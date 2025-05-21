@@ -1,0 +1,21 @@
+{
+	"appId": "com.vibewise.app",
+	"appName": "VibeWise",
+	"webDir": "build",
+	"server": {
+		"androidScheme": "https"
+	},
+	"plugins": {
+		"SplashScreen": {
+			"launchAutoHide": false,
+			"backgroundColor": "#4D44B3",
+			"showSpinner": true,
+			"spinnerColor": "#FFFFFF",
+			"androidSpinnerStyle": "large"
+		},
+		"LocalNotifications": {
+			"smallIcon": "ic_stat_icon",
+			"iconColor": "#4D44B3"
+		}
+	}
+}
