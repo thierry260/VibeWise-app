@@ -4,7 +4,64 @@
     <option name="autoReloadType" value="NONE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="0947e3fc-450a-4716-96a4-0a4ca5809d42" name="Changes" comment="" />
+    <list default="true" id="0947e3fc-450a-4716-96a4-0a4ca5809d42" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/app/src/main/assets/public/app/version.json" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/assets/public/app/version.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/assets/public/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/assets/public/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/capacitor-cordova-android-plugins/build/intermediates/aapt_friendly_merged_manifests/debug/processDebugManifest/aapt/AndroidManifest.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/capacitor-cordova-android-plugins/build/intermediates/aapt_friendly_merged_manifests/debug/processDebugManifest/aapt/output-metadata.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/capacitor-cordova-android-plugins/build/intermediates/aar_metadata/debug/writeDebugAarMetadata/aar-metadata.properties" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/capacitor-cordova-android-plugins/build/intermediates/annotation_processor_list/debug/javaPreCompileDebug/annotationProcessors.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/capacitor-cordova-android-plugins/build/intermediates/compile_library_classes_jar/debug/bundleLibCompileToJarDebug/classes.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/capacitor-cordova-android-plugins/build/intermediates/compile_r_class_jar/debug/generateDebugRFile/R.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/capacitor-cordova-android-plugins/build/intermediates/compile_symbol_list/debug/generateDebugRFile/R.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/capacitor-cordova-android-plugins/build/intermediates/incremental/debug/packageDebugResources/compile-file-map.properties" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/capacitor-cordova-android-plugins/build/intermediates/incremental/debug/packageDebugResources/merger.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/capacitor-cordova-android-plugins/build/intermediates/incremental/mergeDebugJniLibFolders/merger.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/capacitor-cordova-android-plugins/build/intermediates/incremental/mergeDebugShaders/merger.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/capacitor-cordova-android-plugins/build/intermediates/local_only_symbol_list/debug/parseDebugLocalResources/R-def.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/capacitor-cordova-android-plugins/build/intermediates/manifest_merge_blame_file/debug/processDebugManifest/manifest-merger-blame-debug-report.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/capacitor-cordova-android-plugins/build/intermediates/merged_manifest/debug/processDebugManifest/AndroidManifest.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/capacitor-cordova-android-plugins/build/intermediates/navigation_json/debug/extractDeepLinksDebug/navigation.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/capacitor-cordova-android-plugins/build/intermediates/nested_resources_validation_report/debug/generateDebugResources/nestedResourcesValidationReport.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/capacitor-cordova-android-plugins/build/intermediates/runtime_library_classes_jar/debug/bundleLibRuntimeToJarDebug/classes.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/capacitor-cordova-android-plugins/build/intermediates/symbol_list_with_package_name/debug/generateDebugRFile/package-aware-r.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/capacitor-cordova-android-plugins/build/outputs/logs/manifest-merger-debug-report.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ios/App/App/public/app/immutable/assets/0.C2iFE2lH.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ios/App/App/public/app/immutable/assets/5.26wSGZyd.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ios/App/App/public/app/immutable/assets/_layout.B2YkHUzf.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ios/App/App/public/app/immutable/chunks/0SeC9BZI.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ios/App/App/public/app/immutable/chunks/B64_L7Jl.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ios/App/App/public/app/immutable/chunks/BDM_lOGt.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ios/App/App/public/app/immutable/chunks/BEOBgX8I.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ios/App/App/public/app/immutable/chunks/BTZV2jSz.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ios/App/App/public/app/immutable/chunks/BYuUrnC2.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ios/App/App/public/app/immutable/chunks/Cb8j9b9k.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ios/App/App/public/app/immutable/chunks/CdU2vinW.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ios/App/App/public/app/immutable/chunks/Cjvia3pm.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ios/App/App/public/app/immutable/chunks/CqRCXI2u.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ios/App/App/public/app/immutable/chunks/D2gJtSKD.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ios/App/App/public/app/immutable/chunks/D64ZerI1.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ios/App/App/public/app/immutable/chunks/D7KD-X5f.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ios/App/App/public/app/immutable/chunks/HbNiVSMm.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ios/App/App/public/app/immutable/chunks/ToIz8hvJ.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ios/App/App/public/app/immutable/entry/app.Db-TICSg.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ios/App/App/public/app/immutable/entry/start.B2pWCdbD.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ios/App/App/public/app/immutable/nodes/0.BYGH1uBW.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ios/App/App/public/app/immutable/nodes/1.XXxwQmCc.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ios/App/App/public/app/immutable/nodes/2.CJ8crOqK.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ios/App/App/public/app/immutable/nodes/3.DxyWJqKr.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ios/App/App/public/app/immutable/nodes/4.Cacm-BuM.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ios/App/App/public/app/immutable/nodes/5.L_LCyHFb.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ios/App/App/public/app/immutable/nodes/6.BWotDlOt.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ios/App/App/public/app/immutable/nodes/7.7SWmetsj.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ios/App/App/public/app/version.json" beforeDir="false" afterPath="$PROJECT_DIR$/../ios/App/App/public/app/version.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ios/App/App/public/home.html" beforeDir="false" afterPath="$PROJECT_DIR$/../ios/App/App/public/home.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ios/App/App/public/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/../ios/App/App/public/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ios/App/App/public/login.html" beforeDir="false" afterPath="$PROJECT_DIR$/../ios/App/App/public/login.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ios/App/App/public/notification-permission.html" beforeDir="false" afterPath="$PROJECT_DIR$/../ios/App/App/public/notification-permission.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ios/App/App/public/settings.html" beforeDir="false" afterPath="$PROJECT_DIR$/../ios/App/App/public/settings.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/routes/(app)/home/+page.svelte" beforeDir="false" afterPath="$PROJECT_DIR$/../src/routes/(app)/home/+page.svelte" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -13,7 +70,7 @@
   <component name="ClangdSettings">
     <option name="formatViaClangd" value="false" />
   </component>
-  <component name="ExecutionTargetManager" SELECTED_TARGET="device_and_snapshot_combo_box_target[DeviceId(pluginId=PhysicalDevice, isTemplate=false, identifier=serial=fc7ae2e4)]" />
+  <component name="ExecutionTargetManager" SELECTED_TARGET="device_and_snapshot_combo_box_target[DeviceId(pluginId=LocalEmulator, isTemplate=false, identifier=path=/Users/thierryschout/.android/avd/Medium_Phone.avd)]" />
   <component name="ExternalProjectsData">
     <projectState path="$PROJECT_DIR$">
       <ProjectState />
