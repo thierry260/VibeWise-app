@@ -1,6 +1,9 @@
 <script lang="ts">
   import { onMount } from 'svelte';
+  import { goto } from '$app/navigation';
   import { authStore } from '$lib/stores/auth';
+  import { divineToolChooserStore, isDivineTimingEnabled } from '$lib/stores/divineTools';
+  import DivineToolChooser from '$lib/components/DivineToolChooser.svelte';
   import { 
     createReflection, 
     uploadAudioRecording, 
@@ -62,7 +65,7 @@
   let audioBlob: Blob | null = null;
   let audioUrl: string | null = null;
   let recordingDuration = 0;
-  let recordingInterval: number | null = null;
+  let recordingInterval: ReturnType<typeof setInterval> | null = null;
   let voiceInsight: { tone: string; confidence: number } | null = null;
   let isAnalyzingVoice = false;
   
@@ -241,21 +244,49 @@
       if (result.success) {
         submitSuccess = true;
         
-        // Reset form after successful submission
-        setTimeout(() => {
-          selectedMoods = [];
-          reflectionText = '';
-          selectedTags = [];
-          timestamp = new Date();
-          useCurrentTime = true;
-          audioBlob = null;
-          audioUrl = null;
-          voiceInsight = null;
-          submitSuccess = false;
+        // Check if divine timing is enabled for this user
+        const divineTimingEnabled = await isDivineTimingEnabled($authStore.user);
+        
+        if (divineTimingEnabled) {
+          // Show a random divine tool
+          const selectedTool = divineToolChooserStore.showRandomTool();
           
-          // Navigate to home or show Divine ToolChooser
-          // For now, we'll just reset the form
-        }, 2000);
+          // Log that the tool was shown
+          if (selectedTool) {
+            await divineToolChooserStore.logToolInteraction(
+              $authStore.user,
+              selectedTool.id,
+              'shown'
+            );
+          }
+          
+          // Reset form but don't navigate away (Divine ToolChooser will handle navigation)
+          setTimeout(() => {
+            selectedMoods = [];
+            reflectionText = '';
+            selectedTags = [];
+            customTag = '';
+            audioBlob = null;
+            audioUrl = null;
+            voiceInsight = null;
+            submitSuccess = false;
+          }, 2000);
+        } else {
+          // If divine timing is disabled, reset form and navigate to history
+          setTimeout(() => {
+            selectedMoods = [];
+            reflectionText = '';
+            selectedTags = [];
+            customTag = '';
+            audioBlob = null;
+            audioUrl = null;
+            voiceInsight = null;
+            submitSuccess = false;
+            
+            // Navigate to history
+            goto('/history');
+          }, 2000);
+        }
       } else {
         submitError = 'Failed to save reflection. Please try again.';
       }
@@ -441,6 +472,9 @@
     {/if}
   </button>
 </div>
+
+<!-- Divine ToolChooser component -->
+<DivineToolChooser onClose={() => goto('/history')} />
 
 <style>
   .reflect-container {

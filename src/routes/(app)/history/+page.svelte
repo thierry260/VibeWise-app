@@ -57,7 +57,7 @@
     if (session.type === 'reflection') {
       goto(`/reflection/${session.id}`);
     } else if (session.type === 'hrv_session') {
-      goto(`/hrv-detail/${session.id}`);
+      goto(`/hrv-detail?id=${session.id}`);
     } else if (session.type === 'balcony') {
       // For balcony insights, navigate to the balcony page with the parent reflection ID
       goto(`/balcony?reflectionId=${session.parent_reflection_id}`);

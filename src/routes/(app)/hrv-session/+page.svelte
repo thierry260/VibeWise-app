@@ -2,7 +2,10 @@
 	import { onMount, onDestroy } from 'svelte';
 	import { goto } from '$app/navigation';
 	import { authStore } from '$lib/stores/auth';
+	import { divineToolChooserStore, isDivineTimingEnabled } from '$lib/stores/divineTools';
+	import DivineToolChooser from '$lib/components/DivineToolChooser.svelte';
 	import { createHRVSession } from '$lib/services/sessions';
+	import { fade } from 'svelte/transition';
 	import {
 		bleConnectionStatus,
 		hrvData,
@@ -38,6 +41,13 @@
 	let isSaving = false;
 	let saveSuccess = false;
 
+	// Chart legend values
+	let legendValues = {
+		hr: '-',
+		rmssd: '-',
+		vibe: '-'
+	};
+
 	// Initialize chart
 	function initChart() {
 		if (!chartEl) {
@@ -50,23 +60,34 @@
 		// Define proper types for uPlot options
 		const opts: uPlot.Options = {
 			width: chartEl.clientWidth,
-			height: 300,
-			padding: [0, 0, 0, 0], // [top, right, bottom, left]
+			height: 240,
+			padding: [20, 0, 0, 0], // [top, right, bottom, left]
 			cursor: {
 				show: true,
 				points: {
-					show: true,
-					size: 5
+					show: false
 				},
 				drag: {
 					setScale: false
 				},
 				focus: {
 					prox: 30
+				},
+				dataIdx: (u, seriesIdx, closestIdx) => {
+					// Update legend values when cursor moves
+					if (closestIdx !== null) {
+						const data = u.data;
+						legendValues = {
+							hr: data[1][closestIdx] !== null ? (data[1][closestIdx] as number).toFixed(0) + ' bpm' : '-',
+							rmssd: data[2][closestIdx] !== null ? (data[2][closestIdx] as number).toFixed(1) + ' ms' : '-',
+							vibe: data[3][closestIdx] !== null ? (data[3][closestIdx] as number).toFixed(0) : '-'
+						};
+					}
+					return closestIdx;
 				}
 			},
 			legend: {
-				show: false
+				show: false // Disable default legend
 			},
 			series: [
 				{}, // x-axis
@@ -74,8 +95,8 @@
 					scale: 'hr',
 					label: 'Heart Rate',
 					value: (u: uPlot, v: number | null) => (v == null ? '-' : v.toFixed(0) + ' bpm'),
-					stroke: '#E53935',
-					width: 3,
+					stroke: 'rgba(229, 57, 53, 0.8)',  // #E53935 with opacity
+					width: 2,
 					points: {
 						show: false
 					},
@@ -85,8 +106,8 @@
 					scale: 'rmssd',
 					label: 'Balance',
 					value: (u: uPlot, v: number | null) => (v == null ? '-' : v.toFixed(1) + ' ms'),
-					stroke: '#4D44B3',
-					width: 3,
+					stroke: 'rgba(77, 68, 179, 0.8)',  // #4D44B3 with opacity
+					width: 2,
 					points: {
 						show: false
 					},
@@ -96,8 +117,8 @@
 					scale: 'vibe',
 					label: 'Vibe Score',
 					value: (u: uPlot, v: number | null) => (v == null ? '-' : v.toFixed(0)),
-					stroke: '#BF469A',
-					width: 3,
+					stroke: 'rgba(191, 70, 154, 0.8)',  // #BF469A with opacity
+					width: 2,
 					points: {
 						show: false
 					},
@@ -106,7 +127,13 @@
 			],
 			scales: {
 				x: {
-					time: true
+					time: true,
+					auto: false,
+					range: (u, min, max) => {
+						// Show last 2 minutes of data
+						const now = Date.now() / 1000;
+						return [now - 120, now];
+					}
 				},
 				hr: {
 					auto: true,
@@ -122,15 +149,7 @@
 				}
 			},
 			axes: [
-				{
-					scale: 'x',
-					label: 'Time',
-					labelSize: 20,
-					grid: { show: false },
-					ticks: { show: true },
-					values: (u: uPlot, vals: number[]) =>
-						vals.map((v) => new Date(v * 1000).toLocaleTimeString())
-				}
+				// No axes shown for minimalist design
 			]
 		};
 
@@ -138,6 +157,23 @@
 			console.log('Creating uPlot instance with options:', opts);
 			chart = new uPlot(opts, [[], [], [], []], chartEl);
 			console.log('Chart created successfully:', chart);
+
+			// Update legend with latest values when data changes
+			if (chart && chart.hooks && chart.hooks.setData) {
+				chart.hooks.setData.push(() => {
+					if (chart) {
+						const idx = chart.data[0].length - 1;
+						if (idx >= 0) {
+							legendValues = {
+								hr: chart.data[1][idx] !== null ? (chart.data[1][idx]?.toString() || '-') + ' bpm' : '-',
+								rmssd: chart.data[2][idx] !== null ? (chart.data[2][idx]?.toString() || '-') + ' ms' : '-',
+								vibe: chart.data[3][idx] !== null ? (chart.data[3][idx]?.toString() || '-') : '-'
+							};
+						}
+					}
+				});
+			}
+
 		} catch (error) {
 			console.error('Error creating chart:', error);
 			return null;
@@ -146,7 +182,7 @@
 		// Handle window resize
 		const resizeObserver = new ResizeObserver((entries) => {
 			if (chart && entries[0]) {
-				chart.setSize({ width: entries[0].contentRect.width, height: 300 });
+				chart.setSize({ width: entries[0].contentRect.width, height: 240 });
 			}
 		});
 
@@ -198,10 +234,10 @@
 
 	// Start breathing guide animation
 	function startBreathingGuide() {
-		// 5 seconds in, 5 seconds out (6 breaths per minute as requested)
-		const inhaleTime = 4000; // 5 seconds
-		const exhaleTime = 6000; // 5 seconds
-		const updateInterval = 50; // 50ms update interval
+		// 4 seconds in, 6 seconds out (6 breaths per minute)
+		const inhaleTime = 4000; // 4 seconds
+		const exhaleTime = 6000; // 6 seconds
+		const updateInterval = 16; // 16ms update interval for smoother animation
 
 		let currentPhase = 'inhale';
 		let progress = 0;
@@ -277,23 +313,6 @@
 		}
 	}
 
-	// Stop HRV session
-	function stopSession() {
-		// Stop session timer
-		stopSessionTimer();
-
-		// Stop breathing guide
-		stopBreathingGuide();
-
-		// Get session summary
-		sessionSummary = getSessionSummary();
-
-		// Show summary modal
-		showSummary = true;
-
-		// Keep session active until user decides to save or discard
-	}
-
 	// Save HRV session
 	async function saveSession() {
 		if (!$authStore.user || !sessionSummary) return;
@@ -319,10 +338,27 @@
 			if (result.success) {
 				saveSuccess = true;
 
-				// Navigate back to home after successful save
-				setTimeout(() => {
-					goto('/home');
-				}, 2000);
+				// Check if divine timing is enabled for this user
+				const divineTimingEnabled = await isDivineTimingEnabled($authStore.user);
+				
+				if (divineTimingEnabled) {
+					// Show a random divine tool
+					const selectedTool = divineToolChooserStore.showRandomTool();
+					
+					// Log that the tool was shown
+					if (selectedTool) {
+						await divineToolChooserStore.logToolInteraction(
+							$authStore.user,
+							selectedTool.id,
+							'shown'
+						);
+					}
+				} else {
+					// If divine timing is disabled, navigate to history after a delay
+					setTimeout(() => {
+						goto('/history');
+					}, 2000);
+				}
 			} else {
 				saveError = 'Failed to save HRV session. Please try again.';
 			}
@@ -332,6 +368,23 @@
 		} finally {
 			isSaving = false;
 		}
+	}
+
+	// Stop HRV session
+	function stopSession() {
+		// Stop session timer
+		stopSessionTimer();
+
+		// Stop breathing guide
+		stopBreathingGuide();
+
+		// Get session summary
+		sessionSummary = getSessionSummary();
+
+		// Show summary modal
+		showSummary = true;
+
+		// Keep session active until user decides to save or discard
 	}
 
 	// Discard HRV session
@@ -448,33 +501,53 @@
 				<div class="chart-section">
 					<h3 class="mb-2 text-xl font-semibold">Real-time HRV Data</h3>
 					<div class="chart-container" bind:this={chartEl}></div>
+					
+					<!-- Custom Legend -->
+					<div class="custom-legend">
+						<div class="legend-item">
+							<div class="legend-dot hr-dot"></div>
+							<span class="legend-label">Heart Rate</span>
+							<span class="legend-value" class:has-value={legendValues.hr !== '-'} in:fade={{duration: 150}}>{legendValues.hr}</span>
+						</div>
+						<div class="legend-item">
+							<div class="legend-dot rmssd-dot"></div>
+							<span class="legend-label">Balance</span>
+							<span class="legend-value" class:has-value={legendValues.rmssd !== '-'} in:fade={{duration: 150}}>{legendValues.rmssd}</span>
+						</div>
+						<div class="legend-item">
+							<div class="legend-dot vibe-dot"></div>
+							<span class="legend-label">Vibe Score</span>
+							<span class="legend-value" class:has-value={legendValues.vibe !== '-'} in:fade={{duration: 150}}>{legendValues.vibe}</span>
+						</div>
+					</div>
 				</div>
 
 				<div class="breathing-guide-section">
-					<h3 class="mb-4 text-xl font-semibold">Breathing Guide</h3>
-					<p class="mb-4 text-sm text-gray-600">Follow the circle</p>
+					<h3 class="mb-3 text-xl font-semibold">Breathing Guide</h3>
+					<p class="mb-3 text-sm text-gray-500">Follow the rhythm</p>
 					<div class="breathing-guide-container">
+						<div class="breathing-pulse-ring"></div>
 						<div
 							class="breathing-circle"
 							class:inhale={breathPhase === 'inhale'}
 							class:exhale={breathPhase === 'exhale'}
 							style="transform: scale({breathPhase === 'inhale'
-								? 1 + (breathProgress / 100) * 0.5
-								: 1.5 - (breathProgress / 100) * 0.5})"
+								? 0.4 + (breathProgress / 100) * 0.6
+								: 1 - (breathProgress / 100) * 0.8})"
 						>
 							<div class="breathing-text">
 								{breathPhase === 'inhale' ? 'In' : 'Out'}
 							</div>
 							<div class="breathing-timer">
-								{breathPhase === 'inhale' ? '5s in' : '5s out'}
+								{breathPhase === 'inhale' ? '4s' : '6s'}
 							</div>
 						</div>
-						<div class="breathing-wave"></div>
+						<div class="breathing-ripple"></div>
 					</div>
 				</div>
 
 				<div class="button-container">
-					<button class="stop-button" on:click={stopSession}> Stop Session </button>
+					<button class="stop-button" on:click={stopSession}>Stop Session</button>
 				</div>
 			</div>
 		</div>
@@ -534,6 +607,9 @@
 		</div>
 	{/if}
 </div>
+
+<!-- Divine ToolChooser component -->
+<DivineToolChooser onClose={() => goto('/history')} />
 
 <style>
 	.hrv-session-container {
@@ -680,27 +756,79 @@
 
 	.chart-container {
 		width: 100%;
-		height: 300px;
+		height: 240px;
 		background-color: var(--color-card-bg);
 		border-radius: 8px;
-		padding: 1rem;
-		box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+		padding: 1rem 0.5rem;
+		box-shadow: 0 1px 4px rgba(0, 0, 0, 0.03);
+	}
+
+	.custom-legend {
+		display: flex;
+		justify-content: space-around;
+		padding: 0.75rem;
+		margin-top: 0.5rem;
+		border-radius: 8px;
+		background-color: rgba(255, 255, 255, 0.5);
+		backdrop-filter: blur(4px);
+	}
+
+	.legend-item {
+		display: flex;
+		align-items: center;
+		gap: 0.5rem;
+		font-size: 0.9rem;
+	}
+
+	.legend-dot {
+		width: 8px;
+		height: 8px;
+		border-radius: 50%;
+	}
+
+	.hr-dot {
+		background-color: #E53935;
+	}
+
+	.rmssd-dot {
+		background-color: #4D44B3;
+	}
+
+	.vibe-dot {
+		background-color: #BF469A;
+	}
+
+	.legend-label {
+		color: #666;
+		font-weight: 500;
+	}
+
+	.legend-value {
+		color: #333;
+		font-weight: 600;
+		min-width: 3.5rem;
+		opacity: 0;
+		transition: opacity 0.2s ease;
+	}
+
+	.legend-value.has-value {
+		opacity: 1;
 	}
 
 	.breathing-guide-section {
-		margin-top: 3rem;
-		margin-bottom: 3rem;
-		padding: 2rem;
+		margin-top: 2rem;
+		margin-bottom: 2rem;
+		padding: 1.5rem;
 		text-align: center;
-		background-color: rgba(255, 255, 255, 0.8);
+		background-color: rgba(255, 255, 255, 0.6);
 		border-radius: 1rem;
-		box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+		box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
 	}
 
 	.breathing-guide-container {
 		position: relative;
-		width: 200px;
-		height: 200px;
+		width: 140px;
+		height: 140px;
 		margin: 0 auto;
 		display: flex;
 		justify-content: center;
@@ -716,34 +844,31 @@
 		flex-direction: column;
 		justify-content: center;
 		align-items: center;
-		transition:
-			transform 0.2s ease-in-out,
-			background-color 0.5s ease,
-			border-color 0.5s ease;
-		z-index: 2;
+		transition: transform 0.1s linear;
+		z-index: 3;
 	}
 
 	.breathing-circle.inhale {
-		border: 3px solid #4d44b3;
-		background-color: rgba(77, 68, 179, 0.1);
-		box-shadow: 0 0 15px rgba(77, 68, 179, 0.3);
+		border: 2px solid rgba(77, 68, 179, 0.6);
+		background-color: rgba(77, 68, 179, 0.05);
+		box-shadow: 0 0 8px rgba(77, 68, 179, 0.2);
 	}
 
 	.breathing-circle.exhale {
-		border: 3px solid #bf469a;
-		background-color: rgba(191, 70, 154, 0.1);
-		box-shadow: 0 0 15px rgba(191, 70, 154, 0.3);
+		border: 2px solid rgba(191, 70, 154, 0.6);
+		background-color: rgba(191, 70, 154, 0.05);
+		box-shadow: 0 0 8px rgba(191, 70, 154, 0.2);
 	}
 
 	.breathing-text {
-		font-size: 1.5rem;
+		font-size: 1rem;
 		font-weight: 600;
-		margin-bottom: 0.5rem;
+		margin-bottom: 0.25rem;
 	}
 
 	.breathing-timer {
-		font-size: 0.875rem;
-		opacity: 0.8;
+		font-size: 0.75rem;
+		opacity: 0.7;
 	}
 
 	.breathing-circle.inhale .breathing-text,
@@ -756,33 +881,41 @@
 		color: #bf469a;
 	}
 
-	.breathing-wave {
+	.breathing-ripple {
 		position: absolute;
-		width: 300px;
-		height: 300px;
+		width: 100%;
+		height: 100%;
 		border-radius: 50%;
-		background: radial-gradient(
-			circle,
-			transparent 50%,
-			rgba(77, 68, 179, 0.05) 51%,
-			rgba(191, 70, 154, 0.05) 100%
-		);
+		background: transparent;
+		border: 1px solid rgba(77, 68, 179, 0.2);
 		z-index: 1;
-		animation: pulse 10s infinite linear;
+		animation: ripple 10s infinite ease-out;
 	}
 
-	@keyframes pulse {
+	.breathing-pulse-ring {
+		position: absolute;
+		width: 100%;
+		height: 100%;
+		border-radius: 50%;
+		border: 1px dashed rgba(191, 70, 154, 0.15);
+		z-index: 0;
+	}
+
+	@keyframes ripple {
 		0% {
-			transform: scale(0.5);
-			opacity: 0.2;
+			transform: scale(0.6);
+			opacity: 0.1;
+			border-color: rgba(77, 68, 179, 0.1);
 		}
 		50% {
-			transform: scale(1.2);
-			opacity: 0.5;
+			transform: scale(1.4);
+			opacity: 0.2;
+			border-color: rgba(191, 70, 154, 0.1);
 		}
 		100% {
-			transform: scale(0.5);
-			opacity: 0.2;
+			transform: scale(0.6);
+			opacity: 0.1;
+			border-color: rgba(77, 68, 179, 0.1);
 		}
 	}
 
@@ -790,21 +923,28 @@
 		margin-top: 2rem;
 	}
 
+	.button-container {
+		width: 100%;
+		margin-top: 1.5rem;
+		margin-bottom: 1rem;
+	}
+
 	.stop-button {
-		background-color: #e53935;
+		width: 100%;
+		background: linear-gradient(135deg, #e53935, #d32f2f);
 		color: white;
 		border: none;
-		border-radius: 12px;
-		padding: 1rem;
-		font-size: 1.1rem;
+		border-radius: 8px;
+		padding: 0.875rem;
+		font-size: 1rem;
 		font-weight: 500;
 		cursor: pointer;
-		transition: all 0.2s ease;
+		transition: opacity 0.2s ease;
+		box-shadow: none;
 	}
 
 	.stop-button:hover {
-		transform: translateY(-2px);
-		box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+		opacity: 0.9;
 	}
 
 	.modal-overlay {
