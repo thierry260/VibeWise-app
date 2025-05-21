@@ -1,188 +1,176 @@
 <script lang="ts">
-	import { page } from '$app/stores';
+	import { onMount } from 'svelte';
 	import { authStore } from '$lib/stores/auth';
-	import { signOut } from '$lib/firebase';
-	import { goto } from '$app/navigation';
-	import { theme } from '$lib/stores/theme';
 
-	const navItems = [
-		{ name: 'Home', path: '/home', icon: '🏠' },
-		{ name: 'Reflect', path: '/reflect', icon: '📝' },
-		{ name: 'Journey', path: '/journey', icon: '🌱' },
-		{ name: 'Library', path: '/library', icon: '📚' },
-		{ name: 'Settings', path: '/settings', icon: '⚙️' }
-	];
+	let greeting = 'Good morning';
+	let streakDays = 0;
+	let vibeScore = 0;
+	let spiralPhase = 'Beige';
+	let intention = '';
 
-	const handleSignOut = async () => {
-		await signOut();
-		goto('/login');
+	// Set greeting based on time of day
+	const setGreeting = () => {
+		const hour = new Date().getHours();
+		if (hour < 12) greeting = 'Good morning';
+		else if (hour < 18) greeting = 'Good afternoon';
+		else greeting = 'Good evening';
 	};
 
-	const toggleTheme = () => {
-		theme.set($theme === 'dark' ? 'light' : 'dark');
-	};
+	onMount(() => {
+		setGreeting();
+
+		// This would normally come from the database
+		// Placeholder data for now
+		streakDays = 3;
+		vibeScore = 78;
+		spiralPhase = 'Green';
+		intention = 'Be present and mindful throughout the day';
+	});
 </script>
 
-<div class="app-layout">
-	<header class="app-header">
-		<div class="logo">
-			<img src="/vibewise-logo.svg" alt="VibeWise" class="logo-img" on:click={() => goto('/')} />
-		</div>
-		<div class="header-actions">
-			<button class="theme-toggle" on:click={toggleTheme} aria-label="Toggle theme">
-				{$theme === 'dark' ? '☀️' : '🌙'}
-			</button>
-			{#if $authStore.user?.photoURL}
-				<img
-					src={$authStore.user.photoURL}
-					alt="Profile"
-					class="avatar"
-					on:click={() => goto('/profile')}
-				/>
-			{/if}
-		</div>
+<div class="home-page p-4">
+	<header class="mb-6">
+		<h1 class="text-2xl font-bold text-gray-900 dark:text-white">
+			{greeting}, {$authStore.user?.displayName?.split(' ')[0] || 'Friend'}
+		</h1>
+		<p class="text-sm text-gray-600 dark:text-gray-400">
+			{new Date().toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' })}
+		</p>
 	</header>
 
-	<main class="app-content">
-		<slot />
-	</main>
+	<!-- Streak Counter -->
+	<div
+		class="mb-6 flex items-center rounded-lg bg-gradient-to-r from-purple-100 to-indigo-100 p-4 dark:from-purple-900/30 dark:to-indigo-900/30"
+	>
+		<div
+			class="mr-4 flex h-12 w-12 items-center justify-center rounded-full bg-gradient-to-r from-purple-500 to-indigo-600 text-white"
+		>
+			<svg
+				xmlns="http://www.w3.org/2000/svg"
+				class="h-6 w-6"
+				fill="none"
+				viewBox="0 0 24 24"
+				stroke="currentColor"
+			>
+				<path
+					stroke-linecap="round"
+					stroke-linejoin="round"
+					stroke-width="2"
+					d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"
+				/>
+			</svg>
+		</div>
+		<div>
+			<h2 class="text-lg font-semibold text-gray-900 dark:text-white">
+				{streakDays} Day Streak
+			</h2>
+			<p class="text-sm text-gray-600 dark:text-gray-400">
+				Keep going! Your consistency is building momentum.
+			</p>
+		</div>
+	</div>
 
-	<nav class="bottom-nav">
-		{#each navItems as item}
-			<a href={item.path} class:active={$page.url.pathname === item.path} aria-label={item.name}>
-				<span class="icon">{item.icon}</span>
-				<span class="label">{item.name}</span>
+	<!-- Status Card -->
+	<div class="mb-6 overflow-hidden rounded-lg bg-white shadow-md dark:bg-gray-800">
+		<div class="border-b border-gray-200 px-4 py-5 dark:border-gray-700 sm:px-6">
+			<h3 class="text-lg font-medium leading-6 text-gray-900 dark:text-white">Your Status</h3>
+		</div>
+		<div class="px-4 py-5 sm:p-6">
+			<div class="grid grid-cols-2 gap-4">
+				<div class="rounded-lg bg-gray-50 p-4 dark:bg-gray-700">
+					<h4 class="text-sm font-medium text-gray-500 dark:text-gray-400">Vibe Score</h4>
+					<div class="mt-1 flex items-baseline">
+						<p class="text-2xl font-semibold text-gray-900 dark:text-white">{vibeScore}</p>
+						<p class="ml-2 text-sm font-medium text-green-600 dark:text-green-400">/ 100</p>
+					</div>
+				</div>
+				<div class="rounded-lg bg-gray-50 p-4 dark:bg-gray-700">
+					<h4 class="text-sm font-medium text-gray-500 dark:text-gray-400">Spiral Phase</h4>
+					<p class="mt-1 text-2xl font-semibold text-gray-900 dark:text-white">{spiralPhase}</p>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- Intention Display -->
+	{#if intention}
+		<div
+			class="mb-6 rounded-lg bg-gradient-to-r from-primary-50 to-secondary-50 p-4 dark:from-primary-900/20 dark:to-secondary-900/20"
+		>
+			<h3 class="mb-2 text-sm font-medium text-gray-700 dark:text-gray-300">Today's Intention</h3>
+			<p class="text-lg font-medium text-gray-900 dark:text-white">"{intention}"</p>
+		</div>
+	{/if}
+
+	<!-- Quick Actions -->
+	<div class="mb-6">
+		<h3 class="mb-3 text-lg font-medium text-gray-900 dark:text-white">Quick Actions</h3>
+		<div class="grid grid-cols-2 gap-3">
+			<a
+				href="/session"
+				class="flex flex-col items-center rounded-lg bg-white p-4 text-center shadow-md transition-all hover:shadow-lg dark:bg-gray-800 dark:hover:bg-gray-700"
+			>
+				<div
+					class="mb-2 rounded-full bg-primary-100 p-2 text-primary-600 dark:bg-primary-900/30 dark:text-primary-400"
+				>
+					<svg
+						xmlns="http://www.w3.org/2000/svg"
+						class="h-6 w-6"
+						fill="none"
+						viewBox="0 0 24 24"
+						stroke="currentColor"
+					>
+						<path
+							stroke-linecap="round"
+							stroke-linejoin="round"
+							stroke-width="2"
+							d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
+						/>
+					</svg>
+				</div>
+				<span class="text-sm font-medium text-gray-900 dark:text-white">Start HRV Session</span>
 			</a>
-		{/each}
-	</nav>
+			<a
+				href="/settings"
+				class="flex flex-col items-center rounded-lg bg-white p-4 text-center shadow-md transition-all hover:shadow-lg dark:bg-gray-800 dark:hover:bg-gray-700"
+			>
+				<div
+					class="mb-2 rounded-full bg-secondary-100 p-2 text-secondary-600 dark:bg-secondary-900/30 dark:text-secondary-400"
+				>
+					<svg
+						xmlns="http://www.w3.org/2000/svg"
+						class="h-6 w-6"
+						fill="none"
+						viewBox="0 0 24 24"
+						stroke="currentColor"
+					>
+						<path
+							stroke-linecap="round"
+							stroke-linejoin="round"
+							stroke-width="2"
+							d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"
+						/>
+						<path
+							stroke-linecap="round"
+							stroke-linejoin="round"
+							stroke-width="2"
+							d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+						/>
+					</svg>
+				</div>
+				<span class="text-sm font-medium text-gray-900 dark:text-white">Settings</span>
+			</a>
+		</div>
+	</div>
+
+	<!-- Activity Feed -->
+	<div>
+		<h3 class="mb-3 text-lg font-medium text-gray-900 dark:text-white">Recent Activity</h3>
+		<div class="rounded-lg bg-white shadow-md dark:bg-gray-800">
+			<div class="p-4 text-center text-gray-500 dark:text-gray-400">
+				<p>Your activity will appear here once you start using the app.</p>
+				<p class="mt-2 text-sm">Try starting an HRV session to get started!</p>
+			</div>
+		</div>
+	</div>
 </div>
-
-<style>
-	.app-layout {
-		display: flex;
-		flex-direction: column;
-		min-height: 100vh;
-		background-color: var(--color-bg);
-	}
-
-	.app-header {
-		display: flex;
-		justify-content: space-between;
-		align-items: center;
-		padding: 1rem;
-		background-color: var(--color-bg-elevated);
-		box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-		position: sticky;
-		top: 0;
-		z-index: 10;
-	}
-
-	.logo {
-		display: flex;
-		align-items: center;
-	}
-
-	.logo-img {
-		height: 2rem;
-		cursor: pointer;
-	}
-
-	.header-actions {
-		display: flex;
-		align-items: center;
-		gap: 1rem;
-	}
-
-	.theme-toggle {
-		background: none;
-		border: none;
-		font-size: 1.25rem;
-		cursor: pointer;
-		padding: 0.5rem;
-		border-radius: 50%;
-		display: flex;
-		align-items: center;
-		justify-content: center;
-	}
-
-	.avatar {
-		width: 2rem;
-		height: 2rem;
-		border-radius: 50%;
-		cursor: pointer;
-	}
-
-	.app-content {
-		flex: 1;
-		padding: 1rem;
-		overflow-y: auto;
-	}
-
-	.bottom-nav {
-		display: flex;
-		justify-content: space-around;
-		padding: 0.75rem 0;
-		background-color: var(--color-bg-elevated);
-		box-shadow: 0 -1px 3px rgba(0, 0, 0, 0.1);
-		position: sticky;
-		bottom: 0;
-		z-index: 10;
-	}
-
-	.bottom-nav a {
-		display: flex;
-		flex-direction: column;
-		align-items: center;
-		text-decoration: none;
-		color: var(--color-text);
-		opacity: 0.7;
-		transition: opacity 0.2s;
-		padding: 0.25rem 0.5rem;
-		border-radius: 0.5rem;
-	}
-
-	.bottom-nav a:hover {
-		opacity: 1;
-	}
-
-	.bottom-nav a.active {
-		opacity: 1;
-		color: var(--color-primary);
-	}
-
-	.bottom-nav .icon {
-		font-size: 1.25rem;
-		margin-bottom: 0.25rem;
-	}
-
-	.bottom-nav .label {
-		font-size: 0.75rem;
-		font-weight: 500;
-	}
-
-	@media (min-width: 768px) {
-		.app-layout {
-			flex-direction: row;
-		}
-
-		.bottom-nav {
-			flex-direction: column;
-			width: 5rem;
-			height: 100vh;
-			position: fixed;
-			left: 0;
-			top: 0;
-			padding: 1rem 0;
-			box-shadow: 1px 0 3px rgba(0, 0, 0, 0.1);
-		}
-
-		.app-content {
-			margin-left: 5rem;
-			padding: 2rem;
-		}
-
-		.app-header {
-			padding-left: 7rem;
-		}
-	}
-</style>

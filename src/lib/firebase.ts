@@ -16,7 +16,6 @@ import {
   doc, 
   setDoc, 
   getDoc,
-  type DocumentData,
   type Firestore
 } from 'firebase/firestore';
 import { getAnalytics, isSupported } from 'firebase/analytics';
@@ -41,26 +40,25 @@ let auth: Auth;
 let db: Firestore;
 let analytics: Analytics | undefined;
 
-if (typeof window !== 'undefined') {
-  // Client-side only code
-  if (!getApps().length) {
-    firebaseApp = initializeApp(firebaseConfig);
-    auth = getAuth(firebaseApp);
-    db = getFirestore(firebaseApp);
-    
-    // Initialize Analytics only in browser environment
-    if (typeof window !== 'undefined') {
-      isSupported().then(yes => {
-        if (yes && firebaseApp) {
-          analytics = getAnalytics(firebaseApp);
-        }
-      });
-    }
-  } else {
+// Lazy initialization function to defer Firebase setup
+const initializeFirebase = () => {
+  if (typeof window === 'undefined') return;
+  
+  // If Firebase is already initialized, just return the existing instances
+  if (getApps().length) {
     firebaseApp = getApps()[0];
-    auth = getAuth(firebaseApp);
-    db = getFirestore(firebaseApp);
-    
+    auth = auth || getAuth(firebaseApp);
+    db = db || getFirestore(firebaseApp);
+    return;
+  }
+  
+  // Initialize Firebase app
+  firebaseApp = initializeApp(firebaseConfig);
+  auth = getAuth(firebaseApp);
+  db = getFirestore(firebaseApp);
+  
+  // Initialize Analytics in the background
+  setTimeout(() => {
     if (typeof window !== 'undefined') {
       isSupported().then(yes => {
         if (yes && firebaseApp) {
@@ -68,7 +66,12 @@ if (typeof window !== 'undefined') {
         }
       });
     }
-  }
+  }, 2000); // Delay analytics initialization
+};
+
+// Initialize Firebase immediately but with core services only
+if (typeof window !== 'undefined') {
+  initializeFirebase();
 }
 
 const googleProvider = new GoogleAuthProvider();

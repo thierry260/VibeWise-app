@@ -15,11 +15,28 @@ export const authStore = writable<AuthStore>({
   error: null,
 });
 
-// Initialize auth state listener
+// Initialize auth state listener with a timeout to prevent long loading times
 if (typeof window !== 'undefined') {
+  // Set a timeout to ensure loading state doesn't get stuck
+  const authTimeout = setTimeout(() => {
+    authStore.update(state => {
+      // Only update if still loading
+      if (state.loading) {
+        console.log('Auth loading timed out, forcing ready state');
+        return {
+          ...state,
+          loading: false
+        };
+      }
+      return state;
+    });
+  }, 5000); // 5 second timeout
+  
+  // Set up the normal auth listener
   onAuthStateChanged(
     auth as Auth,
     (user) => {
+      clearTimeout(authTimeout);
       authStore.set({
         user,
         loading: false,
@@ -27,6 +44,7 @@ if (typeof window !== 'undefined') {
       });
     },
     (error) => {
+      clearTimeout(authTimeout);
       console.error('Auth state error:', error);
       authStore.update((state) => ({
         ...state,

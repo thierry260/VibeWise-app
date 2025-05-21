@@ -28,24 +28,39 @@
 		theme.set($theme === 'dark' ? 'light' : 'dark');
 	};
 
-	onMount(() => {
+	// Initialize platform detection early - this doesn't need to wait for auth
+let initPlatform = () => {
+		if (!browser) return;
+		
+		// Detect platform - this is fast and doesn't require network
+		isWebPlatform = notificationService.isPlatformWeb();
+		isNativePlatform = notificationService.isPlatformNative();
+		console.log('Platform detection - isWeb:', isWebPlatform, 'isNative:', isNativePlatform);
+		
+		// Check if notifications are supported - also fast
+		notificationsSupported = areNotificationsSupported();
+		console.log('Notifications supported:', notificationsSupported);
+};
+
+// Run platform detection immediately if in browser
+if (browser) {
+	initPlatform();
+}
+
+onMount(() => {
 		// Get user ID and check notification permission
 		const unsubscribe = authStore.subscribe(($auth) => {
 			userId = $auth.user?.uid || '';
+			
+			// Only initialize notifications after auth is ready and not loading
+			if (!$auth.loading && $auth.user) {
+				initNotificationsAsync();
+			}
 		});
 
-		// Check if notifications are supported and get permission status
-		const initNotifications = async () => {
+		// Initialize notification permissions - separate from platform detection
+		const initNotificationsAsync = async () => {
 			if (!browser) return;
-			
-			// Detect platform
-			isWebPlatform = notificationService.isPlatformWeb();
-			isNativePlatform = notificationService.isPlatformNative();
-			console.log('Platform detection - isWeb:', isWebPlatform, 'isNative:', isNativePlatform);
-			
-			// Check if notifications are supported
-			notificationsSupported = areNotificationsSupported();
-			console.log('Notifications supported:', notificationsSupported);
 			
 			// Get current permission status
 			if (notificationsSupported) {
@@ -58,9 +73,6 @@
 				await notificationService.initializeNotifications();
 			}
 		};
-		
-		// Execute the initialization
-		initNotifications();
 
 		return () => {
 			unsubscribe();
@@ -145,7 +157,10 @@
 </script>
 
 {#if $authStore.loading}
-  <div class="loading-state">Loading settings...</div>
+  <div class="loading-state">
+    <div class="loading-spinner"></div>
+    <div class="loading-text">Loading settings...</div>
+  </div>
 {:else if !$authStore.user}
   <div class="unauth-state">You are not logged in. <a href="/login">Go to login</a>.</div>
 {:else}
@@ -326,15 +341,39 @@
   .loading-state,
   .unauth-state {
     display: flex;
+    flex-direction: column;
     height: 100vh;
     align-items: center;
     justify-content: center;
     font-size: 1.125rem;
     color: rgb(75, 85, 99);
+    gap: 1rem;
   }
   
   :global(.dark) .loading-state,
   :global(.dark) .unauth-state {
     color: rgb(156, 163, 175);
+  }
+  
+  .loading-spinner {
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 50%;
+    border: 3px solid rgba(79, 70, 229, 0.2);
+    border-top-color: rgb(79, 70, 229);
+    animation: spinner 0.8s linear infinite;
+  }
+  
+  :global(.dark) .loading-spinner {
+    border: 3px solid rgba(139, 92, 246, 0.2);
+    border-top-color: rgb(139, 92, 246);
+  }
+  
+  @keyframes spinner {
+    to { transform: rotate(360deg); }
+  }
+  
+  .loading-text {
+    margin-top: 0.5rem;
   }
 </style>
