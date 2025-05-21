@@ -1,5 +1,5 @@
 import { db } from '$lib/firebase';
-import { doc, collection, addDoc, updateDoc, getDoc, getDocs, query, where, orderBy, limit, Timestamp } from 'firebase/firestore';
+import { doc, collection, addDoc, updateDoc, getDoc, getDocs, query, where, orderBy, limit as firestoreLimit, Timestamp } from 'firebase/firestore';
 import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import type { User } from 'firebase/auth';
 
@@ -242,25 +242,110 @@ export const getReflectionById = async (
 export const getRecentSessions = async (
   user: User,
   limit: number = 10
-): Promise<{ success: boolean; sessions?: Session[]; error?: any }> => {
+): Promise<{ success: boolean; sessions?: Array<Session & { id: string }>; error?: any }> => {
   try {
     const sessionsQuery = query(
       collection(db, 'users', user.uid, 'sessions'),
       orderBy('timestamp', 'desc'),
-      limit(limit)
+      firestoreLimit(limit)
     );
     
     const sessionsSnap = await getDocs(sessionsQuery);
-    const sessions: Session[] = [];
+    const sessions: Array<Session & { id: string }> = [];
     
     sessionsSnap.forEach(doc => {
       const session = doc.data() as Session;
-      sessions.push(session);
+      sessions.push({
+        ...session,
+        id: doc.id
+      });
     });
     
     return { success: true, sessions };
   } catch (error) {
     console.error('Error getting recent sessions:', error);
+    return { success: false, error };
+  }
+};
+
+// Get a session by ID
+export const getSessionById = async (
+  user: User,
+  sessionId: string
+): Promise<{ success: boolean; session?: Session & { id: string }; error?: any }> => {
+  try {
+    const sessionRef = doc(db, 'users', user.uid, 'sessions', sessionId);
+    const sessionSnap = await getDoc(sessionRef);
+    
+    if (sessionSnap.exists()) {
+      return { 
+        success: true, 
+        session: {
+          ...sessionSnap.data() as Session,
+          id: sessionSnap.id
+        }
+      };
+    }
+    
+    return { 
+      success: false, 
+      error: 'Session not found' 
+    };
+  } catch (error) {
+    console.error('Error getting session:', error);
+    return { success: false, error };
+  }
+};
+
+// Check if a balcony experiment exists for a reflection
+export const getBalconyForReflection = async (
+  user: User,
+  reflectionId: string
+): Promise<{ success: boolean; balcony?: BalconyExperiment & { id: string }; error?: any }> => {
+  try {
+    const balconyQuery = query(
+      collection(db, 'users', user.uid, 'sessions'),
+      where('type', '==', 'balcony'),
+      where('parent_reflection_id', '==', reflectionId)
+    );
+    
+    const balconySnap = await getDocs(balconyQuery);
+    
+    if (!balconySnap.empty) {
+      const balconyDoc = balconySnap.docs[0];
+      return { 
+        success: true, 
+        balcony: {
+          ...balconyDoc.data() as BalconyExperiment,
+          id: balconyDoc.id
+        }
+      };
+    }
+    
+    return { success: false, error: 'No balcony experiment found for this reflection' };
+  } catch (error) {
+    console.error('Error getting balcony experiment:', error);
+    return { success: false, error };
+  }
+};
+
+// Update an existing balcony experiment
+export const updateBalconyExperiment = async (
+  user: User,
+  balconyId: string,
+  balconyData: Partial<Omit<BalconyExperiment, 'type' | 'createdAt'>>
+): Promise<{ success: boolean; error?: any }> => {
+  try {
+    const balconyRef = doc(db, 'users', user.uid, 'sessions', balconyId);
+    
+    await updateDoc(balconyRef, {
+      ...balconyData,
+      updatedAt: new Date().toISOString()
+    });
+    
+    return { success: true };
+  } catch (error) {
+    console.error('Error updating balcony experiment:', error);
     return { success: false, error };
   }
 };

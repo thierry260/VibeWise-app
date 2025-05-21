@@ -6,7 +6,10 @@
   import { 
     getReflectionById, 
     createBalconyExperiment, 
-    type Reflection 
+    updateBalconyExperiment,
+    getBalconyForReflection,
+    type Reflection,
+    type BalconyExperiment 
   } from '$lib/services/sessions';
 
   // Parent reflection data
@@ -14,6 +17,10 @@
   let parentReflectionId: string | null = null;
   let reflectionLoadError: string | null = null;
   let isLoading = true;
+
+  // Existing balcony data
+  let existingBalcony: (BalconyExperiment & { id: string }) | null = null;
+  let isEditMode = false;
 
   // Form state
   let pattern = '';
@@ -25,7 +32,7 @@
   let submitSuccess = false;
   let submitError: string | null = null;
 
-  // Load parent reflection data
+  // Load parent reflection data and check for existing balcony insight
   onMount(async () => {
     // Get reflection ID from URL query parameter
     parentReflectionId = $page.url.searchParams.get('reflectionId');
@@ -43,15 +50,30 @@
     }
     
     try {
-      const result = await getReflectionById($authStore.user, parentReflectionId);
+      // Get the parent reflection
+      const reflectionResult = await getReflectionById($authStore.user, parentReflectionId);
       
-      if (result.success && result.reflection) {
-        parentReflection = result.reflection;
+      if (reflectionResult.success && reflectionResult.reflection) {
+        parentReflection = reflectionResult.reflection;
         
-        // Calculate delay in minutes between original reflection and now
-        const reflectionTime = new Date(parentReflection.timestamp).getTime();
-        const currentTime = new Date().getTime();
-        delayMinutes = Math.floor((currentTime - reflectionTime) / (1000 * 60));
+        // Check if there's an existing balcony insight for this reflection
+        const balconyResult = await getBalconyForReflection($authStore.user, parentReflectionId);
+        
+        if (balconyResult.success && balconyResult.balcony) {
+          // We found an existing balcony insight, prefill the form
+          existingBalcony = balconyResult.balcony;
+          isEditMode = true;
+          
+          // Prefill form fields
+          pattern = existingBalcony.pattern;
+          truth = existingBalcony.truth;
+          delayMinutes = existingBalcony.delay_minutes;
+        } else {
+          // No existing balcony insight, calculate delay from now
+          const reflectionTime = new Date(parentReflection.timestamp).getTime();
+          const currentTime = new Date().getTime();
+          delayMinutes = Math.floor((currentTime - reflectionTime) / (1000 * 60));
+        }
       } else {
         reflectionLoadError = 'Failed to load reflection. It may have been deleted.';
       }
@@ -79,7 +101,7 @@
     return `${hours} hour${hours !== 1 ? 's' : ''} and ${remainingMinutes} minute${remainingMinutes !== 1 ? 's' : ''}`;
   }
 
-  // Submit balcony experiment
+  // Submit or update balcony experiment
   async function submitBalconyExperiment() {
     if (!$authStore.user || !parentReflectionId || !parentReflection) return;
     
@@ -97,25 +119,39 @@
     submitError = null;
     
     try {
-      const balconyData = {
-        timestamp: new Date().toISOString(),
-        parent_reflection_id: parentReflectionId,
-        pattern: pattern.trim(),
-        truth: truth.trim(),
-        delay_minutes: delayMinutes
-      };
+      let result;
       
-      const result = await createBalconyExperiment($authStore.user, balconyData);
+      if (isEditMode && existingBalcony) {
+        // Update existing balcony experiment
+        const balconyData = {
+          pattern: pattern.trim(),
+          truth: truth.trim(),
+          delay_minutes: delayMinutes
+        };
+        
+        result = await updateBalconyExperiment($authStore.user, existingBalcony.id, balconyData);
+      } else {
+        // Create new balcony experiment
+        const balconyData = {
+          timestamp: new Date().toISOString(),
+          parent_reflection_id: parentReflectionId,
+          pattern: pattern.trim(),
+          truth: truth.trim(),
+          delay_minutes: delayMinutes
+        };
+        
+        result = await createBalconyExperiment($authStore.user, balconyData);
+      }
       
       if (result.success) {
         submitSuccess = true;
         
-        // Navigate back to home after successful submission
+        // Navigate back to history page after successful submission
         setTimeout(() => {
-          goto('/home');
+          goto('/history');
         }, 2000);
       } else {
-        submitError = 'Failed to save balcony experiment. Please try again.';
+        submitError = `Failed to ${isEditMode ? 'update' : 'save'} balcony experiment. Please try again.`;
       }
     } catch (error) {
       console.error('Error submitting balcony experiment:', error);
@@ -188,11 +224,11 @@
       on:click={submitBalconyExperiment}
     >
       {#if isSubmitting}
-        Saving...
+        {isEditMode ? 'Updating...' : 'Saving...'}
       {:else if submitSuccess}
-        Saved!
+        {isEditMode ? 'Updated!' : 'Saved!'}
       {:else}
-        Save Balcony Insight
+        {isEditMode ? 'Update Balcony Insight' : 'Save Balcony Insight'}
       {/if}
     </button>
   {/if}

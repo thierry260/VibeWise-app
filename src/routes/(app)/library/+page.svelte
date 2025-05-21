@@ -75,7 +75,7 @@
   let activeTab = 'Practices';
   
   // Function to change active tab
-  function setActiveTab(tab) {
+  function setActiveTab(tab: string) {
     activeTab = tab;
   }
 </script>

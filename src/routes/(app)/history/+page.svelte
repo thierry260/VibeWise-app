@@ -1,20 +1,25 @@
 <script lang="ts">
   import { onMount } from 'svelte';
+  import { goto } from '$app/navigation';
   import { authStore } from '$lib/stores/auth';
-  import { getRecentSessions, type Session } from '$lib/services/sessions';
+  import { getRecentSessions, getBalconyForReflection, type Session } from '$lib/services/sessions';
 
-  let sessions: Session[] = [];
+  let sessions: Array<Session & { id: string }> = [];
   let isLoading = true;
   let loadError: string | null = null;
+  let balconyCache: Record<string, boolean> = {}; // Cache to track which reflections have balcony insights
 
   onMount(async () => {
     if (!$authStore.user) return;
     
     try {
-      const result = await getRecentSessions($authStore.user, 10);
+      const result = await getRecentSessions($authStore.user, 20);
       
       if (result.success && result.sessions) {
         sessions = result.sessions;
+        
+        // Check for balcony insights for each reflection
+        await checkForBalconyInsights();
       } else {
         loadError = 'Failed to load recent sessions.';
       }
@@ -25,6 +30,44 @@
       isLoading = false;
     }
   });
+  
+  // Check which reflections have associated balcony insights
+  async function checkForBalconyInsights() {
+    if (!$authStore.user) return;
+    
+    // Get all reflection IDs
+    const reflectionIds = sessions
+      .filter(session => session.type === 'reflection')
+      .map(session => session.id);
+    
+    // Check each reflection for a balcony insight
+    for (const reflectionId of reflectionIds) {
+      try {
+        const result = await getBalconyForReflection($authStore.user, reflectionId);
+        balconyCache[reflectionId] = result.success;
+      } catch (error) {
+        console.error(`Error checking balcony for reflection ${reflectionId}:`, error);
+        balconyCache[reflectionId] = false;
+      }
+    }
+  }
+  
+  // Navigate to session detail
+  function viewSessionDetail(session: Session & { id: string }) {
+    if (session.type === 'reflection') {
+      goto(`/reflection/${session.id}`);
+    } else if (session.type === 'hrv_session') {
+      goto(`/hrv-detail/${session.id}`);
+    } else if (session.type === 'balcony') {
+      // For balcony insights, navigate to the balcony page with the parent reflection ID
+      goto(`/balcony?reflectionId=${session.parent_reflection_id}`);
+    }
+  }
+  
+  // Navigate to add balcony insight
+  function addBalconyInsight(reflectionId: string) {
+    goto(`/balcony?reflectionId=${reflectionId}`);
+  }
 
   // Format date for display
   function formatDate(dateString: string): string {
@@ -78,11 +121,6 @@
 <div class="history-container">
   <h1>Session History</h1>
   
-  <div class="coming-soon-banner">
-    <p>Full history view will be available in Phase 4</p>
-    <p class="subtitle">This is a placeholder for the upcoming Session History feature</p>
-  </div>
-  
   {#if isLoading}
     <div class="loading">Loading your sessions...</div>
   {:else if loadError}
@@ -95,7 +133,12 @@
   {:else}
     <div class="sessions-list">
       {#each sessions as session}
-        <div class="session-card">
+        <div class="session-card" 
+          on:click={() => viewSessionDetail(session)} 
+          on:keydown={(e) => e.key === 'Enter' && viewSessionDetail(session)}
+          tabindex="0"
+          role="button"
+          aria-label={`View ${getSessionTypeName(session.type)} details`}>
           <div class="session-icon">{getSessionIcon(session.type)}</div>
           <div class="session-details">
             <div class="session-header">
@@ -108,6 +151,26 @@
               <div class="session-content">
                 <p class="mood">{session.mood.join(', ')}</p>
                 <p class="text-preview">{session.text.substring(0, 100)}{session.text.length > 100 ? '...' : ''}</p>
+                
+                <!-- Add balcony insight button if no balcony exists for this reflection -->
+                {#if balconyCache[session.id] === false}
+                  <button 
+                    class="add-balcony-button"
+                    on:click|stopPropagation={() => addBalconyInsight(session.id)}
+                  >
+                    Add Balcony Insight
+                  </button>
+                {:else if balconyCache[session.id] === true}
+                  <div class="has-balcony">
+                    <span class="balcony-badge">Has Balcony Insight</span>
+                    <button 
+                      class="view-balcony-button"
+                      on:click|stopPropagation={() => addBalconyInsight(session.id)}
+                    >
+                      View/Edit
+                    </button>
+                  </div>
+                {/if}
               </div>
             {:else if session.type === 'hrv_session'}
               <div class="session-content">
@@ -115,6 +178,11 @@
                   <span>Avg HR: {session.avg_hr} bpm</span>
                   <span>Vibe Score: {session.vibe_score}</span>
                 </p>
+              </div>
+            {:else if session.type === 'balcony'}
+              <div class="session-content">
+                <p class="balcony-pattern">Pattern: {session.pattern.substring(0, 100)}{session.pattern.length > 100 ? '...' : ''}</p>
+                <p class="balcony-truth">Truth: {session.truth.substring(0, 100)}{session.truth.length > 100 ? '...' : ''}</p>
               </div>
             {/if}
           </div>
@@ -137,27 +205,7 @@
     color: var(--color-primary);
   }
   
-  .coming-soon-banner {
-    background: linear-gradient(135deg, #4D44B3, #BF469A);
-    color: white;
-    padding: 1.5rem;
-    border-radius: 12px;
-    text-align: center;
-    margin-bottom: 2rem;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  }
-  
-  .coming-soon-banner p {
-    font-size: 1.2rem;
-    font-weight: 500;
-    margin: 0;
-  }
-  
-  .coming-soon-banner .subtitle {
-    font-size: 0.9rem;
-    opacity: 0.8;
-    margin-top: 0.5rem;
-  }
+
   
   .loading {
     text-align: center;
@@ -252,5 +300,67 @@
     display: flex;
     gap: 1rem;
     color: var(--color-text-secondary);
+  }
+  
+  .session-card {
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+  
+  .session-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  }
+  
+  .add-balcony-button, .view-balcony-button {
+    background: linear-gradient(90deg, var(--color-primary), var(--color-secondary));
+    color: white;
+    border: none;
+    border-radius: 0.5rem;
+    padding: 0.5rem 1rem;
+    margin-top: 0.5rem;
+    font-size: 0.8rem;
+    cursor: pointer;
+    transition: opacity 0.2s;
+  }
+  
+  .add-balcony-button:hover, .view-balcony-button:hover {
+    opacity: 0.9;
+  }
+  
+  .view-balcony-button {
+    background: transparent;
+    border: 1px solid var(--color-primary);
+    color: var(--color-primary);
+  }
+  
+  .has-balcony {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 0.5rem;
+  }
+  
+  .balcony-badge {
+    background-color: rgba(77, 68, 179, 0.1);
+    color: var(--color-primary);
+    padding: 0.25rem 0.5rem;
+    border-radius: 1rem;
+    font-size: 0.7rem;
+    font-weight: 500;
+  }
+  
+  .balcony-pattern, .balcony-truth {
+    font-size: 0.9rem;
+    margin: 0.25rem 0;
+    color: var(--color-text-secondary);
+  }
+  
+  .balcony-pattern::before {
+    content: '🔍 ';
+  }
+  
+  .balcony-truth::before {
+    content: '💡 ';
   }
 </style>
