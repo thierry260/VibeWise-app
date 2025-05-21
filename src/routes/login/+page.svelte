@@ -18,7 +18,7 @@
 		// Redirect if already logged in
 		const unsubscribe = authStore.subscribe(($auth) => {
 			if ($auth.user) {
-				goto('/');
+				goto('/home');
 			}
 		});
 
@@ -37,7 +37,7 @@
 			loading = true;
 			error = '';
 			await signInWithEmail(email, password);
-			goto('/');
+			goto('/home');
 		} catch (err) {
 			console.error('Login error:', err);
 			const authError = err as AuthError;
@@ -72,7 +72,7 @@
 			loading = true;
 			error = '';
 			await signInWithGoogle();
-			goto('/');
+			goto('/home');
 		} catch (err) {
 			console.error('Google sign in error:', err);
 			const authError = err as AuthError;
@@ -84,7 +84,7 @@
 </script>
 
 <div
-	class="from-primary-50 to-primary-100 flex min-h-screen items-center justify-center p-4 transition-colors duration-200 dark:from-gray-900 dark:to-gray-800"
+	class="flex min-h-screen items-center justify-center from-primary-50 to-primary-100 p-4 transition-colors duration-200 dark:from-gray-900 dark:to-gray-800"
 >
 	<div
 		class="w-full max-w-md transform overflow-hidden rounded-2xl bg-white shadow-xl transition-all duration-300 hover:shadow-2xl dark:bg-gray-800"
@@ -154,7 +154,7 @@
 							type="email"
 							autocomplete="email"
 							bind:value={email}
-							class="focus:ring-primary-500 focus:border-primary-500 w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm focus:ring-2 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400"
+							class="w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm focus:border-primary-500 focus:ring-2 focus:ring-primary-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400"
 							placeholder="you@example.com"
 							required
 						/>
@@ -169,7 +169,7 @@
 							</label>
 							<a
 								href="/forgot-password"
-								class="text-primary-600 hover:text-primary-500 dark:text-primary-400 text-sm"
+								class="text-sm text-primary-600 hover:text-primary-500 dark:text-primary-400"
 							>
 								Forgot password?
 							</a>
@@ -180,7 +180,7 @@
 								bind:value={password}
 								type={showPassword ? 'text' : 'password'}
 								autocomplete="current-password"
-								class="focus:ring-primary-500 focus:border-primary-500 w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm focus:ring-2 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400"
+								class="w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm focus:border-primary-500 focus:ring-2 focus:ring-primary-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400"
 								placeholder="••••••••"
 								required
 							/>
@@ -221,7 +221,7 @@
 					<button
 						type="submit"
 						disabled={loading}
-						class="bg-primary-600 hover:bg-primary-700 focus:ring-primary-500 flex w-full justify-center rounded-lg border border-transparent px-4 py-2.5 text-sm font-medium text-white shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+						class="flex w-full justify-center rounded-lg border border-transparent bg-primary-600 px-4 py-2.5 text-sm font-medium text-white shadow-sm hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
 					>
 						{#if loading}
 							<svg
@@ -266,7 +266,7 @@
 							type="email"
 							autocomplete="email"
 							bind:value={email}
-							class="focus:ring-primary-500 focus:border-primary-500 w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm focus:ring-2 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400"
+							class="w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm focus:border-primary-500 focus:ring-2 focus:ring-primary-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400"
 							placeholder="you@example.com"
 							required
 						/>
@@ -274,7 +274,7 @@
 					<button
 						type="submit"
 						disabled={loading}
-						class="bg-primary-600 hover:bg-primary-700 focus:ring-primary-500 flex w-full justify-center rounded-lg border border-transparent px-4 py-2.5 text-sm font-medium text-white shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+						class="flex w-full justify-center rounded-lg border border-transparent bg-primary-600 px-4 py-2.5 text-sm font-medium text-white shadow-sm hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
 					>
 						{#if loading}
 							<svg
@@ -322,7 +322,7 @@
 				<button
 					on:click={handleGoogleLogin}
 					disabled={loading}
-					class="focus:ring-primary-500 flex w-full items-center justify-center rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-600"
+					class="flex w-full items-center justify-center rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-600"
 				>
 					<svg
 						class="mr-2 h-5 w-5"
@@ -361,7 +361,7 @@
 				Don't have an account?{' '}
 				<a
 					href="/signup"
-					class="text-primary-600 hover:text-primary-500 dark:text-primary-400 font-medium"
+					class="font-medium text-primary-600 hover:text-primary-500 dark:text-primary-400"
 				>
 					Sign up
 				</a>

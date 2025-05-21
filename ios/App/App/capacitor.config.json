@@ -19,9 +19,6 @@
 		}
 	},
 	"packageClassList": [
-		"AppPlugin",
-		"CAPBrowserPlugin",
-		"LocalNotificationsPlugin",
-		"PushNotificationsPlugin"
+		"LocalNotificationsPlugin"
 	]
 }

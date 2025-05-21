@@ -11,12 +11,17 @@
 		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
 		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
 		"format": "prettier --write .",
-		"lint": "prettier --check . && eslint ."
+		"lint": "prettier --check . && eslint .",
+		"cap": "npx cap",
+		"cap:sync": "npm run build && npx cap sync",
+		"cap:open:ios": "npm run cap:sync && npx cap open ios",
+		"cap:open:android": "npm run cap:sync && npx cap open android"
 	},
 	"devDependencies": {
 		"@eslint/compat": "^1.2.5",
 		"@eslint/js": "^9.18.0",
 		"@sveltejs/adapter-auto": "^6.0.0",
+		"@sveltejs/adapter-static": "^3.0.8",
 		"@sveltejs/kit": "^2.16.0",
 		"@sveltejs/vite-plugin-svelte": "^5.0.0",
 		"@tailwindcss/forms": "^0.5.10",
@@ -40,6 +45,11 @@
 		"vite-plugin-tailwind-purgecss": "^0.3.5"
 	},
 	"dependencies": {
+		"@capacitor/android": "^7.2.0",
+		"@capacitor/cli": "^7.2.0",
+		"@capacitor/core": "^7.2.0",
+		"@capacitor/ios": "^7.2.0",
+		"@capacitor/local-notifications": "^7.0.1",
 		"firebase": "^11.7.3"
 	}
 }

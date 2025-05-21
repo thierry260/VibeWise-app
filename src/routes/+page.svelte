@@ -6,11 +6,11 @@
 	import { theme } from '$lib/stores/theme';
 
 	const navItems = [
-		{ name: 'Home', path: '/', icon: '🏠' },
+		{ name: 'Home', path: '/home', icon: '🏠' },
 		{ name: 'Reflect', path: '/reflect', icon: '📝' },
 		{ name: 'Journey', path: '/journey', icon: '🌱' },
 		{ name: 'Library', path: '/library', icon: '📚' },
-		{ name: 'More', path: '/more', icon: '⋯' }
+		{ name: 'Settings', path: '/settings', icon: '⚙️' }
 	];
 
 	const handleSignOut = async () => {

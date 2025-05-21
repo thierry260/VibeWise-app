@@ -72,13 +72,37 @@ if (typeof window !== 'undefined') {
 }
 
 const googleProvider = new GoogleAuthProvider();
+// Add scopes for Google OAuth
+googleProvider.addScope('profile');
+googleProvider.addScope('email');
+
+// Detect platform
+const isPlatformWeb = () => {
+  return typeof window !== 'undefined' && 
+         !window.navigator.userAgent.includes('VibeWise') && 
+         !window.location.href.includes('capacitor');
+};
 
 // Auth functions
 export const signInWithGoogle = async () => {
   try {
-    const result = await signInWithPopup(auth, googleProvider);
-    await createUserProfileIfNeeded(result.user);
-    return { success: true, user: result.user };
+    console.log('Starting Google sign-in process');
+    console.log('Platform detection - is web:', isPlatformWeb());
+    
+    // For web platform, use popup authentication
+    if (isPlatformWeb()) {
+      console.log('Using web authentication flow with popup');
+      const result = await signInWithPopup(auth, googleProvider);
+      await createUserProfileIfNeeded(result.user);
+      return { success: true, user: result.user };
+    } else {
+      // For mobile app, use custom URL construction for deep linking
+      console.log('Using mobile authentication flow with custom URL');
+      // This will use the intent filters in AndroidManifest.xml for mobile
+      const result = await signInWithPopup(auth, googleProvider);
+      await createUserProfileIfNeeded(result.user);
+      return { success: true, user: result.user };
+    }
   } catch (error) {
     console.error('Error signing in with Google:', error);
     return { success: false, error };
