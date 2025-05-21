@@ -15,6 +15,7 @@ ADDED from /Users/thierryschout/Documents/dev/VibeWise-app/android/app/src/main/
 INJECTED from /Users/thierryschout/Documents/dev/VibeWise-app/android/app/src/main/AndroidManifest.xml:2:1-53:12
 INJECTED from /Users/thierryschout/Documents/dev/VibeWise-app/android/app/src/main/AndroidManifest.xml:2:1-53:12
 INJECTED from /Users/thierryschout/Documents/dev/VibeWise-app/android/app/src/main/AndroidManifest.xml:2:1-53:12
+MERGED from [:capacitor-community-bluetooth-le] /Users/thierryschout/Documents/dev/VibeWise-app/node_modules/@capacitor-community/bluetooth-le/android/build/intermediates/merged_manifest/debug/processDebugManifest/AndroidManifest.xml:2:1-27:12
 MERGED from [:capacitor-local-notifications] /Users/thierryschout/Documents/dev/VibeWise-app/node_modules/@capacitor/local-notifications/android/build/intermediates/merged_manifest/debug/processDebugManifest/AndroidManifest.xml:2:1-26:12
 MERGED from [:capacitor-android] /Users/thierryschout/Documents/dev/VibeWise-app/node_modules/@capacitor/android/capacitor/build/intermediates/merged_manifest/debug/processDebugManifest/AndroidManifest.xml:2:1-7:12
 MERGED from [:capacitor-cordova-android-plugins] /Users/thierryschout/Documents/dev/VibeWise-app/android/capacitor-cordova-android-plugins/build/intermediates/merged_manifest/debug/processDebugManifest/AndroidManifest.xml:2:1-11:12
@@ -172,6 +173,8 @@ uses-sdk
 INJECTED from /Users/thierryschout/Documents/dev/VibeWise-app/android/app/src/main/AndroidManifest.xml reason: use-sdk injection requested
 INJECTED from /Users/thierryschout/Documents/dev/VibeWise-app/android/app/src/main/AndroidManifest.xml
 INJECTED from /Users/thierryschout/Documents/dev/VibeWise-app/android/app/src/main/AndroidManifest.xml
+MERGED from [:capacitor-community-bluetooth-le] /Users/thierryschout/Documents/dev/VibeWise-app/node_modules/@capacitor-community/bluetooth-le/android/build/intermediates/merged_manifest/debug/processDebugManifest/AndroidManifest.xml:6:5-44
+MERGED from [:capacitor-community-bluetooth-le] /Users/thierryschout/Documents/dev/VibeWise-app/node_modules/@capacitor-community/bluetooth-le/android/build/intermediates/merged_manifest/debug/processDebugManifest/AndroidManifest.xml:6:5-44
 MERGED from [:capacitor-local-notifications] /Users/thierryschout/Documents/dev/VibeWise-app/node_modules/@capacitor/local-notifications/android/build/intermediates/merged_manifest/debug/processDebugManifest/AndroidManifest.xml:5:5-44
 MERGED from [:capacitor-local-notifications] /Users/thierryschout/Documents/dev/VibeWise-app/node_modules/@capacitor/local-notifications/android/build/intermediates/merged_manifest/debug/processDebugManifest/AndroidManifest.xml:5:5-44
 MERGED from [:capacitor-android] /Users/thierryschout/Documents/dev/VibeWise-app/node_modules/@capacitor/android/capacitor/build/intermediates/merged_manifest/debug/processDebugManifest/AndroidManifest.xml:5:5-44
@@ -248,6 +251,44 @@ MERGED from [org.apache.cordova:framework:10.1.1] /Users/thierryschout/.gradle/c
 		INJECTED from /Users/thierryschout/Documents/dev/VibeWise-app/android/app/src/main/AndroidManifest.xml
 	android:minSdkVersion
 		INJECTED from /Users/thierryschout/Documents/dev/VibeWise-app/android/app/src/main/AndroidManifest.xml
+uses-permission#android.permission.ACCESS_COARSE_LOCATION
+ADDED from [:capacitor-community-bluetooth-le] /Users/thierryschout/Documents/dev/VibeWise-app/node_modules/@capacitor-community/bluetooth-le/android/build/intermediates/merged_manifest/debug/processDebugManifest/AndroidManifest.xml:8:5-81
+	android:name
+		ADDED from [:capacitor-community-bluetooth-le] /Users/thierryschout/Documents/dev/VibeWise-app/node_modules/@capacitor-community/bluetooth-le/android/build/intermediates/merged_manifest/debug/processDebugManifest/AndroidManifest.xml:8:22-78
+uses-permission#android.permission.ACCESS_FINE_LOCATION
+ADDED from [:capacitor-community-bluetooth-le] /Users/thierryschout/Documents/dev/VibeWise-app/node_modules/@capacitor-community/bluetooth-le/android/build/intermediates/merged_manifest/debug/processDebugManifest/AndroidManifest.xml:9:5-79
+	android:name
+		ADDED from [:capacitor-community-bluetooth-le] /Users/thierryschout/Documents/dev/VibeWise-app/node_modules/@capacitor-community/bluetooth-le/android/build/intermediates/merged_manifest/debug/processDebugManifest/AndroidManifest.xml:9:22-76
+uses-permission#android.permission.BLUETOOTH
+ADDED from [:capacitor-community-bluetooth-le] /Users/thierryschout/Documents/dev/VibeWise-app/node_modules/@capacitor-community/bluetooth-le/android/build/intermediates/merged_manifest/debug/processDebugManifest/AndroidManifest.xml:10:5-12:38
+	android:maxSdkVersion
+		ADDED from [:capacitor-community-bluetooth-le] /Users/thierryschout/Documents/dev/VibeWise-app/node_modules/@capacitor-community/bluetooth-le/android/build/intermediates/merged_manifest/debug/processDebugManifest/AndroidManifest.xml:12:9-35
+	android:name
+		ADDED from [:capacitor-community-bluetooth-le] /Users/thierryschout/Documents/dev/VibeWise-app/node_modules/@capacitor-community/bluetooth-le/android/build/intermediates/merged_manifest/debug/processDebugManifest/AndroidManifest.xml:11:9-52
+uses-permission#android.permission.BLUETOOTH_ADMIN
+ADDED from [:capacitor-community-bluetooth-le] /Users/thierryschout/Documents/dev/VibeWise-app/node_modules/@capacitor-community/bluetooth-le/android/build/intermediates/merged_manifest/debug/processDebugManifest/AndroidManifest.xml:13:5-15:38
+	android:maxSdkVersion
+		ADDED from [:capacitor-community-bluetooth-le] /Users/thierryschout/Documents/dev/VibeWise-app/node_modules/@capacitor-community/bluetooth-le/android/build/intermediates/merged_manifest/debug/processDebugManifest/AndroidManifest.xml:15:9-35
+	android:name
+		ADDED from [:capacitor-community-bluetooth-le] /Users/thierryschout/Documents/dev/VibeWise-app/node_modules/@capacitor-community/bluetooth-le/android/build/intermediates/merged_manifest/debug/processDebugManifest/AndroidManifest.xml:14:9-58
+uses-permission#android.permission.BLUETOOTH_SCAN
+ADDED from [:capacitor-community-bluetooth-le] /Users/thierryschout/Documents/dev/VibeWise-app/node_modules/@capacitor-community/bluetooth-le/android/build/intermediates/merged_manifest/debug/processDebugManifest/AndroidManifest.xml:16:5-18:31
+	tools:targetApi
+		ADDED from [:capacitor-community-bluetooth-le] /Users/thierryschout/Documents/dev/VibeWise-app/node_modules/@capacitor-community/bluetooth-le/android/build/intermediates/merged_manifest/debug/processDebugManifest/AndroidManifest.xml:18:9-28
+	android:name
+		ADDED from [:capacitor-community-bluetooth-le] /Users/thierryschout/Documents/dev/VibeWise-app/node_modules/@capacitor-community/bluetooth-le/android/build/intermediates/merged_manifest/debug/processDebugManifest/AndroidManifest.xml:17:9-57
+uses-permission#android.permission.BLUETOOTH_CONNECT
+ADDED from [:capacitor-community-bluetooth-le] /Users/thierryschout/Documents/dev/VibeWise-app/node_modules/@capacitor-community/bluetooth-le/android/build/intermediates/merged_manifest/debug/processDebugManifest/AndroidManifest.xml:19:5-21:31
+	tools:targetApi
+		ADDED from [:capacitor-community-bluetooth-le] /Users/thierryschout/Documents/dev/VibeWise-app/node_modules/@capacitor-community/bluetooth-le/android/build/intermediates/merged_manifest/debug/processDebugManifest/AndroidManifest.xml:21:9-28
+	android:name
+		ADDED from [:capacitor-community-bluetooth-le] /Users/thierryschout/Documents/dev/VibeWise-app/node_modules/@capacitor-community/bluetooth-le/android/build/intermediates/merged_manifest/debug/processDebugManifest/AndroidManifest.xml:20:9-60
+uses-feature#android.hardware.bluetooth_le
+ADDED from [:capacitor-community-bluetooth-le] /Users/thierryschout/Documents/dev/VibeWise-app/node_modules/@capacitor-community/bluetooth-le/android/build/intermediates/merged_manifest/debug/processDebugManifest/AndroidManifest.xml:23:5-25:36
+	android:required
+		ADDED from [:capacitor-community-bluetooth-le] /Users/thierryschout/Documents/dev/VibeWise-app/node_modules/@capacitor-community/bluetooth-le/android/build/intermediates/merged_manifest/debug/processDebugManifest/AndroidManifest.xml:25:9-33
+	android:name
+		ADDED from [:capacitor-community-bluetooth-le] /Users/thierryschout/Documents/dev/VibeWise-app/node_modules/@capacitor-community/bluetooth-le/android/build/intermediates/merged_manifest/debug/processDebugManifest/AndroidManifest.xml:24:9-53
 uses-permission#android.permission.WAKE_LOCK
 ADDED from [:capacitor-local-notifications] /Users/thierryschout/Documents/dev/VibeWise-app/node_modules/@capacitor/local-notifications/android/build/intermediates/merged_manifest/debug/processDebugManifest/AndroidManifest.xml:8:5-68
 	android:name

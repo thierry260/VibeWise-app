@@ -25,198 +25,231 @@
 17    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
 17-->/Users/thierryschout/Documents/dev/VibeWise-app/android/app/src/main/AndroidManifest.xml:52:5-77
 17-->/Users/thierryschout/Documents/dev/VibeWise-app/android/app/src/main/AndroidManifest.xml:52:22-74
-18    <uses-permission android:name="android.permission.WAKE_LOCK" />
-18-->[:capacitor-local-notifications] /Users/thierryschout/Documents/dev/VibeWise-app/node_modules/@capacitor/local-notifications/android/build/intermediates/merged_manifest/debug/processDebugManifest/AndroidManifest.xml:8:5-68
-18-->[:capacitor-local-notifications] /Users/thierryschout/Documents/dev/VibeWise-app/node_modules/@capacitor/local-notifications/android/build/intermediates/merged_manifest/debug/processDebugManifest/AndroidManifest.xml:8:22-65
-19
-20    <permission
-20-->[androidx.core:core:1.15.0] /Users/thierryschout/.gradle/caches/8.11.1/transforms/ef1f180427a0fecf3707e7197b3c342a/transformed/core-1.15.0/AndroidManifest.xml:22:5-24:47
-21        android:name="com.vibewise.app.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION"
-21-->[androidx.core:core:1.15.0] /Users/thierryschout/.gradle/caches/8.11.1/transforms/ef1f180427a0fecf3707e7197b3c342a/transformed/core-1.15.0/AndroidManifest.xml:23:9-81
-22        android:protectionLevel="signature" />
-22-->[androidx.core:core:1.15.0] /Users/thierryschout/.gradle/caches/8.11.1/transforms/ef1f180427a0fecf3707e7197b3c342a/transformed/core-1.15.0/AndroidManifest.xml:24:9-44
-23
-24    <uses-permission android:name="com.vibewise.app.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION" />
-24-->[androidx.core:core:1.15.0] /Users/thierryschout/.gradle/caches/8.11.1/transforms/ef1f180427a0fecf3707e7197b3c342a/transformed/core-1.15.0/AndroidManifest.xml:26:5-97
-24-->[androidx.core:core:1.15.0] /Users/thierryschout/.gradle/caches/8.11.1/transforms/ef1f180427a0fecf3707e7197b3c342a/transformed/core-1.15.0/AndroidManifest.xml:26:22-94
-25
-26    <application
-26-->/Users/thierryschout/Documents/dev/VibeWise-app/android/app/src/main/AndroidManifest.xml:4:5-44:19
-27        android:allowBackup="true"
-27-->/Users/thierryschout/Documents/dev/VibeWise-app/android/app/src/main/AndroidManifest.xml:5:9-35
-28        android:appComponentFactory="androidx.core.app.CoreComponentFactory"
-28-->[androidx.core:core:1.15.0] /Users/thierryschout/.gradle/caches/8.11.1/transforms/ef1f180427a0fecf3707e7197b3c342a/transformed/core-1.15.0/AndroidManifest.xml:28:18-86
-29        android:debuggable="true"
-30        android:extractNativeLibs="false"
-31        android:icon="@mipmap/ic_launcher"
-31-->/Users/thierryschout/Documents/dev/VibeWise-app/android/app/src/main/AndroidManifest.xml:6:9-43
-32        android:label="@string/app_name"
-32-->/Users/thierryschout/Documents/dev/VibeWise-app/android/app/src/main/AndroidManifest.xml:7:9-41
-33        android:roundIcon="@mipmap/ic_launcher_round"
-33-->/Users/thierryschout/Documents/dev/VibeWise-app/android/app/src/main/AndroidManifest.xml:8:9-54
-34        android:supportsRtl="true"
-34-->/Users/thierryschout/Documents/dev/VibeWise-app/android/app/src/main/AndroidManifest.xml:9:9-35
-35        android:testOnly="true"
-36        android:theme="@style/AppTheme" >
-36-->/Users/thierryschout/Documents/dev/VibeWise-app/android/app/src/main/AndroidManifest.xml:10:9-40
-37        <activity
-37-->/Users/thierryschout/Documents/dev/VibeWise-app/android/app/src/main/AndroidManifest.xml:12:9-33:20
-38            android:name="com.vibewise.app.MainActivity"
-38-->/Users/thierryschout/Documents/dev/VibeWise-app/android/app/src/main/AndroidManifest.xml:14:13-41
-39            android:configChanges="orientation|keyboardHidden|keyboard|screenSize|locale|smallestScreenSize|screenLayout|uiMode|navigation"
-39-->/Users/thierryschout/Documents/dev/VibeWise-app/android/app/src/main/AndroidManifest.xml:13:13-140
-40            android:exported="true"
-40-->/Users/thierryschout/Documents/dev/VibeWise-app/android/app/src/main/AndroidManifest.xml:18:13-36
-41            android:label="@string/title_activity_main"
-41-->/Users/thierryschout/Documents/dev/VibeWise-app/android/app/src/main/AndroidManifest.xml:15:13-56
-42            android:launchMode="singleTask"
-42-->/Users/thierryschout/Documents/dev/VibeWise-app/android/app/src/main/AndroidManifest.xml:17:13-44
-43            android:theme="@style/AppTheme.NoActionBarLaunch" >
-43-->/Users/thierryschout/Documents/dev/VibeWise-app/android/app/src/main/AndroidManifest.xml:16:13-62
-44            <intent-filter>
-44-->/Users/thierryschout/Documents/dev/VibeWise-app/android/app/src/main/AndroidManifest.xml:20:13-23:29
-45                <action android:name="android.intent.action.MAIN" />
-45-->/Users/thierryschout/Documents/dev/VibeWise-app/android/app/src/main/AndroidManifest.xml:21:17-69
-45-->/Users/thierryschout/Documents/dev/VibeWise-app/android/app/src/main/AndroidManifest.xml:21:25-66
-46
-47                <category android:name="android.intent.category.LAUNCHER" />
-47-->/Users/thierryschout/Documents/dev/VibeWise-app/android/app/src/main/AndroidManifest.xml:22:17-77
-47-->/Users/thierryschout/Documents/dev/VibeWise-app/android/app/src/main/AndroidManifest.xml:22:27-74
-48            </intent-filter>
-49
-50            <!-- Deep linking for OAuth authentication -->
-51            <intent-filter>
-51-->/Users/thierryschout/Documents/dev/VibeWise-app/android/app/src/main/AndroidManifest.xml:26:13-31:29
-52                <action android:name="android.intent.action.VIEW" />
-52-->/Users/thierryschout/Documents/dev/VibeWise-app/android/app/src/main/AndroidManifest.xml:27:17-69
-52-->/Users/thierryschout/Documents/dev/VibeWise-app/android/app/src/main/AndroidManifest.xml:27:25-66
-53
-54                <category android:name="android.intent.category.DEFAULT" />
-54-->/Users/thierryschout/Documents/dev/VibeWise-app/android/app/src/main/AndroidManifest.xml:28:17-76
-54-->/Users/thierryschout/Documents/dev/VibeWise-app/android/app/src/main/AndroidManifest.xml:28:27-73
-55                <category android:name="android.intent.category.BROWSABLE" />
-55-->/Users/thierryschout/Documents/dev/VibeWise-app/android/app/src/main/AndroidManifest.xml:29:17-78
-55-->/Users/thierryschout/Documents/dev/VibeWise-app/android/app/src/main/AndroidManifest.xml:29:27-75
-56
-57                <data
-57-->/Users/thierryschout/Documents/dev/VibeWise-app/android/app/src/main/AndroidManifest.xml:30:17-80
-58                    android:host="auth-callback"
-58-->/Users/thierryschout/Documents/dev/VibeWise-app/android/app/src/main/AndroidManifest.xml:30:49-77
-59                    android:scheme="vibewise" />
-59-->/Users/thierryschout/Documents/dev/VibeWise-app/android/app/src/main/AndroidManifest.xml:30:23-48
-60            </intent-filter>
-61        </activity>
+18    <!-- Bluetooth -->
+19    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+19-->[:capacitor-community-bluetooth-le] /Users/thierryschout/Documents/dev/VibeWise-app/node_modules/@capacitor-community/bluetooth-le/android/build/intermediates/merged_manifest/debug/processDebugManifest/AndroidManifest.xml:8:5-81
+19-->[:capacitor-community-bluetooth-le] /Users/thierryschout/Documents/dev/VibeWise-app/node_modules/@capacitor-community/bluetooth-le/android/build/intermediates/merged_manifest/debug/processDebugManifest/AndroidManifest.xml:8:22-78
+20    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+20-->[:capacitor-community-bluetooth-le] /Users/thierryschout/Documents/dev/VibeWise-app/node_modules/@capacitor-community/bluetooth-le/android/build/intermediates/merged_manifest/debug/processDebugManifest/AndroidManifest.xml:9:5-79
+20-->[:capacitor-community-bluetooth-le] /Users/thierryschout/Documents/dev/VibeWise-app/node_modules/@capacitor-community/bluetooth-le/android/build/intermediates/merged_manifest/debug/processDebugManifest/AndroidManifest.xml:9:22-76
+21    <uses-permission
+21-->[:capacitor-community-bluetooth-le] /Users/thierryschout/Documents/dev/VibeWise-app/node_modules/@capacitor-community/bluetooth-le/android/build/intermediates/merged_manifest/debug/processDebugManifest/AndroidManifest.xml:10:5-12:38
+22        android:name="android.permission.BLUETOOTH"
+22-->[:capacitor-community-bluetooth-le] /Users/thierryschout/Documents/dev/VibeWise-app/node_modules/@capacitor-community/bluetooth-le/android/build/intermediates/merged_manifest/debug/processDebugManifest/AndroidManifest.xml:11:9-52
+23        android:maxSdkVersion="30" />
+23-->[:capacitor-community-bluetooth-le] /Users/thierryschout/Documents/dev/VibeWise-app/node_modules/@capacitor-community/bluetooth-le/android/build/intermediates/merged_manifest/debug/processDebugManifest/AndroidManifest.xml:12:9-35
+24    <uses-permission
+24-->[:capacitor-community-bluetooth-le] /Users/thierryschout/Documents/dev/VibeWise-app/node_modules/@capacitor-community/bluetooth-le/android/build/intermediates/merged_manifest/debug/processDebugManifest/AndroidManifest.xml:13:5-15:38
+25        android:name="android.permission.BLUETOOTH_ADMIN"
+25-->[:capacitor-community-bluetooth-le] /Users/thierryschout/Documents/dev/VibeWise-app/node_modules/@capacitor-community/bluetooth-le/android/build/intermediates/merged_manifest/debug/processDebugManifest/AndroidManifest.xml:14:9-58
+26        android:maxSdkVersion="30" />
+26-->[:capacitor-community-bluetooth-le] /Users/thierryschout/Documents/dev/VibeWise-app/node_modules/@capacitor-community/bluetooth-le/android/build/intermediates/merged_manifest/debug/processDebugManifest/AndroidManifest.xml:15:9-35
+27    <uses-permission android:name="android.permission.BLUETOOTH_SCAN" />
+27-->[:capacitor-community-bluetooth-le] /Users/thierryschout/Documents/dev/VibeWise-app/node_modules/@capacitor-community/bluetooth-le/android/build/intermediates/merged_manifest/debug/processDebugManifest/AndroidManifest.xml:16:5-18:31
+27-->[:capacitor-community-bluetooth-le] /Users/thierryschout/Documents/dev/VibeWise-app/node_modules/@capacitor-community/bluetooth-le/android/build/intermediates/merged_manifest/debug/processDebugManifest/AndroidManifest.xml:17:9-57
+28    <uses-permission android:name="android.permission.BLUETOOTH_CONNECT" />
+28-->[:capacitor-community-bluetooth-le] /Users/thierryschout/Documents/dev/VibeWise-app/node_modules/@capacitor-community/bluetooth-le/android/build/intermediates/merged_manifest/debug/processDebugManifest/AndroidManifest.xml:19:5-21:31
+28-->[:capacitor-community-bluetooth-le] /Users/thierryschout/Documents/dev/VibeWise-app/node_modules/@capacitor-community/bluetooth-le/android/build/intermediates/merged_manifest/debug/processDebugManifest/AndroidManifest.xml:20:9-60
+29
+30    <uses-feature
+30-->[:capacitor-community-bluetooth-le] /Users/thierryschout/Documents/dev/VibeWise-app/node_modules/@capacitor-community/bluetooth-le/android/build/intermediates/merged_manifest/debug/processDebugManifest/AndroidManifest.xml:23:5-25:36
+31        android:name="android.hardware.bluetooth_le"
+31-->[:capacitor-community-bluetooth-le] /Users/thierryschout/Documents/dev/VibeWise-app/node_modules/@capacitor-community/bluetooth-le/android/build/intermediates/merged_manifest/debug/processDebugManifest/AndroidManifest.xml:24:9-53
+32        android:required="false" />
+32-->[:capacitor-community-bluetooth-le] /Users/thierryschout/Documents/dev/VibeWise-app/node_modules/@capacitor-community/bluetooth-le/android/build/intermediates/merged_manifest/debug/processDebugManifest/AndroidManifest.xml:25:9-33
+33
+34    <uses-permission android:name="android.permission.WAKE_LOCK" />
+34-->[:capacitor-local-notifications] /Users/thierryschout/Documents/dev/VibeWise-app/node_modules/@capacitor/local-notifications/android/build/intermediates/merged_manifest/debug/processDebugManifest/AndroidManifest.xml:8:5-68
+34-->[:capacitor-local-notifications] /Users/thierryschout/Documents/dev/VibeWise-app/node_modules/@capacitor/local-notifications/android/build/intermediates/merged_manifest/debug/processDebugManifest/AndroidManifest.xml:8:22-65
+35
+36    <permission
+36-->[androidx.core:core:1.15.0] /Users/thierryschout/.gradle/caches/8.11.1/transforms/ef1f180427a0fecf3707e7197b3c342a/transformed/core-1.15.0/AndroidManifest.xml:22:5-24:47
+37        android:name="com.vibewise.app.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION"
+37-->[androidx.core:core:1.15.0] /Users/thierryschout/.gradle/caches/8.11.1/transforms/ef1f180427a0fecf3707e7197b3c342a/transformed/core-1.15.0/AndroidManifest.xml:23:9-81
+38        android:protectionLevel="signature" />
+38-->[androidx.core:core:1.15.0] /Users/thierryschout/.gradle/caches/8.11.1/transforms/ef1f180427a0fecf3707e7197b3c342a/transformed/core-1.15.0/AndroidManifest.xml:24:9-44
+39
+40    <uses-permission android:name="com.vibewise.app.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION" />
+40-->[androidx.core:core:1.15.0] /Users/thierryschout/.gradle/caches/8.11.1/transforms/ef1f180427a0fecf3707e7197b3c342a/transformed/core-1.15.0/AndroidManifest.xml:26:5-97
+40-->[androidx.core:core:1.15.0] /Users/thierryschout/.gradle/caches/8.11.1/transforms/ef1f180427a0fecf3707e7197b3c342a/transformed/core-1.15.0/AndroidManifest.xml:26:22-94
+41
+42    <application
+42-->/Users/thierryschout/Documents/dev/VibeWise-app/android/app/src/main/AndroidManifest.xml:4:5-44:19
+43        android:allowBackup="true"
+43-->/Users/thierryschout/Documents/dev/VibeWise-app/android/app/src/main/AndroidManifest.xml:5:9-35
+44        android:appComponentFactory="androidx.core.app.CoreComponentFactory"
+44-->[androidx.core:core:1.15.0] /Users/thierryschout/.gradle/caches/8.11.1/transforms/ef1f180427a0fecf3707e7197b3c342a/transformed/core-1.15.0/AndroidManifest.xml:28:18-86
+45        android:debuggable="true"
+46        android:extractNativeLibs="false"
+47        android:icon="@mipmap/ic_launcher"
+47-->/Users/thierryschout/Documents/dev/VibeWise-app/android/app/src/main/AndroidManifest.xml:6:9-43
+48        android:label="@string/app_name"
+48-->/Users/thierryschout/Documents/dev/VibeWise-app/android/app/src/main/AndroidManifest.xml:7:9-41
+49        android:roundIcon="@mipmap/ic_launcher_round"
+49-->/Users/thierryschout/Documents/dev/VibeWise-app/android/app/src/main/AndroidManifest.xml:8:9-54
+50        android:supportsRtl="true"
+50-->/Users/thierryschout/Documents/dev/VibeWise-app/android/app/src/main/AndroidManifest.xml:9:9-35
+51        android:testOnly="true"
+52        android:theme="@style/AppTheme" >
+52-->/Users/thierryschout/Documents/dev/VibeWise-app/android/app/src/main/AndroidManifest.xml:10:9-40
+53        <activity
+53-->/Users/thierryschout/Documents/dev/VibeWise-app/android/app/src/main/AndroidManifest.xml:12:9-33:20
+54            android:name="com.vibewise.app.MainActivity"
+54-->/Users/thierryschout/Documents/dev/VibeWise-app/android/app/src/main/AndroidManifest.xml:14:13-41
+55            android:configChanges="orientation|keyboardHidden|keyboard|screenSize|locale|smallestScreenSize|screenLayout|uiMode|navigation"
+55-->/Users/thierryschout/Documents/dev/VibeWise-app/android/app/src/main/AndroidManifest.xml:13:13-140
+56            android:exported="true"
+56-->/Users/thierryschout/Documents/dev/VibeWise-app/android/app/src/main/AndroidManifest.xml:18:13-36
+57            android:label="@string/title_activity_main"
+57-->/Users/thierryschout/Documents/dev/VibeWise-app/android/app/src/main/AndroidManifest.xml:15:13-56
+58            android:launchMode="singleTask"
+58-->/Users/thierryschout/Documents/dev/VibeWise-app/android/app/src/main/AndroidManifest.xml:17:13-44
+59            android:theme="@style/AppTheme.NoActionBarLaunch" >
+59-->/Users/thierryschout/Documents/dev/VibeWise-app/android/app/src/main/AndroidManifest.xml:16:13-62
+60            <intent-filter>
+60-->/Users/thierryschout/Documents/dev/VibeWise-app/android/app/src/main/AndroidManifest.xml:20:13-23:29
+61                <action android:name="android.intent.action.MAIN" />
+61-->/Users/thierryschout/Documents/dev/VibeWise-app/android/app/src/main/AndroidManifest.xml:21:17-69
+61-->/Users/thierryschout/Documents/dev/VibeWise-app/android/app/src/main/AndroidManifest.xml:21:25-66
 62
-63        <provider
-64            android:name="androidx.core.content.FileProvider"
-64-->/Users/thierryschout/Documents/dev/VibeWise-app/android/app/src/main/AndroidManifest.xml:36:13-62
-65            android:authorities="com.vibewise.app.fileprovider"
-65-->/Users/thierryschout/Documents/dev/VibeWise-app/android/app/src/main/AndroidManifest.xml:37:13-64
-66            android:exported="false"
-66-->/Users/thierryschout/Documents/dev/VibeWise-app/android/app/src/main/AndroidManifest.xml:38:13-37
-67            android:grantUriPermissions="true" >
-67-->/Users/thierryschout/Documents/dev/VibeWise-app/android/app/src/main/AndroidManifest.xml:39:13-47
-68            <meta-data
-68-->/Users/thierryschout/Documents/dev/VibeWise-app/android/app/src/main/AndroidManifest.xml:40:13-42:64
-69                android:name="android.support.FILE_PROVIDER_PATHS"
-69-->/Users/thierryschout/Documents/dev/VibeWise-app/android/app/src/main/AndroidManifest.xml:41:17-67
-70                android:resource="@xml/file_paths" />
-70-->/Users/thierryschout/Documents/dev/VibeWise-app/android/app/src/main/AndroidManifest.xml:42:17-51
-71        </provider>
+63                <category android:name="android.intent.category.LAUNCHER" />
+63-->/Users/thierryschout/Documents/dev/VibeWise-app/android/app/src/main/AndroidManifest.xml:22:17-77
+63-->/Users/thierryschout/Documents/dev/VibeWise-app/android/app/src/main/AndroidManifest.xml:22:27-74
+64            </intent-filter>
+65
+66            <!-- Deep linking for OAuth authentication -->
+67            <intent-filter>
+67-->/Users/thierryschout/Documents/dev/VibeWise-app/android/app/src/main/AndroidManifest.xml:26:13-31:29
+68                <action android:name="android.intent.action.VIEW" />
+68-->/Users/thierryschout/Documents/dev/VibeWise-app/android/app/src/main/AndroidManifest.xml:27:17-69
+68-->/Users/thierryschout/Documents/dev/VibeWise-app/android/app/src/main/AndroidManifest.xml:27:25-66
+69
+70                <category android:name="android.intent.category.DEFAULT" />
+70-->/Users/thierryschout/Documents/dev/VibeWise-app/android/app/src/main/AndroidManifest.xml:28:17-76
+70-->/Users/thierryschout/Documents/dev/VibeWise-app/android/app/src/main/AndroidManifest.xml:28:27-73
+71                <category android:name="android.intent.category.BROWSABLE" />
+71-->/Users/thierryschout/Documents/dev/VibeWise-app/android/app/src/main/AndroidManifest.xml:29:17-78
+71-->/Users/thierryschout/Documents/dev/VibeWise-app/android/app/src/main/AndroidManifest.xml:29:27-75
 72
-73        <receiver android:name="com.capacitorjs.plugins.localnotifications.TimedNotificationPublisher" />
-73-->[:capacitor-local-notifications] /Users/thierryschout/Documents/dev/VibeWise-app/node_modules/@capacitor/local-notifications/android/build/intermediates/merged_manifest/debug/processDebugManifest/AndroidManifest.xml:12:9-106
-73-->[:capacitor-local-notifications] /Users/thierryschout/Documents/dev/VibeWise-app/node_modules/@capacitor/local-notifications/android/build/intermediates/merged_manifest/debug/processDebugManifest/AndroidManifest.xml:12:19-103
-74        <receiver android:name="com.capacitorjs.plugins.localnotifications.NotificationDismissReceiver" />
-74-->[:capacitor-local-notifications] /Users/thierryschout/Documents/dev/VibeWise-app/node_modules/@capacitor/local-notifications/android/build/intermediates/merged_manifest/debug/processDebugManifest/AndroidManifest.xml:13:9-107
-74-->[:capacitor-local-notifications] /Users/thierryschout/Documents/dev/VibeWise-app/node_modules/@capacitor/local-notifications/android/build/intermediates/merged_manifest/debug/processDebugManifest/AndroidManifest.xml:13:19-104
-75        <receiver
-75-->[:capacitor-local-notifications] /Users/thierryschout/Documents/dev/VibeWise-app/node_modules/@capacitor/local-notifications/android/build/intermediates/merged_manifest/debug/processDebugManifest/AndroidManifest.xml:14:9-23:20
-76            android:name="com.capacitorjs.plugins.localnotifications.LocalNotificationRestoreReceiver"
-76-->[:capacitor-local-notifications] /Users/thierryschout/Documents/dev/VibeWise-app/node_modules/@capacitor/local-notifications/android/build/intermediates/merged_manifest/debug/processDebugManifest/AndroidManifest.xml:15:13-103
-77            android:directBootAware="true"
-77-->[:capacitor-local-notifications] /Users/thierryschout/Documents/dev/VibeWise-app/node_modules/@capacitor/local-notifications/android/build/intermediates/merged_manifest/debug/processDebugManifest/AndroidManifest.xml:16:13-43
-78            android:exported="false" >
-78-->[:capacitor-local-notifications] /Users/thierryschout/Documents/dev/VibeWise-app/node_modules/@capacitor/local-notifications/android/build/intermediates/merged_manifest/debug/processDebugManifest/AndroidManifest.xml:17:13-37
-79            <intent-filter>
-79-->[:capacitor-local-notifications] /Users/thierryschout/Documents/dev/VibeWise-app/node_modules/@capacitor/local-notifications/android/build/intermediates/merged_manifest/debug/processDebugManifest/AndroidManifest.xml:18:13-22:29
-80                <action android:name="android.intent.action.LOCKED_BOOT_COMPLETED" />
-80-->[:capacitor-local-notifications] /Users/thierryschout/Documents/dev/VibeWise-app/node_modules/@capacitor/local-notifications/android/build/intermediates/merged_manifest/debug/processDebugManifest/AndroidManifest.xml:19:17-86
-80-->[:capacitor-local-notifications] /Users/thierryschout/Documents/dev/VibeWise-app/node_modules/@capacitor/local-notifications/android/build/intermediates/merged_manifest/debug/processDebugManifest/AndroidManifest.xml:19:25-83
-81                <action android:name="android.intent.action.BOOT_COMPLETED" />
-81-->[:capacitor-local-notifications] /Users/thierryschout/Documents/dev/VibeWise-app/node_modules/@capacitor/local-notifications/android/build/intermediates/merged_manifest/debug/processDebugManifest/AndroidManifest.xml:20:17-79
-81-->[:capacitor-local-notifications] /Users/thierryschout/Documents/dev/VibeWise-app/node_modules/@capacitor/local-notifications/android/build/intermediates/merged_manifest/debug/processDebugManifest/AndroidManifest.xml:20:25-76
-82                <action android:name="android.intent.action.QUICKBOOT_POWERON" />
-82-->[:capacitor-local-notifications] /Users/thierryschout/Documents/dev/VibeWise-app/node_modules/@capacitor/local-notifications/android/build/intermediates/merged_manifest/debug/processDebugManifest/AndroidManifest.xml:21:17-82
-82-->[:capacitor-local-notifications] /Users/thierryschout/Documents/dev/VibeWise-app/node_modules/@capacitor/local-notifications/android/build/intermediates/merged_manifest/debug/processDebugManifest/AndroidManifest.xml:21:25-79
-83            </intent-filter>
-84        </receiver>
-85
-86        <provider
-86-->[androidx.emoji2:emoji2:1.3.0] /Users/thierryschout/.gradle/caches/8.11.1/transforms/95e1bff8b07737d3ac903152ef1e755e/transformed/emoji2-1.3.0/AndroidManifest.xml:24:9-32:20
-87            android:name="androidx.startup.InitializationProvider"
-87-->[androidx.emoji2:emoji2:1.3.0] /Users/thierryschout/.gradle/caches/8.11.1/transforms/95e1bff8b07737d3ac903152ef1e755e/transformed/emoji2-1.3.0/AndroidManifest.xml:25:13-67
-88            android:authorities="com.vibewise.app.androidx-startup"
-88-->[androidx.emoji2:emoji2:1.3.0] /Users/thierryschout/.gradle/caches/8.11.1/transforms/95e1bff8b07737d3ac903152ef1e755e/transformed/emoji2-1.3.0/AndroidManifest.xml:26:13-68
-89            android:exported="false" >
-89-->[androidx.emoji2:emoji2:1.3.0] /Users/thierryschout/.gradle/caches/8.11.1/transforms/95e1bff8b07737d3ac903152ef1e755e/transformed/emoji2-1.3.0/AndroidManifest.xml:27:13-37
-90            <meta-data
-90-->[androidx.emoji2:emoji2:1.3.0] /Users/thierryschout/.gradle/caches/8.11.1/transforms/95e1bff8b07737d3ac903152ef1e755e/transformed/emoji2-1.3.0/AndroidManifest.xml:29:13-31:52
-91                android:name="androidx.emoji2.text.EmojiCompatInitializer"
-91-->[androidx.emoji2:emoji2:1.3.0] /Users/thierryschout/.gradle/caches/8.11.1/transforms/95e1bff8b07737d3ac903152ef1e755e/transformed/emoji2-1.3.0/AndroidManifest.xml:30:17-75
-92                android:value="androidx.startup" />
-92-->[androidx.emoji2:emoji2:1.3.0] /Users/thierryschout/.gradle/caches/8.11.1/transforms/95e1bff8b07737d3ac903152ef1e755e/transformed/emoji2-1.3.0/AndroidManifest.xml:31:17-49
-93            <meta-data
-93-->[androidx.lifecycle:lifecycle-process:2.6.2] /Users/thierryschout/.gradle/caches/8.11.1/transforms/11761f1ceca3852e938c40f2ce8e6bce/transformed/lifecycle-process-2.6.2/AndroidManifest.xml:29:13-31:52
-94                android:name="androidx.lifecycle.ProcessLifecycleInitializer"
-94-->[androidx.lifecycle:lifecycle-process:2.6.2] /Users/thierryschout/.gradle/caches/8.11.1/transforms/11761f1ceca3852e938c40f2ce8e6bce/transformed/lifecycle-process-2.6.2/AndroidManifest.xml:30:17-78
-95                android:value="androidx.startup" />
-95-->[androidx.lifecycle:lifecycle-process:2.6.2] /Users/thierryschout/.gradle/caches/8.11.1/transforms/11761f1ceca3852e938c40f2ce8e6bce/transformed/lifecycle-process-2.6.2/AndroidManifest.xml:31:17-49
-96            <meta-data
-96-->[androidx.profileinstaller:profileinstaller:1.3.1] /Users/thierryschout/.gradle/caches/8.11.1/transforms/b9f752dfdb069bf6a0fa184065e8ae73/transformed/profileinstaller-1.3.1/AndroidManifest.xml:29:13-31:52
-97                android:name="androidx.profileinstaller.ProfileInstallerInitializer"
-97-->[androidx.profileinstaller:profileinstaller:1.3.1] /Users/thierryschout/.gradle/caches/8.11.1/transforms/b9f752dfdb069bf6a0fa184065e8ae73/transformed/profileinstaller-1.3.1/AndroidManifest.xml:30:17-85
-98                android:value="androidx.startup" />
-98-->[androidx.profileinstaller:profileinstaller:1.3.1] /Users/thierryschout/.gradle/caches/8.11.1/transforms/b9f752dfdb069bf6a0fa184065e8ae73/transformed/profileinstaller-1.3.1/AndroidManifest.xml:31:17-49
-99        </provider>
-100
-101        <receiver
-101-->[androidx.profileinstaller:profileinstaller:1.3.1] /Users/thierryschout/.gradle/caches/8.11.1/transforms/b9f752dfdb069bf6a0fa184065e8ae73/transformed/profileinstaller-1.3.1/AndroidManifest.xml:34:9-52:20
-102            android:name="androidx.profileinstaller.ProfileInstallReceiver"
-102-->[androidx.profileinstaller:profileinstaller:1.3.1] /Users/thierryschout/.gradle/caches/8.11.1/transforms/b9f752dfdb069bf6a0fa184065e8ae73/transformed/profileinstaller-1.3.1/AndroidManifest.xml:35:13-76
-103            android:directBootAware="false"
-103-->[androidx.profileinstaller:profileinstaller:1.3.1] /Users/thierryschout/.gradle/caches/8.11.1/transforms/b9f752dfdb069bf6a0fa184065e8ae73/transformed/profileinstaller-1.3.1/AndroidManifest.xml:36:13-44
-104            android:enabled="true"
-104-->[androidx.profileinstaller:profileinstaller:1.3.1] /Users/thierryschout/.gradle/caches/8.11.1/transforms/b9f752dfdb069bf6a0fa184065e8ae73/transformed/profileinstaller-1.3.1/AndroidManifest.xml:37:13-35
-105            android:exported="true"
-105-->[androidx.profileinstaller:profileinstaller:1.3.1] /Users/thierryschout/.gradle/caches/8.11.1/transforms/b9f752dfdb069bf6a0fa184065e8ae73/transformed/profileinstaller-1.3.1/AndroidManifest.xml:38:13-36
-106            android:permission="android.permission.DUMP" >
-106-->[androidx.profileinstaller:profileinstaller:1.3.1] /Users/thierryschout/.gradle/caches/8.11.1/transforms/b9f752dfdb069bf6a0fa184065e8ae73/transformed/profileinstaller-1.3.1/AndroidManifest.xml:39:13-57
-107            <intent-filter>
-107-->[androidx.profileinstaller:profileinstaller:1.3.1] /Users/thierryschout/.gradle/caches/8.11.1/transforms/b9f752dfdb069bf6a0fa184065e8ae73/transformed/profileinstaller-1.3.1/AndroidManifest.xml:40:13-42:29
-108                <action android:name="androidx.profileinstaller.action.INSTALL_PROFILE" />
-108-->[androidx.profileinstaller:profileinstaller:1.3.1] /Users/thierryschout/.gradle/caches/8.11.1/transforms/b9f752dfdb069bf6a0fa184065e8ae73/transformed/profileinstaller-1.3.1/AndroidManifest.xml:41:17-91
-108-->[androidx.profileinstaller:profileinstaller:1.3.1] /Users/thierryschout/.gradle/caches/8.11.1/transforms/b9f752dfdb069bf6a0fa184065e8ae73/transformed/profileinstaller-1.3.1/AndroidManifest.xml:41:25-88
-109            </intent-filter>
-110            <intent-filter>
-110-->[androidx.profileinstaller:profileinstaller:1.3.1] /Users/thierryschout/.gradle/caches/8.11.1/transforms/b9f752dfdb069bf6a0fa184065e8ae73/transformed/profileinstaller-1.3.1/AndroidManifest.xml:43:13-45:29
-111                <action android:name="androidx.profileinstaller.action.SKIP_FILE" />
-111-->[androidx.profileinstaller:profileinstaller:1.3.1] /Users/thierryschout/.gradle/caches/8.11.1/transforms/b9f752dfdb069bf6a0fa184065e8ae73/transformed/profileinstaller-1.3.1/AndroidManifest.xml:44:17-85
-111-->[androidx.profileinstaller:profileinstaller:1.3.1] /Users/thierryschout/.gradle/caches/8.11.1/transforms/b9f752dfdb069bf6a0fa184065e8ae73/transformed/profileinstaller-1.3.1/AndroidManifest.xml:44:25-82
-112            </intent-filter>
-113            <intent-filter>
-113-->[androidx.profileinstaller:profileinstaller:1.3.1] /Users/thierryschout/.gradle/caches/8.11.1/transforms/b9f752dfdb069bf6a0fa184065e8ae73/transformed/profileinstaller-1.3.1/AndroidManifest.xml:46:13-48:29
-114                <action android:name="androidx.profileinstaller.action.SAVE_PROFILE" />
-114-->[androidx.profileinstaller:profileinstaller:1.3.1] /Users/thierryschout/.gradle/caches/8.11.1/transforms/b9f752dfdb069bf6a0fa184065e8ae73/transformed/profileinstaller-1.3.1/AndroidManifest.xml:47:17-88
-114-->[androidx.profileinstaller:profileinstaller:1.3.1] /Users/thierryschout/.gradle/caches/8.11.1/transforms/b9f752dfdb069bf6a0fa184065e8ae73/transformed/profileinstaller-1.3.1/AndroidManifest.xml:47:25-85
-115            </intent-filter>
-116            <intent-filter>
-116-->[androidx.profileinstaller:profileinstaller:1.3.1] /Users/thierryschout/.gradle/caches/8.11.1/transforms/b9f752dfdb069bf6a0fa184065e8ae73/transformed/profileinstaller-1.3.1/AndroidManifest.xml:49:13-51:29
-117                <action android:name="androidx.profileinstaller.action.BENCHMARK_OPERATION" />
-117-->[androidx.profileinstaller:profileinstaller:1.3.1] /Users/thierryschout/.gradle/caches/8.11.1/transforms/b9f752dfdb069bf6a0fa184065e8ae73/transformed/profileinstaller-1.3.1/AndroidManifest.xml:50:17-95
-117-->[androidx.profileinstaller:profileinstaller:1.3.1] /Users/thierryschout/.gradle/caches/8.11.1/transforms/b9f752dfdb069bf6a0fa184065e8ae73/transformed/profileinstaller-1.3.1/AndroidManifest.xml:50:25-92
-118            </intent-filter>
-119        </receiver>
-120    </application>
-121
-122</manifest>
+73                <data
+73-->/Users/thierryschout/Documents/dev/VibeWise-app/android/app/src/main/AndroidManifest.xml:30:17-80
+74                    android:host="auth-callback"
+74-->/Users/thierryschout/Documents/dev/VibeWise-app/android/app/src/main/AndroidManifest.xml:30:49-77
+75                    android:scheme="vibewise" />
+75-->/Users/thierryschout/Documents/dev/VibeWise-app/android/app/src/main/AndroidManifest.xml:30:23-48
+76            </intent-filter>
+77        </activity>
+78
+79        <provider
+80            android:name="androidx.core.content.FileProvider"
+80-->/Users/thierryschout/Documents/dev/VibeWise-app/android/app/src/main/AndroidManifest.xml:36:13-62
+81            android:authorities="com.vibewise.app.fileprovider"
+81-->/Users/thierryschout/Documents/dev/VibeWise-app/android/app/src/main/AndroidManifest.xml:37:13-64
+82            android:exported="false"
+82-->/Users/thierryschout/Documents/dev/VibeWise-app/android/app/src/main/AndroidManifest.xml:38:13-37
+83            android:grantUriPermissions="true" >
+83-->/Users/thierryschout/Documents/dev/VibeWise-app/android/app/src/main/AndroidManifest.xml:39:13-47
+84            <meta-data
+84-->/Users/thierryschout/Documents/dev/VibeWise-app/android/app/src/main/AndroidManifest.xml:40:13-42:64
+85                android:name="android.support.FILE_PROVIDER_PATHS"
+85-->/Users/thierryschout/Documents/dev/VibeWise-app/android/app/src/main/AndroidManifest.xml:41:17-67
+86                android:resource="@xml/file_paths" />
+86-->/Users/thierryschout/Documents/dev/VibeWise-app/android/app/src/main/AndroidManifest.xml:42:17-51
+87        </provider>
+88
+89        <receiver android:name="com.capacitorjs.plugins.localnotifications.TimedNotificationPublisher" />
+89-->[:capacitor-local-notifications] /Users/thierryschout/Documents/dev/VibeWise-app/node_modules/@capacitor/local-notifications/android/build/intermediates/merged_manifest/debug/processDebugManifest/AndroidManifest.xml:12:9-106
+89-->[:capacitor-local-notifications] /Users/thierryschout/Documents/dev/VibeWise-app/node_modules/@capacitor/local-notifications/android/build/intermediates/merged_manifest/debug/processDebugManifest/AndroidManifest.xml:12:19-103
+90        <receiver android:name="com.capacitorjs.plugins.localnotifications.NotificationDismissReceiver" />
+90-->[:capacitor-local-notifications] /Users/thierryschout/Documents/dev/VibeWise-app/node_modules/@capacitor/local-notifications/android/build/intermediates/merged_manifest/debug/processDebugManifest/AndroidManifest.xml:13:9-107
+90-->[:capacitor-local-notifications] /Users/thierryschout/Documents/dev/VibeWise-app/node_modules/@capacitor/local-notifications/android/build/intermediates/merged_manifest/debug/processDebugManifest/AndroidManifest.xml:13:19-104
+91        <receiver
+91-->[:capacitor-local-notifications] /Users/thierryschout/Documents/dev/VibeWise-app/node_modules/@capacitor/local-notifications/android/build/intermediates/merged_manifest/debug/processDebugManifest/AndroidManifest.xml:14:9-23:20
+92            android:name="com.capacitorjs.plugins.localnotifications.LocalNotificationRestoreReceiver"
+92-->[:capacitor-local-notifications] /Users/thierryschout/Documents/dev/VibeWise-app/node_modules/@capacitor/local-notifications/android/build/intermediates/merged_manifest/debug/processDebugManifest/AndroidManifest.xml:15:13-103
+93            android:directBootAware="true"
+93-->[:capacitor-local-notifications] /Users/thierryschout/Documents/dev/VibeWise-app/node_modules/@capacitor/local-notifications/android/build/intermediates/merged_manifest/debug/processDebugManifest/AndroidManifest.xml:16:13-43
+94            android:exported="false" >
+94-->[:capacitor-local-notifications] /Users/thierryschout/Documents/dev/VibeWise-app/node_modules/@capacitor/local-notifications/android/build/intermediates/merged_manifest/debug/processDebugManifest/AndroidManifest.xml:17:13-37
+95            <intent-filter>
+95-->[:capacitor-local-notifications] /Users/thierryschout/Documents/dev/VibeWise-app/node_modules/@capacitor/local-notifications/android/build/intermediates/merged_manifest/debug/processDebugManifest/AndroidManifest.xml:18:13-22:29
+96                <action android:name="android.intent.action.LOCKED_BOOT_COMPLETED" />
+96-->[:capacitor-local-notifications] /Users/thierryschout/Documents/dev/VibeWise-app/node_modules/@capacitor/local-notifications/android/build/intermediates/merged_manifest/debug/processDebugManifest/AndroidManifest.xml:19:17-86
+96-->[:capacitor-local-notifications] /Users/thierryschout/Documents/dev/VibeWise-app/node_modules/@capacitor/local-notifications/android/build/intermediates/merged_manifest/debug/processDebugManifest/AndroidManifest.xml:19:25-83
+97                <action android:name="android.intent.action.BOOT_COMPLETED" />
+97-->[:capacitor-local-notifications] /Users/thierryschout/Documents/dev/VibeWise-app/node_modules/@capacitor/local-notifications/android/build/intermediates/merged_manifest/debug/processDebugManifest/AndroidManifest.xml:20:17-79
+97-->[:capacitor-local-notifications] /Users/thierryschout/Documents/dev/VibeWise-app/node_modules/@capacitor/local-notifications/android/build/intermediates/merged_manifest/debug/processDebugManifest/AndroidManifest.xml:20:25-76
+98                <action android:name="android.intent.action.QUICKBOOT_POWERON" />
+98-->[:capacitor-local-notifications] /Users/thierryschout/Documents/dev/VibeWise-app/node_modules/@capacitor/local-notifications/android/build/intermediates/merged_manifest/debug/processDebugManifest/AndroidManifest.xml:21:17-82
+98-->[:capacitor-local-notifications] /Users/thierryschout/Documents/dev/VibeWise-app/node_modules/@capacitor/local-notifications/android/build/intermediates/merged_manifest/debug/processDebugManifest/AndroidManifest.xml:21:25-79
+99            </intent-filter>
+100        </receiver>
+101
+102        <provider
+102-->[androidx.emoji2:emoji2:1.3.0] /Users/thierryschout/.gradle/caches/8.11.1/transforms/95e1bff8b07737d3ac903152ef1e755e/transformed/emoji2-1.3.0/AndroidManifest.xml:24:9-32:20
+103            android:name="androidx.startup.InitializationProvider"
+103-->[androidx.emoji2:emoji2:1.3.0] /Users/thierryschout/.gradle/caches/8.11.1/transforms/95e1bff8b07737d3ac903152ef1e755e/transformed/emoji2-1.3.0/AndroidManifest.xml:25:13-67
+104            android:authorities="com.vibewise.app.androidx-startup"
+104-->[androidx.emoji2:emoji2:1.3.0] /Users/thierryschout/.gradle/caches/8.11.1/transforms/95e1bff8b07737d3ac903152ef1e755e/transformed/emoji2-1.3.0/AndroidManifest.xml:26:13-68
+105            android:exported="false" >
+105-->[androidx.emoji2:emoji2:1.3.0] /Users/thierryschout/.gradle/caches/8.11.1/transforms/95e1bff8b07737d3ac903152ef1e755e/transformed/emoji2-1.3.0/AndroidManifest.xml:27:13-37
+106            <meta-data
+106-->[androidx.emoji2:emoji2:1.3.0] /Users/thierryschout/.gradle/caches/8.11.1/transforms/95e1bff8b07737d3ac903152ef1e755e/transformed/emoji2-1.3.0/AndroidManifest.xml:29:13-31:52
+107                android:name="androidx.emoji2.text.EmojiCompatInitializer"
+107-->[androidx.emoji2:emoji2:1.3.0] /Users/thierryschout/.gradle/caches/8.11.1/transforms/95e1bff8b07737d3ac903152ef1e755e/transformed/emoji2-1.3.0/AndroidManifest.xml:30:17-75
+108                android:value="androidx.startup" />
+108-->[androidx.emoji2:emoji2:1.3.0] /Users/thierryschout/.gradle/caches/8.11.1/transforms/95e1bff8b07737d3ac903152ef1e755e/transformed/emoji2-1.3.0/AndroidManifest.xml:31:17-49
+109            <meta-data
+109-->[androidx.lifecycle:lifecycle-process:2.6.2] /Users/thierryschout/.gradle/caches/8.11.1/transforms/11761f1ceca3852e938c40f2ce8e6bce/transformed/lifecycle-process-2.6.2/AndroidManifest.xml:29:13-31:52
+110                android:name="androidx.lifecycle.ProcessLifecycleInitializer"
+110-->[androidx.lifecycle:lifecycle-process:2.6.2] /Users/thierryschout/.gradle/caches/8.11.1/transforms/11761f1ceca3852e938c40f2ce8e6bce/transformed/lifecycle-process-2.6.2/AndroidManifest.xml:30:17-78
+111                android:value="androidx.startup" />
+111-->[androidx.lifecycle:lifecycle-process:2.6.2] /Users/thierryschout/.gradle/caches/8.11.1/transforms/11761f1ceca3852e938c40f2ce8e6bce/transformed/lifecycle-process-2.6.2/AndroidManifest.xml:31:17-49
+112            <meta-data
+112-->[androidx.profileinstaller:profileinstaller:1.3.1] /Users/thierryschout/.gradle/caches/8.11.1/transforms/b9f752dfdb069bf6a0fa184065e8ae73/transformed/profileinstaller-1.3.1/AndroidManifest.xml:29:13-31:52
+113                android:name="androidx.profileinstaller.ProfileInstallerInitializer"
+113-->[androidx.profileinstaller:profileinstaller:1.3.1] /Users/thierryschout/.gradle/caches/8.11.1/transforms/b9f752dfdb069bf6a0fa184065e8ae73/transformed/profileinstaller-1.3.1/AndroidManifest.xml:30:17-85
+114                android:value="androidx.startup" />
+114-->[androidx.profileinstaller:profileinstaller:1.3.1] /Users/thierryschout/.gradle/caches/8.11.1/transforms/b9f752dfdb069bf6a0fa184065e8ae73/transformed/profileinstaller-1.3.1/AndroidManifest.xml:31:17-49
+115        </provider>
+116
+117        <receiver
+117-->[androidx.profileinstaller:profileinstaller:1.3.1] /Users/thierryschout/.gradle/caches/8.11.1/transforms/b9f752dfdb069bf6a0fa184065e8ae73/transformed/profileinstaller-1.3.1/AndroidManifest.xml:34:9-52:20
+118            android:name="androidx.profileinstaller.ProfileInstallReceiver"
+118-->[androidx.profileinstaller:profileinstaller:1.3.1] /Users/thierryschout/.gradle/caches/8.11.1/transforms/b9f752dfdb069bf6a0fa184065e8ae73/transformed/profileinstaller-1.3.1/AndroidManifest.xml:35:13-76
+119            android:directBootAware="false"
+119-->[androidx.profileinstaller:profileinstaller:1.3.1] /Users/thierryschout/.gradle/caches/8.11.1/transforms/b9f752dfdb069bf6a0fa184065e8ae73/transformed/profileinstaller-1.3.1/AndroidManifest.xml:36:13-44
+120            android:enabled="true"
+120-->[androidx.profileinstaller:profileinstaller:1.3.1] /Users/thierryschout/.gradle/caches/8.11.1/transforms/b9f752dfdb069bf6a0fa184065e8ae73/transformed/profileinstaller-1.3.1/AndroidManifest.xml:37:13-35
+121            android:exported="true"
+121-->[androidx.profileinstaller:profileinstaller:1.3.1] /Users/thierryschout/.gradle/caches/8.11.1/transforms/b9f752dfdb069bf6a0fa184065e8ae73/transformed/profileinstaller-1.3.1/AndroidManifest.xml:38:13-36
+122            android:permission="android.permission.DUMP" >
+122-->[androidx.profileinstaller:profileinstaller:1.3.1] /Users/thierryschout/.gradle/caches/8.11.1/transforms/b9f752dfdb069bf6a0fa184065e8ae73/transformed/profileinstaller-1.3.1/AndroidManifest.xml:39:13-57
+123            <intent-filter>
+123-->[androidx.profileinstaller:profileinstaller:1.3.1] /Users/thierryschout/.gradle/caches/8.11.1/transforms/b9f752dfdb069bf6a0fa184065e8ae73/transformed/profileinstaller-1.3.1/AndroidManifest.xml:40:13-42:29
+124                <action android:name="androidx.profileinstaller.action.INSTALL_PROFILE" />
+124-->[androidx.profileinstaller:profileinstaller:1.3.1] /Users/thierryschout/.gradle/caches/8.11.1/transforms/b9f752dfdb069bf6a0fa184065e8ae73/transformed/profileinstaller-1.3.1/AndroidManifest.xml:41:17-91
+124-->[androidx.profileinstaller:profileinstaller:1.3.1] /Users/thierryschout/.gradle/caches/8.11.1/transforms/b9f752dfdb069bf6a0fa184065e8ae73/transformed/profileinstaller-1.3.1/AndroidManifest.xml:41:25-88
+125            </intent-filter>
+126            <intent-filter>
+126-->[androidx.profileinstaller:profileinstaller:1.3.1] /Users/thierryschout/.gradle/caches/8.11.1/transforms/b9f752dfdb069bf6a0fa184065e8ae73/transformed/profileinstaller-1.3.1/AndroidManifest.xml:43:13-45:29
+127                <action android:name="androidx.profileinstaller.action.SKIP_FILE" />
+127-->[androidx.profileinstaller:profileinstaller:1.3.1] /Users/thierryschout/.gradle/caches/8.11.1/transforms/b9f752dfdb069bf6a0fa184065e8ae73/transformed/profileinstaller-1.3.1/AndroidManifest.xml:44:17-85
+127-->[androidx.profileinstaller:profileinstaller:1.3.1] /Users/thierryschout/.gradle/caches/8.11.1/transforms/b9f752dfdb069bf6a0fa184065e8ae73/transformed/profileinstaller-1.3.1/AndroidManifest.xml:44:25-82
+128            </intent-filter>
+129            <intent-filter>
+129-->[androidx.profileinstaller:profileinstaller:1.3.1] /Users/thierryschout/.gradle/caches/8.11.1/transforms/b9f752dfdb069bf6a0fa184065e8ae73/transformed/profileinstaller-1.3.1/AndroidManifest.xml:46:13-48:29
+130                <action android:name="androidx.profileinstaller.action.SAVE_PROFILE" />
+130-->[androidx.profileinstaller:profileinstaller:1.3.1] /Users/thierryschout/.gradle/caches/8.11.1/transforms/b9f752dfdb069bf6a0fa184065e8ae73/transformed/profileinstaller-1.3.1/AndroidManifest.xml:47:17-88
+130-->[androidx.profileinstaller:profileinstaller:1.3.1] /Users/thierryschout/.gradle/caches/8.11.1/transforms/b9f752dfdb069bf6a0fa184065e8ae73/transformed/profileinstaller-1.3.1/AndroidManifest.xml:47:25-85
+131            </intent-filter>
+132            <intent-filter>
+132-->[androidx.profileinstaller:profileinstaller:1.3.1] /Users/thierryschout/.gradle/caches/8.11.1/transforms/b9f752dfdb069bf6a0fa184065e8ae73/transformed/profileinstaller-1.3.1/AndroidManifest.xml:49:13-51:29
+133                <action android:name="androidx.profileinstaller.action.BENCHMARK_OPERATION" />
+133-->[androidx.profileinstaller:profileinstaller:1.3.1] /Users/thierryschout/.gradle/caches/8.11.1/transforms/b9f752dfdb069bf6a0fa184065e8ae73/transformed/profileinstaller-1.3.1/AndroidManifest.xml:50:17-95
+133-->[androidx.profileinstaller:profileinstaller:1.3.1] /Users/thierryschout/.gradle/caches/8.11.1/transforms/b9f752dfdb069bf6a0fa184065e8ae73/transformed/profileinstaller-1.3.1/AndroidManifest.xml:50:25-92
+134            </intent-filter>
+135        </receiver>
+136    </application>
+137
+138</manifest>

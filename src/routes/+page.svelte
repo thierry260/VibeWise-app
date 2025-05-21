@@ -107,7 +107,7 @@
 		<h3 class="mb-3 text-lg font-medium text-gray-900 dark:text-white">Quick Actions</h3>
 		<div class="grid grid-cols-2 gap-3">
 			<a
-				href="/session"
+				href="/hrv-session"
 				class="flex flex-col items-center rounded-lg bg-white p-4 text-center shadow-md transition-all hover:shadow-lg dark:bg-gray-800 dark:hover:bg-gray-700"
 			>
 				<div
