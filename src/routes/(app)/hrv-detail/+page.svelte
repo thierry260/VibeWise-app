@@ -4,6 +4,7 @@
 	import { goto } from '$app/navigation';
 	import { authStore } from '$lib/stores/auth';
 	import { getSessionById, type HRVSession } from '$lib/services/sessions';
+	import { getVibeScoreInterpretation } from '$lib/utils/vibeScore';
 	import uPlot from 'uplot';
 	import 'uplot/dist/uPlot.min.css';
 
@@ -98,7 +99,39 @@
 			},
 			series: [
 				{}, // x-axis
-				{}
+				{
+					scale: 'hr',
+					label: 'Heart Rate',
+					value: (u: uPlot, v: number | null) => (v == null ? '-' : v.toFixed(0) + ' bpm'),
+					stroke: 'rgba(229, 57, 53, 0.8)', // #E53935 with opacity
+					width: 2,
+					points: {
+						show: false
+					},
+					spanGaps: true
+				},
+				{
+					scale: 'rmssd',
+					label: 'Balance',
+					value: (u: uPlot, v: number | null) => (v == null ? '-' : v.toFixed(1) + ' ms'),
+					stroke: 'rgba(77, 68, 179, 0.8)', // #4D44B3 with opacity
+					width: 2,
+					points: {
+						show: false
+					},
+					spanGaps: true
+				},
+				{
+					scale: 'vibe',
+					label: 'Vibe Score',
+					value: (u: uPlot, v: number | null) => (v == null ? '-' : v.toFixed(0)),
+					stroke: 'rgba(191, 70, 154, 0.8)', // #BF469A with opacity
+					width: 2,
+					points: {
+						show: false
+					},
+					spanGaps: true
+				}
 			],
 			scales: {
 				x: {
@@ -119,27 +152,7 @@
 			},
 			axes: [
 				{}, // x-axis
-				{
-					scale: 'hr',
-					label: 'Heart Rate (bpm)',
-					labelSize: 20,
-					stroke: 'rgba(229, 57, 53, 0.5)',
-					grid: { show: false }
-				},
-				{
-					scale: 'rmssd',
-					label: 'Balance (ms)',
-					labelSize: 20,
-					stroke: 'rgba(77, 68, 179, 0.5)',
-					grid: { show: false }
-				},
-				{
-					scale: 'vibe',
-					label: 'Vibe Score',
-					labelSize: 20,
-					stroke: 'rgba(191, 70, 154, 0.5)',
-					grid: { show: false }
-				}
+				{}
 			]
 		};
 
@@ -245,9 +258,19 @@
 					<div class="stat-label">Avg Balance</div>
 					<div class="stat-value">{session.avg_rmssd.toFixed(1)} <span class="unit">ms</span></div>
 				</div>
-				<div class="stat-card">
+				<div class="vibe-score-card">
 					<div class="stat-label">Vibe Score</div>
 					<div class="stat-value">{session.vibe_score.toFixed(0)}</div>
+					<div class="vibe-interpretation">
+						{#if session.vibe_interpretation}
+							<div class="interpretation-emoji">{session.vibe_interpretation.emoji}</div>
+							<div class="interpretation-text">{session.vibe_interpretation.label}</div>
+						{:else}
+							{@const interpretation = getVibeScoreInterpretation(session.vibe_score)}
+							<div class="interpretation-emoji">{interpretation.emoji}</div>
+							<div class="interpretation-text">{interpretation.label}</div>
+						{/if}
+					</div>
 				</div>
 			</div>
 
@@ -362,10 +385,37 @@
 	}
 
 	.stat-card {
-		background-color: rgba(255, 255, 255, 0.5);
-		border-radius: 8px;
+		background-color: white;
 		padding: 1rem;
+		border-radius: 0.5rem;
+		box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 		text-align: center;
+	}
+
+	.vibe-score-card {
+		grid-column: span 2;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		padding: 1.5rem;
+		background: linear-gradient(135deg, rgba(139, 92, 246, 0.05), rgba(99, 102, 241, 0.1));
+	}
+
+	.vibe-interpretation {
+		display: flex;
+		align-items: center;
+		gap: 0.5rem;
+		margin-top: 0.75rem;
+	}
+
+	.interpretation-emoji {
+		font-size: 1.5rem;
+	}
+
+	.interpretation-text {
+		font-size: 0.875rem;
+		font-weight: 600;
+		color: var(--color-primary, #4D44B3);
 	}
 
 	.stat-label {

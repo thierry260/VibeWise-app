@@ -18,6 +18,7 @@
 		stopSessionTimer,
 		getSessionSummary
 	} from '$lib/services/ble';
+	import { getVibeScoreInterpretation } from '$lib/utils/vibeScore';
 	import uPlot from 'uplot';
 	import 'uplot/dist/uPlot.min.css';
 
@@ -47,6 +48,12 @@
 		rmssd: '-',
 		vibe: '-'
 	};
+
+	// Vibe score interpretation
+	let vibeInterpretation = getVibeScoreInterpretation(0);
+
+	// Update vibe interpretation when the score changes
+	$: vibeInterpretation = getVibeScoreInterpretation($hrvData.vibeScore);
 
 	// Initialize chart
 	function initChart() {
@@ -329,6 +336,7 @@
 				avg_hr: sessionSummary.avgHR,
 				avg_rmssd: sessionSummary.avgRMSSD,
 				vibe_score: sessionSummary.avgVibe,
+				vibe_interpretation: sessionSummary.vibeInterpretation,
 				chart_data: sessionSummary.chartData,
 				rr_intervals: sessionSummary.rrIntervals
 			};
@@ -518,6 +526,18 @@
 							<div class="legend-dot vibe-dot"></div>
 							<span class="legend-label">Vibe Score</span>
 							<span class="legend-value" class:has-value={legendValues.vibe !== '-'} in:fade={{duration: 150}}>{legendValues.vibe}</span>
+						</div>
+					</div>
+
+					<!-- Vibe Score Display -->
+					<div class="vibe-score-container">
+						<div class="vibe-score-circle" style="--progress: {$hrvData.vibeScore}%">
+							<div class="vibe-score-value">{$hrvData.vibeScore}</div>
+							<div class="vibe-score-label">Vibe Score</div>
+						</div>
+						<div class="vibe-score-interpretation">
+							<div class="interpretation-emoji">{vibeInterpretation.emoji}</div>
+							<div class="interpretation-text">{vibeInterpretation.label}</div>
 						</div>
 					</div>
 				</div>
@@ -765,9 +785,10 @@
 
 	.custom-legend {
 		display: flex;
-		justify-content: space-around;
-		padding: 0.75rem;
+		flex-wrap: wrap;
+		gap: 1rem;
 		margin-top: 0.5rem;
+		margin-bottom: 1.5rem;
 		border-radius: 8px;
 		background-color: rgba(255, 255, 255, 0.5);
 		backdrop-filter: blur(4px);
@@ -778,6 +799,82 @@
 		align-items: center;
 		gap: 0.5rem;
 		font-size: 0.9rem;
+	}
+
+	/* Vibe Score Display Styles */
+	.vibe-score-container {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		gap: 2rem;
+		margin-top: 1.5rem;
+		padding: 1.5rem;
+		background-color: var(--color-card-bg);
+		border-radius: 12px;
+		box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+	}
+
+	.vibe-score-circle {
+		position: relative;
+		width: 120px;
+		height: 120px;
+		border-radius: 50%;
+		background: conic-gradient(
+			var(--color-primary) 0%, 
+			var(--color-primary) var(--progress), 
+			#e5e7eb var(--progress), 
+			#e5e7eb 100%
+		);
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		align-items: center;
+		box-shadow: 0 4px 6px rgba(77, 68, 179, 0.1);
+	}
+
+	.vibe-score-circle::before {
+		content: '';
+		position: absolute;
+		top: 10px;
+		left: 10px;
+		right: 10px;
+		bottom: 10px;
+		border-radius: 50%;
+		background-color: white;
+	}
+
+	.vibe-score-value {
+		position: relative;
+		font-size: 2.5rem;
+		font-weight: 700;
+		color: var(--color-primary);
+		line-height: 1;
+	}
+
+	.vibe-score-label {
+		position: relative;
+		font-size: 0.75rem;
+		color: var(--color-text-secondary);
+		margin-top: 0.25rem;
+	}
+
+	.vibe-score-interpretation {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		gap: 0.5rem;
+	}
+
+	.interpretation-emoji {
+		font-size: 2.5rem;
+		line-height: 1;
+	}
+
+	.interpretation-text {
+		font-size: 1.25rem;
+		font-weight: 600;
+		color: var(--color-text-primary);
+		text-align: center;
 	}
 
 	.legend-dot {

@@ -1,7 +1,7 @@
 import { db } from '$lib/firebase';
-import { doc, collection, addDoc, updateDoc, getDoc, getDocs, query, where, orderBy, limit as firestoreLimit, Timestamp } from 'firebase/firestore';
-import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
+import { doc, collection, addDoc, updateDoc, getDoc, getDocs, query, where, orderBy, limit as firestoreLimit } from 'firebase/firestore';
 import type { User } from 'firebase/auth';
+import { saveAudioLocally } from './localStorage';
 
 // Session types
 export type MoodLevel = 'high' | 'neutral' | 'low';
@@ -19,6 +19,7 @@ export interface Reflection extends BaseSession {
   text: string;
   tags: string[];
   audio_url?: string;
+  audio_storage?: 'local' | 'cloud';
   voice_insight?: {
     tone: string;
     confidence: number;
@@ -41,6 +42,10 @@ export interface HRVSession extends BaseSession {
   avg_hr: number;
   avg_rmssd: number;
   vibe_score: number;
+  vibe_interpretation?: {
+    emoji: string;
+    label: string;
+  };
   chart_data: Array<{
     timestamp: string;
     hr: number;
@@ -56,7 +61,7 @@ export type Session = Reflection | BalconyExperiment | HRVSession;
 export const createReflection = async (
   user: User,
   reflection: Omit<Reflection, 'type' | 'createdAt'>
-): Promise<{ success: boolean; id?: string; error?: any }> => {
+): Promise<{ success: boolean; id?: string; error?: unknown }> => {
   try {
     const sessionData: Reflection = {
       ...reflection,
@@ -86,32 +91,45 @@ export const createReflection = async (
   }
 };
 
-// Upload audio recording for reflection
+// Store audio recording locally for reflection
 export const uploadAudioRecording = async (
   user: User,
   audioBlob: Blob
-): Promise<{ success: boolean; url?: string; error?: any }> => {
+): Promise<{ success: boolean; url?: string; storage?: 'local' | 'cloud'; error?: unknown }> => {
   try {
-    const storage = getStorage();
-    const audioFileName = `${user.uid}/audio/${Date.now()}.webm`;
-    const audioRef = ref(storage, audioFileName);
+    console.log('Starting audio upload process - LOCAL ONLY MODE');
     
-    await uploadBytes(audioRef, audioBlob);
-    const downloadUrl = await getDownloadURL(audioRef);
+    // IMPORTANT: We are ONLY using local storage, NOT Firebase Storage
+    const result = await saveAudioLocally(user, audioBlob);
     
-    return { success: true, url: downloadUrl };
+    if (result.success && result.url) {
+      console.log('Successfully saved audio locally:', result.url);
+      return { 
+        success: true, 
+        url: result.url, 
+        storage: 'local' // Always set to local to ensure we don't use Firebase
+      };
+    } else {
+      console.error('Failed to save audio locally:', result.error);
+      throw new Error(result.error ? String(result.error) : 'Failed to save audio locally');
+    }
   } catch (error) {
-    console.error('Error uploading audio:', error);
+    console.error('Error storing audio locally:', error);
     return { success: false, error };
   }
 };
 
 // Analyze voice tone (mock implementation for now)
 export const analyzeVoiceTone = async (
-  audioUrl: string
-): Promise<{ success: boolean; tone?: string; confidence?: number; error?: any }> => {
+  audioInput: Blob | string
+): Promise<{ success: boolean; tone?: string; confidence?: number; error?: unknown }> => {
   try {
     // Mock implementation - in a real app, this would call an AI service
+    // We can accept either a Blob (for local audio) or a URL string (for cloud audio)
+    
+    // Log what type of input we received for debugging
+    console.log('Analyzing voice tone with input type:', typeof audioInput === 'string' ? 'URL' : 'Blob');
+    
     const tones = ['optimistic', 'calm', 'frustrated', 'anxious', 'confident', 'neutral'];
     const randomTone = tones[Math.floor(Math.random() * tones.length)];
     const randomConfidence = parseFloat((0.7 + Math.random() * 0.3).toFixed(2));
@@ -134,7 +152,7 @@ export const analyzeVoiceTone = async (
 export const createBalconyExperiment = async (
   user: User,
   balcony: Omit<BalconyExperiment, 'type' | 'createdAt'>
-): Promise<{ success: boolean; id?: string; error?: any }> => {
+): Promise<{ success: boolean; id?: string; error?: unknown }> => {
   try {
     const sessionData: BalconyExperiment = {
       ...balcony,
@@ -156,7 +174,7 @@ export const createBalconyExperiment = async (
 export const createHRVSession = async (
   user: User,
   hrvSession: Omit<HRVSession, 'type' | 'createdAt'>
-): Promise<{ success: boolean; id?: string; error?: any }> => {
+): Promise<{ success: boolean; id?: string; error?: unknown }> => {
   try {
     const sessionData: HRVSession = {
       ...hrvSession,
@@ -216,15 +234,25 @@ export const createHRVSession = async (
 export const getReflectionById = async (
   user: User,
   reflectionId: string
-): Promise<{ success: boolean; reflection?: Reflection; error?: any }> => {
+): Promise<{ success: boolean; reflection?: Reflection; error?: unknown }> => {
   try {
     const reflectionRef = doc(db, 'users', user.uid, 'sessions', reflectionId);
     const reflectionSnap = await getDoc(reflectionRef);
     
     if (reflectionSnap.exists() && reflectionSnap.data().type === 'reflection') {
+      // Get the reflection data
+      const reflectionData = reflectionSnap.data() as Reflection;
+      
+      // Check if the reflection has an audio URL and is stored locally
+      if (reflectionData.audio_url && reflectionData.audio_storage === 'local') {
+        // The audio is stored locally, so we don't need to do anything special
+        // The LocalAudioPlayer component will handle retrieving the audio
+        console.log('Reflection has locally stored audio:', reflectionData.audio_url);
+      }
+      
       return { 
         success: true, 
-        reflection: reflectionSnap.data() as Reflection 
+        reflection: reflectionData 
       };
     }
     
@@ -242,7 +270,7 @@ export const getReflectionById = async (
 export const getRecentSessions = async (
   user: User,
   limit: number = 10
-): Promise<{ success: boolean; sessions?: Array<Session & { id: string }>; error?: any }> => {
+): Promise<{ success: boolean; sessions?: Array<Session & { id: string }>; error?: unknown }> => {
   try {
     const sessionsQuery = query(
       collection(db, 'users', user.uid, 'sessions'),
@@ -272,7 +300,7 @@ export const getRecentSessions = async (
 export const getSessionById = async (
   user: User,
   sessionId: string
-): Promise<{ success: boolean; session?: Session & { id: string }; error?: any }> => {
+): Promise<{ success: boolean; session?: Session & { id: string }; error?: unknown }> => {
   try {
     const sessionRef = doc(db, 'users', user.uid, 'sessions', sessionId);
     const sessionSnap = await getDoc(sessionRef);
@@ -301,7 +329,7 @@ export const getSessionById = async (
 export const getBalconyForReflection = async (
   user: User,
   reflectionId: string
-): Promise<{ success: boolean; balcony?: BalconyExperiment & { id: string }; error?: any }> => {
+): Promise<{ success: boolean; balcony?: BalconyExperiment & { id: string }; error?: unknown }> => {
   try {
     const balconyQuery = query(
       collection(db, 'users', user.uid, 'sessions'),
@@ -334,7 +362,7 @@ export const updateBalconyExperiment = async (
   user: User,
   balconyId: string,
   balconyData: Partial<Omit<BalconyExperiment, 'type' | 'createdAt'>>
-): Promise<{ success: boolean; error?: any }> => {
+): Promise<{ success: boolean; error?: unknown }> => {
   try {
     const balconyRef = doc(db, 'users', user.uid, 'sessions', balconyId);
     

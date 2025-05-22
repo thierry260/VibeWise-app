@@ -106,7 +106,7 @@
 		align-items: flex-end;
 		justify-content: center;
 		z-index: 1000;
-		padding: 1rem;
+		padding: 1rem 1rem 0rem 1rem;
 	}
 
 	.divine-tool-modal {

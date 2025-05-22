@@ -9,16 +9,34 @@
       <change beforePath="$PROJECT_DIR$/.gradle/8.11.1/executionHistory/executionHistory.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/8.11.1/executionHistory/executionHistory.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/8.11.1/fileHashes/fileHashes.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/8.11.1/fileHashes/fileHashes.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/8.11.1/fileHashes/fileHashes.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/8.11.1/fileHashes/fileHashes.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/8.11.1/fileHashes/resourceHashesCache.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/8.11.1/fileHashes/resourceHashesCache.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/outputFiles.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/outputFiles.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/file-system.probe" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/file-system.probe" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/build/intermediates/apk/debug/app-debug.apk" beforeDir="false" afterPath="$PROJECT_DIR$/app/build/intermediates/apk/debug/app-debug.apk" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/build/intermediates/assets/debug/mergeDebugAssets/capacitor.plugins.json" beforeDir="false" afterPath="$PROJECT_DIR$/app/build/intermediates/assets/debug/mergeDebugAssets/capacitor.plugins.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/build/intermediates/assets/debug/mergeDebugAssets/public/app/version.json" beforeDir="false" afterPath="$PROJECT_DIR$/app/build/intermediates/assets/debug/mergeDebugAssets/public/app/version.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/build/intermediates/assets/debug/mergeDebugAssets/public/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/app/build/intermediates/assets/debug/mergeDebugAssets/public/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/build/intermediates/compile_and_runtime_not_namespaced_r_class_jar/debug/processDebugResources/R.jar" beforeDir="false" afterPath="$PROJECT_DIR$/app/build/intermediates/compile_and_runtime_not_namespaced_r_class_jar/debug/processDebugResources/R.jar" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/build/intermediates/compressed_assets/debug/compressDebugAssets/out/assets/capacitor.plugins.json.jar" beforeDir="false" afterPath="$PROJECT_DIR$/app/build/intermediates/compressed_assets/debug/compressDebugAssets/out/assets/capacitor.plugins.json.jar" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/build/intermediates/compressed_assets/debug/compressDebugAssets/out/assets/public/app/version.json.jar" beforeDir="false" afterPath="$PROJECT_DIR$/app/build/intermediates/compressed_assets/debug/compressDebugAssets/out/assets/public/app/version.json.jar" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/build/intermediates/compressed_assets/debug/compressDebugAssets/out/assets/public/index.html.jar" beforeDir="false" afterPath="$PROJECT_DIR$/app/build/intermediates/compressed_assets/debug/compressDebugAssets/out/assets/public/index.html.jar" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/build/intermediates/dex/debug/mergeProjectDexDebug/0/classes.dex" beforeDir="false" afterPath="$PROJECT_DIR$/app/build/intermediates/dex/debug/mergeProjectDexDebug/0/classes.dex" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/build/intermediates/dex_archive_input_jar_hashes/debug/dexBuilderDebug/out" beforeDir="false" afterPath="$PROJECT_DIR$/app/build/intermediates/dex_archive_input_jar_hashes/debug/dexBuilderDebug/out" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/build/intermediates/incremental/mergeDebugAssets/merger.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/build/intermediates/incremental/mergeDebugAssets/merger.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/build/intermediates/incremental/packageDebug/tmp/debug/dex-renamer-state.txt" beforeDir="false" afterPath="$PROJECT_DIR$/app/build/intermediates/incremental/packageDebug/tmp/debug/dex-renamer-state.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/build/intermediates/incremental/packageDebug/tmp/debug/zip-cache/androidResources" beforeDir="false" afterPath="$PROJECT_DIR$/app/build/intermediates/incremental/packageDebug/tmp/debug/zip-cache/androidResources" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/build/intermediates/linked_resources_binary_format/debug/processDebugResources/linked-resources-binary-format-debug.ap_" beforeDir="false" afterPath="$PROJECT_DIR$/app/build/intermediates/linked_resources_binary_format/debug/processDebugResources/linked-resources-binary-format-debug.ap_" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/build/intermediates/manifest_merge_blame_file/debug/processDebugMainManifest/manifest-merger-blame-debug-report.txt" beforeDir="false" afterPath="$PROJECT_DIR$/app/build/intermediates/manifest_merge_blame_file/debug/processDebugMainManifest/manifest-merger-blame-debug-report.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/build/intermediates/merged_manifest/debug/processDebugMainManifest/AndroidManifest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/build/intermediates/merged_manifest/debug/processDebugMainManifest/AndroidManifest.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/build/intermediates/merged_manifests/debug/processDebugManifest/AndroidManifest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/build/intermediates/merged_manifests/debug/processDebugManifest/AndroidManifest.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/build/intermediates/packaged_manifests/debug/processDebugManifestForPackage/AndroidManifest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/build/intermediates/packaged_manifests/debug/processDebugManifestForPackage/AndroidManifest.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/build/intermediates/stable_resource_ids_file/debug/processDebugResources/stableIds.txt" beforeDir="false" afterPath="$PROJECT_DIR$/app/build/intermediates/stable_resource_ids_file/debug/processDebugResources/stableIds.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/build/outputs/logs/manifest-merger-debug-report.txt" beforeDir="false" afterPath="$PROJECT_DIR$/app/build/outputs/logs/manifest-merger-debug-report.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/capacitor.build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/app/capacitor.build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/AndroidManifest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/AndroidManifest.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/assets/capacitor.plugins.json" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/assets/capacitor.plugins.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/assets/public/app/version.json" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/assets/public/app/version.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/assets/public/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/assets/public/index.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/capacitor-cordova-android-plugins/build/intermediates/aapt_friendly_merged_manifests/debug/processDebugManifest/aapt/AndroidManifest.xml" beforeDir="false" />
@@ -40,54 +58,66 @@
       <change beforePath="$PROJECT_DIR$/capacitor-cordova-android-plugins/build/intermediates/runtime_library_classes_jar/debug/bundleLibRuntimeToJarDebug/classes.jar" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/capacitor-cordova-android-plugins/build/intermediates/symbol_list_with_package_name/debug/generateDebugRFile/package-aware-r.txt" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/capacitor-cordova-android-plugins/build/outputs/logs/manifest-merger-debug-report.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../ios/App/App/public/app/immutable/assets/0.BRgm7VEI.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../ios/App/App/public/app/immutable/assets/10.BiLcAtWn.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../ios/App/App/public/app/immutable/assets/11.26wSGZyd.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../ios/App/App/public/app/immutable/assets/7.Bv5CW6Vx.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../ios/App/App/public/app/immutable/assets/8.rf82sdBx.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../ios/App/App/public/app/immutable/assets/9.H1aDf99n.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../ios/App/App/public/app/immutable/assets/_layout.BIw6lSEt.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../ios/App/App/public/app/immutable/assets/_page.Du1f5pXO.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../ios/App/App/public/app/immutable/chunks/BAvhnk5Z.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../ios/App/App/public/app/immutable/chunks/BL7Xhzn1.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../ios/App/App/public/app/immutable/chunks/BNHQayFl.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../ios/App/App/public/app/immutable/chunks/BbEiKdn8.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../ios/App/App/public/app/immutable/chunks/BjEy9C_A.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../ios/App/App/public/app/immutable/chunks/C36XmJx2.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../ios/App/App/public/app/immutable/chunks/CCy7pD-5.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../ios/App/App/public/app/immutable/chunks/CFgcPMXS.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../ios/App/App/public/app/immutable/chunks/CSgteSvS.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../ios/App/App/public/app/immutable/chunks/CvgfbjKt.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../ios/App/App/public/app/immutable/chunks/D2hW0EMZ.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../ios/App/App/public/app/immutable/chunks/DK1W6Ej9.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../ios/App/App/public/app/immutable/chunks/DafhDkqO.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../ios/App/App/public/app/immutable/chunks/DgVJPhGv.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../ios/App/App/public/app/immutable/chunks/MC8t-0GI.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../ios/App/App/public/app/immutable/chunks/SNwGAtB4.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../ios/App/App/public/app/immutable/chunks/Ul0UnCso.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../ios/App/App/public/app/immutable/chunks/jUTo_GiH.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../ios/App/App/public/app/immutable/chunks/jbLWzUtC.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../ios/App/App/public/app/immutable/chunks/sG7jKqtR.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../ios/App/App/public/app/immutable/entry/app.JL_Xr5YE.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../ios/App/App/public/app/immutable/entry/start.DDci0jdU.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../ios/App/App/public/app/immutable/nodes/0.CYgsdK77.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../ios/App/App/public/app/immutable/nodes/1.jmq7aA0I.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../ios/App/App/public/app/immutable/nodes/10.B7POWeJm.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../ios/App/App/public/app/immutable/nodes/11.kv-wCjTh.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../ios/App/App/public/app/immutable/nodes/12.CkXzAGOk.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../ios/App/App/public/app/immutable/nodes/13.csANAidl.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../ios/App/App/public/app/immutable/nodes/2.DRieh1rc.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../ios/App/App/public/app/immutable/nodes/3.DZ0E3pcV.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../ios/App/App/public/app/immutable/nodes/4.BcPYhCI0.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../ios/App/App/public/app/immutable/nodes/5.D4Jhsmcy.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../ios/App/App/public/app/immutable/nodes/6.CAaO4fvp.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../ios/App/App/public/app/immutable/nodes/7.gLcSS9mL.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../ios/App/App/public/app/immutable/nodes/8.BalOOnte.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../ios/App/App/public/app/immutable/nodes/9.uqHoaZO8.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/capacitor.settings.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/capacitor.settings.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ios/App/App/capacitor.config.json" beforeDir="false" afterPath="$PROJECT_DIR$/../ios/App/App/capacitor.config.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ios/App/App/public/app/immutable/assets/0.CZMVaa4G.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ios/App/App/public/app/immutable/assets/12.26wSGZyd.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ios/App/App/public/app/immutable/assets/7.DqXElpyO.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ios/App/App/public/app/immutable/assets/8.BWqbMKGt.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ios/App/App/public/app/immutable/assets/DivineToolChooser.B9bysphX.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ios/App/App/public/app/immutable/assets/DivineToolChooser.Bmjj4yHE.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ios/App/App/public/app/immutable/assets/_layout.BuDjqele.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ios/App/App/public/app/immutable/assets/_page.C-E6NHvq.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ios/App/App/public/app/immutable/assets/_page.DqXElpyO.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ios/App/App/public/app/immutable/chunks/3OU4Vcau.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ios/App/App/public/app/immutable/chunks/B1TZXfti.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ios/App/App/public/app/immutable/chunks/B1jByD-r.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ios/App/App/public/app/immutable/chunks/BERqu7mZ.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ios/App/App/public/app/immutable/chunks/BOa5fj8P.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ios/App/App/public/app/immutable/chunks/BP3oUo1A.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ios/App/App/public/app/immutable/chunks/BXsTdfT2.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ios/App/App/public/app/immutable/chunks/BqtZpFwS.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ios/App/App/public/app/immutable/chunks/BxZ9Lh6Y.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ios/App/App/public/app/immutable/chunks/C1IXUDxN.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ios/App/App/public/app/immutable/chunks/CDb6m0PD.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ios/App/App/public/app/immutable/chunks/CGS7UL4d.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ios/App/App/public/app/immutable/chunks/CK-3OmJg.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ios/App/App/public/app/immutable/chunks/CX1IrXiN.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ios/App/App/public/app/immutable/chunks/CbuS4uut.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ios/App/App/public/app/immutable/chunks/Cefqs-SS.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ios/App/App/public/app/immutable/chunks/CxWVBdvW.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ios/App/App/public/app/immutable/chunks/D7Jg-ab8.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ios/App/App/public/app/immutable/chunks/DMjQQS0d.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ios/App/App/public/app/immutable/chunks/DTuXmu8e.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ios/App/App/public/app/immutable/chunks/DXN4q5X4.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ios/App/App/public/app/immutable/chunks/DlIxCHKx.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ios/App/App/public/app/immutable/chunks/Dm4goCkW.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ios/App/App/public/app/immutable/chunks/DptaK6WB.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ios/App/App/public/app/immutable/chunks/TA4SG1DG.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ios/App/App/public/app/immutable/chunks/VBNCskEB.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ios/App/App/public/app/immutable/chunks/h1Z2Twhl.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ios/App/App/public/app/immutable/entry/app.Up_f4Mqp.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ios/App/App/public/app/immutable/entry/start.C4maLMhv.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ios/App/App/public/app/immutable/nodes/0.DZVkfvF2.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ios/App/App/public/app/immutable/nodes/1.KlniL0t6.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ios/App/App/public/app/immutable/nodes/10.DPAS0QUG.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ios/App/App/public/app/immutable/nodes/11.u418kLB6.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ios/App/App/public/app/immutable/nodes/12.7bMuFnC_.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ios/App/App/public/app/immutable/nodes/13.Djk9667B.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ios/App/App/public/app/immutable/nodes/14.BGqMBfGN.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ios/App/App/public/app/immutable/nodes/2.B8PgBKkY.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ios/App/App/public/app/immutable/nodes/3.Ct-n5-t6.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ios/App/App/public/app/immutable/nodes/4.BV_r2Uyd.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ios/App/App/public/app/immutable/nodes/5.BnbOQxtK.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ios/App/App/public/app/immutable/nodes/6.BdbX-lKl.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ios/App/App/public/app/immutable/nodes/7.GhoV8Yt7.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ios/App/App/public/app/immutable/nodes/8.DdQO1fdJ.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ios/App/App/public/app/immutable/nodes/9.6wRfhI1o.js" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/../ios/App/App/public/app/version.json" beforeDir="false" afterPath="$PROJECT_DIR$/../ios/App/App/public/app/version.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../ios/App/App/public/balcony.html" beforeDir="false" afterPath="$PROJECT_DIR$/../ios/App/App/public/balcony.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../ios/App/App/public/history.html" beforeDir="false" afterPath="$PROJECT_DIR$/../ios/App/App/public/history.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../ios/App/App/public/home.html" beforeDir="false" afterPath="$PROJECT_DIR$/../ios/App/App/public/home.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ios/App/App/public/hrv-detail.html" beforeDir="false" afterPath="$PROJECT_DIR$/../ios/App/App/public/hrv-detail.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../ios/App/App/public/hrv-session.html" beforeDir="false" afterPath="$PROJECT_DIR$/../ios/App/App/public/hrv-session.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../ios/App/App/public/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/../ios/App/App/public/index.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../ios/App/App/public/journey.html" beforeDir="false" afterPath="$PROJECT_DIR$/../ios/App/App/public/journey.html" afterDir="false" />
@@ -96,9 +126,13 @@
       <change beforePath="$PROJECT_DIR$/../ios/App/App/public/notification-permission.html" beforeDir="false" afterPath="$PROJECT_DIR$/../ios/App/App/public/notification-permission.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../ios/App/App/public/reflect.html" beforeDir="false" afterPath="$PROJECT_DIR$/../ios/App/App/public/reflect.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../ios/App/App/public/settings.html" beforeDir="false" afterPath="$PROJECT_DIR$/../ios/App/App/public/settings.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../src/routes/(app)/history/+page.svelte" beforeDir="false" afterPath="$PROJECT_DIR$/../src/routes/(app)/history/+page.svelte" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../src/routes/(app)/hrv-session/+page.svelte" beforeDir="false" afterPath="$PROJECT_DIR$/../src/routes/(app)/hrv-session/+page.svelte" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/../package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../package.json" beforeDir="false" afterPath="$PROJECT_DIR$/../package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/lib/components/DivineToolChooser.svelte" beforeDir="false" afterPath="$PROJECT_DIR$/../src/lib/components/DivineToolChooser.svelte" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/lib/services/sessions.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../src/lib/services/sessions.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/routes/(app)/hrv-detail/+page.svelte" beforeDir="false" afterPath="$PROJECT_DIR$/../src/routes/(app)/hrv-detail/+page.svelte" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../src/routes/(app)/reflect/+page.svelte" beforeDir="false" afterPath="$PROJECT_DIR$/../src/routes/(app)/reflect/+page.svelte" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/routes/+layout.js" beforeDir="false" afterPath="$PROJECT_DIR$/../src/routes/+layout.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -108,7 +142,7 @@
   <component name="ClangdSettings">
     <option name="formatViaClangd" value="false" />
   </component>
-  <component name="ExecutionTargetManager" SELECTED_TARGET="device_and_snapshot_combo_box_target[DeviceId(pluginId=PhysicalDevice, isTemplate=false, identifier=serial=fc7ae2e4)]" />
+  <component name="ExecutionTargetManager" SELECTED_TARGET="device_and_snapshot_combo_box_target[DeviceId(pluginId=LocalEmulator, isTemplate=false, identifier=path=/Users/thierryschout/.android/avd/Medium_Phone.avd)]" />
   <component name="ExternalProjectsData">
     <projectState path="$PROJECT_DIR$">
       <ProjectState />

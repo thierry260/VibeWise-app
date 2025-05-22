@@ -1,9 +1,10 @@
 import { writable, get } from 'svelte/store';
+import { calculateVibeScore, getVibeScoreInterpretation } from '$lib/utils/vibeScore';
 import { browser } from '$app/environment';
 
 // Check if we're running in Capacitor environment
 const isCapacitorApp = (): boolean => {
-  return browser && typeof (window as any).Capacitor !== 'undefined';
+  return browser && typeof (window as Window & { Capacitor?: unknown }).Capacitor !== 'undefined';
 };
 
 // Log environment info for debugging
@@ -314,14 +315,13 @@ const updateHRVData = (heartRate: number, newRRIntervals: number[]) => {
       rmssd = Math.sqrt(sumSquaredDiff / (recentIntervals.length - 1));
     }
     
-    // Calculate Vibe Score (simplified version)
-    // In a real implementation, this would be more sophisticated
-    // Normalize RMSSD to a 0-100 scale
-    // Typical RMSSD values range from 10-100, with higher being better
-    const normalizedRMSSD = Math.min(100, Math.max(0, rmssd / 100 * 100));
+    // Get the current breathing rate from the session timer if available
+    // This is an approximation - in a real app, we might track actual breathing
+    const timerState = get(sessionTimer);
+    const breathingRate = timerState.isRunning ? 6 : undefined; // Assume 6 breaths/min during active sessions
     
-    // For now, our vibe score is just the normalized RMSSD
-    const vibeScore = Math.round(normalizedRMSSD);
+    // Calculate Vibe Score using our new algorithm
+    const vibeScore = calculateVibeScore(rmssd, recentIntervals, breathingRate);
     
     // Add data point to chart data
     const timestamp = new Date().toISOString();
@@ -434,11 +434,10 @@ export const stopSessionTimer = () => {
 
 // Get session summary
 export const getSessionSummary = () => {
-  const data = get(hrvData);
   const timer = get(sessionTimer);
-  
-  // Calculate averages
+  const data = get(hrvData);
   const chartData = data.chartData;
+  
   let totalHR = 0;
   let totalRMSSD = 0;
   let totalVibe = 0;
@@ -453,6 +452,9 @@ export const getSessionSummary = () => {
   const avgRMSSD = chartData.length ? Math.round(totalRMSSD / chartData.length * 10) / 10 : 0;
   const avgVibe = chartData.length ? Math.round(totalVibe / chartData.length) : 0;
   
+  // Get interpretation of the vibe score
+  const vibeInterpretation = getVibeScoreInterpretation(avgVibe);
+  
   return {
     startTime: new Date(timer.startTime).toISOString(),
     endTime: new Date(timer.currentTime).toISOString(),
@@ -460,6 +462,7 @@ export const getSessionSummary = () => {
     avgHR,
     avgRMSSD,
     avgVibe,
+    vibeInterpretation,
     chartData,
     rrIntervals: data.rrIntervals
   };

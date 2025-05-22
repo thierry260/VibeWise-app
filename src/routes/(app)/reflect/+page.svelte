@@ -66,6 +66,7 @@
   let audioUrl: string | null = null;
   let recordingDuration = 0;
   let recordingInterval: ReturnType<typeof setInterval> | null = null;
+  let mediaStream: MediaStream | null = null;
   let voiceInsight: { tone: string; confidence: number } | null = null;
   let isAnalyzingVoice = false;
   
@@ -111,28 +112,137 @@
     }
   }
   
+  // Helper function to safely check if we're on a mobile platform
+  function isMobilePlatform(): boolean {
+    try {
+      return typeof window !== 'undefined' && 
+             'Capacitor' in window && 
+             typeof (window as any).Capacitor?.getPlatform === 'function' && 
+             (window as any).Capacitor.getPlatform() !== 'web';
+    } catch (e) {
+      console.log('Error checking platform:', e);
+      return false;
+    }
+  }
+
+  // Helper function to request microphone permission on mobile
+  async function requestMicrophonePermission(): Promise<boolean> {
+    try {
+      // Only proceed if we're on a mobile platform
+      if (!isMobilePlatform()) return true;
+      
+      console.log('Checking microphone permission on mobile');
+      
+      // Safely access Capacitor APIs with proper type casting
+      const capacitor = (window as any).Capacitor;
+      
+      if (capacitor.getPlatform() === 'android') {
+        // Check if Permissions plugin is available
+        if (capacitor.Plugins?.Permissions) {
+          // Check current permission status
+          const permStatus = await capacitor.Plugins.Permissions.query({
+            name: 'microphone'
+          });
+          
+          if (permStatus.state !== 'granted') {
+            console.log('Requesting microphone permission...');
+            const requestResult = await capacitor.Plugins.Permissions.request({
+              name: 'microphone'
+            });
+            
+            if (requestResult.state !== 'granted') {
+              alert('Microphone permission is required for voice recording');
+              return false;
+            }
+          }
+          
+          console.log('Microphone permission granted');
+          return true;
+        }
+      }
+      
+      // If we're on iOS or permissions API isn't available, try direct access
+      return true;
+    } catch (err) {
+      console.error('Error requesting microphone permission:', err);
+      alert('Unable to access microphone. Please enable microphone permissions in your device settings.');
+      return false;
+    }
+  }
+  
   // Start audio recording
   async function startRecording() {
     try {
-      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-      audioRecorder = new MediaRecorder(stream);
-      audioChunks = [];
+      // First request permissions if needed
+      const hasPermission = await requestMicrophonePermission();
+      if (!hasPermission) {
+        throw new Error('Microphone permission denied');
+      }
       
-      audioRecorder.addEventListener('dataavailable', (event) => {
-        audioChunks.push(event.data);
+      // Store the stream to stop tracks later
+      mediaStream = await navigator.mediaDevices.getUserMedia({ 
+        audio: true,
+        video: false
       });
       
+      // Try different MIME types that work well on Android
+      const mimeTypes = [
+        'audio/webm;codecs=opus',
+        'audio/webm',
+        'audio/mp4',
+        'audio/ogg;codecs=opus'
+      ];
+      
+      // Find a supported MIME type
+      let options = {};
+      for (const mimeType of mimeTypes) {
+        if (MediaRecorder.isTypeSupported(mimeType)) {
+          options = { mimeType };
+          console.log(`Using supported MIME type: ${mimeType}`);
+          break;
+        }
+      }
+      
+      // Create the recorder with the best available options
+      audioRecorder = new MediaRecorder(mediaStream, options);
+      audioChunks = [];
+      
+      // Handle data as it becomes available
+      audioRecorder.addEventListener('dataavailable', (event) => {
+        if (event.data && event.data.size > 0) {
+          audioChunks.push(event.data);
+        }
+      });
+      
+      // Handle recording stop
       audioRecorder.addEventListener('stop', () => {
-        audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
-        audioUrl = URL.createObjectURL(audioBlob);
+        if (audioChunks.length > 0) {
+          const mimeType = audioRecorder?.mimeType || 'audio/webm';
+          audioBlob = new Blob(audioChunks, { type: mimeType });
+          audioUrl = URL.createObjectURL(audioBlob);
+          console.log(`Recording completed: ${audioChunks.length} chunks, type: ${mimeType}`);
+        } else {
+          console.error('No audio data was recorded');
+        }
+        
+        // Clean up
         isRecording = false;
         if (recordingInterval) {
           clearInterval(recordingInterval);
           recordingInterval = null;
         }
+        
+        // Stop all tracks to properly release the microphone
+        if (mediaStream) {
+          mediaStream.getTracks().forEach(track => track.stop());
+        }
       });
       
-      audioRecorder.start();
+      // Start recording with timeslice to get data during recording
+      audioRecorder.start(1000);
+      console.log('Recording started');
+      
+      // Update UI state
       isRecording = true;
       recordingDuration = 0;
       
@@ -149,8 +259,25 @@
   // Stop audio recording
   function stopRecording() {
     if (audioRecorder && isRecording) {
-      audioRecorder.stop();
-      // The 'stop' event handler will update state
+      try {
+        audioRecorder.stop();
+        // The 'stop' event handler will handle cleanup and state updates
+        console.log('Recording stopped');
+      } catch (error) {
+        console.error('Error stopping recording:', error);
+        
+        // Manual cleanup in case of error
+        isRecording = false;
+        if (recordingInterval) {
+          clearInterval(recordingInterval);
+          recordingInterval = null;
+        }
+        
+        // Release microphone
+        if (mediaStream) {
+          mediaStream.getTracks().forEach(track => track.stop());
+        }
+      }
     }
   }
   
@@ -163,13 +290,13 @@
   
   // Analyze voice tone
   async function analyzeVoice() {
-    if (!audioBlob || !audioUrl) return;
+    if (!audioBlob) return;
     
     isAnalyzingVoice = true;
     try {
-      // In a real app, we would upload the audio and get analysis
-      // For now, we'll use our mock implementation
-      const result = await analyzeVoiceTone(audioUrl);
+      // Pass the audio blob directly to the analyzer
+      // This works with our local-only storage approach
+      const result = await analyzeVoiceTone(audioBlob);
       if (result.success && result.tone && result.confidence) {
         voiceInsight = {
           tone: result.tone,
@@ -214,12 +341,15 @@
         }
       }
       
-      // Upload audio if recorded
+      // Store audio locally if recorded
       let audioUploadUrl = '';
+      let audioStorage: 'local' | 'cloud' = 'local';
       if (audioBlob) {
         const uploadResult = await uploadAudioRecording($authStore.user, audioBlob);
         if (uploadResult.success && uploadResult.url) {
           audioUploadUrl = uploadResult.url;
+          // Ensure audioStorage is properly typed
+          audioStorage = (uploadResult.storage === 'cloud' ? 'cloud' : 'local');
           
           // If we haven't analyzed the voice yet, do it now
           if (!voiceInsight) {
@@ -235,7 +365,10 @@
         mood_level: determinedMoodLevel,
         text: reflectionText,
         tags: selectedTags,
-        ...(audioUploadUrl && { audio_url: audioUploadUrl }),
+        ...(audioUploadUrl && { 
+          audio_url: audioUploadUrl,
+          audio_storage: audioStorage 
+        }),
         ...(voiceInsight && { voice_insight: voiceInsight })
       };
       
