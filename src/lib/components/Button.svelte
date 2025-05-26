@@ -1,10 +1,11 @@
 <script lang="ts">
-	export let variant: 'primary' | 'secondary' | 'outline' = 'primary';
+	export let variant: 'primary' | 'secondary' | 'outline' | 'ghost' = 'primary';
 	export let type: 'button' | 'submit' | 'reset' = 'button';
 	export let disabled: boolean = false;
 	export let fullWidth: boolean = false;
-	export let size: 'sm' | 'md' | 'lg' = 'md';
+	export let size: 'sm' | 'md' | 'lg' | 'icon' = 'md';
 	export let icon: any = null; // Optional Lucide icon component
+	export let ariaLabel: string = '';
 </script>
 
 <button
@@ -12,13 +13,16 @@
 	class="btn btn-{variant} btn-{size} {fullWidth ? 'full-width' : ''}"
 	{disabled}
 	on:click
+	aria-label={ariaLabel}
 >
 	{#if icon}
 		<span class="btn-icon">
-			<svelte:component this={icon} size={size === 'sm' ? 16 : size === 'md' ? 18 : 20} strokeWidth={1.5} />
+			<svelte:component this={icon} size={size === 'icon' ? 18 : size === 'sm' ? 16 : size === 'md' ? 18 : 20} strokeWidth={1.5} />
 		</span>
 	{/if}
-	<slot />
+	{#if size !== 'icon'}
+		<slot />
+	{/if}
 </button>
 
 <style>
@@ -77,6 +81,15 @@
 		background-color: rgba(77, 68, 179, 0.05);
 	}
 	
+	.btn-ghost {
+		background-color: transparent;
+		color: var(--color-text);
+	}
+	
+	.btn-ghost:hover:not(:disabled) {
+		background-color: var(--color-bg-hover);
+	}
+	
 	/* Sizes */
 	.btn-sm {
 		padding: 0.5rem 0.75rem;
@@ -91,6 +104,15 @@
 	.btn-lg {
 		padding: 1rem 1.5rem;
 		font-size: 1.125rem;
+	}
+	
+	.btn-icon {
+		padding: 0.5rem;
+		font-size: 0;
+		border-radius: 50%;
+		aspect-ratio: 1;
+		width: 2.25rem;
+		height: 2.25rem;
 	}
 	
 	.full-width {

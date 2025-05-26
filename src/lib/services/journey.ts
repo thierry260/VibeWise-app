@@ -57,9 +57,41 @@ export const getUserJourneyData = async (
       : 'Green';
 
     // Extract spiral history
-    const spiralHistory = spiralHistorySnap.exists()
-      ? (spiralHistorySnap.data().entries as SpiralHistoryEntry[]) || []
+    let spiralHistory = spiralHistorySnap.exists()
+      ? (spiralHistorySnap.data()?.entries as SpiralHistoryEntry[]) || []
       : [];
+
+    // Initialize spiral history if empty but we have a current phase
+    if (spiralHistory.length === 0 && summarySnap.exists() && currentPhase) {
+      try {
+        console.log('No spiral history found. Creating initial entry with phase:', currentPhase);
+        
+        // Get timestamp from summary or use current time
+        const timestamp = summarySnap.data()?.updatedAt || new Date().toISOString();
+        console.log('Using timestamp for initial entry:', timestamp);
+        
+        const initialEntry: SpiralHistoryEntry = {
+          phase: currentPhase,
+          entered_at: timestamp
+        };
+        
+        // Add the initial entry to Firestore
+        await setDoc(spiralHistoryRef, {
+          entries: [initialEntry]
+        });
+        
+        // Update our local copy
+        spiralHistory = [initialEntry];
+        console.log('Successfully initialized spiral history with entry:', initialEntry);
+      } catch (initError) {
+        console.error('Failed to initialize spiral history:', initError);
+        // Continue with empty history rather than failing completely
+      }
+    } else if (spiralHistory.length === 0) {
+      console.log('No spiral history and no valid summary data to initialize from.');
+    } else {
+      console.log('Spiral history already exists with', spiralHistory.length, 'entries');
+    }
 
     // Extract intention for current phase
     const intention = intentionSnap.exists() && intentionSnap.data().phase === currentPhase
@@ -115,7 +147,7 @@ export const analyzeUserPatterns = async (
     // Calculate the date limit
     const dateLimit = new Date();
     dateLimit.setDate(dateLimit.getDate() - daysLimit);
-
+    
     // Query for reflection and balcony sessions
     const sessionsQuery = query(
       collection(db, 'users', user.uid, 'sessions'),
@@ -123,13 +155,37 @@ export const analyzeUserPatterns = async (
       where('timestamp', '>=', dateLimit.toISOString()),
       orderBy('timestamp', 'desc')
     );
-
-    const sessionsSnap = await getDocs(sessionsQuery);
-
+    
+    let sessionsSnap;
+    try {
+      sessionsSnap = await getDocs(sessionsQuery);
+    } catch (indexError) {
+      // Handle Firestore index error gracefully
+      console.error('Firestore index error. You need to create the following index:', indexError);
+      console.log('Please create an index for: collection("sessions").where("type", "in", ["reflection", "balcony"]).orderBy("timestamp")');
+      
+      if (indexError instanceof Error && indexError.message.includes('index')) {
+        const indexMatch = indexError.message.match(/https:\/\/console\.firebase\.google\.com[^\s]+/);
+        if (indexMatch) {
+          console.log('Create the index here:', indexMatch[0]);
+        }
+      }
+      
+      // Return default patterns while index is being created
+      return { 
+        success: true, 
+        patterns: [{
+          type: 'tag_pattern',
+          description: 'Creating Firestore index. Please try again in a few minutes.',
+          count: 0
+        }] 
+      };
+    }
+    
     // Collect data for analysis
     const reflections: Reflection[] = [];
     const balconySessions: BalconyExperiment[] = [];
-
+    
     sessionsSnap.forEach(doc => {
       const session = doc.data() as Session;
       if (session.type === 'reflection') {
@@ -138,30 +194,32 @@ export const analyzeUserPatterns = async (
         balconySessions.push(session as BalconyExperiment);
       }
     });
-
+    
     // Get current spiral phase for context
     const summaryRef = doc(db, 'users', user.uid, 'private', 'summary');
     const summarySnap = await getDoc(summaryRef);
-    const currentPhase = summarySnap.exists()
+    const currentPhase = summarySnap.exists() 
       ? (summarySnap.data().current_spiral_phase as SpiralPhase) || 'Green'
       : 'Green';
-
+    
     // Analyze patterns
     const patterns: PatternInsight[] = [];
-
+    
     // 1. Analyze tags from reflections
     const tagCounts: Record<string, number> = {};
     reflections.forEach(reflection => {
-      reflection.tags.forEach(tag => {
-        tagCounts[tag] = (tagCounts[tag] || 0) + 1;
-      });
+      if (reflection.tags && Array.isArray(reflection.tags)) {
+        reflection.tags.forEach(tag => {
+          tagCounts[tag] = (tagCounts[tag] || 0) + 1;
+        });
+      }
     });
-
+    
     // Add top tags as patterns
     const sortedTags = Object.entries(tagCounts)
       .sort((a, b) => b[1] - a[1])
       .slice(0, 3);
-
+    
     sortedTags.forEach(([tag, count]) => {
       patterns.push({
         type: 'tag_pattern',
@@ -171,19 +229,21 @@ export const analyzeUserPatterns = async (
         related_tags: [tag]
       });
     });
-
+    
     // 2. Analyze limiting beliefs from balcony sessions
     const beliefCounts: Record<string, number> = {};
     balconySessions.forEach(balcony => {
-      const belief = balcony.pattern.toLowerCase();
-      beliefCounts[belief] = (beliefCounts[belief] || 0) + 1;
+      if (balcony.pattern) {
+        const belief = balcony.pattern.toLowerCase();
+        beliefCounts[belief] = (beliefCounts[belief] || 0) + 1;
+      }
     });
-
+    
     // Add top limiting beliefs as patterns
     const sortedBeliefs = Object.entries(beliefCounts)
       .sort((a, b) => b[1] - a[1])
       .slice(0, 2);
-
+    
     sortedBeliefs.forEach(([belief, count]) => {
       patterns.push({
         type: 'limiting_belief',
@@ -191,19 +251,21 @@ export const analyzeUserPatterns = async (
         count
       });
     });
-
+    
     // 3. Analyze truths from balcony sessions
     const truthCounts: Record<string, number> = {};
     balconySessions.forEach(balcony => {
-      const truth = balcony.truth.toLowerCase();
-      truthCounts[truth] = (truthCounts[truth] || 0) + 1;
+      if (balcony.truth) {
+        const truth = balcony.truth.toLowerCase();
+        truthCounts[truth] = (truthCounts[truth] || 0) + 1;
+      }
     });
-
+    
     // Add top truths as patterns
     const sortedTruths = Object.entries(truthCounts)
       .sort((a, b) => b[1] - a[1])
       .slice(0, 2);
-
+    
     sortedTruths.forEach(([truth, count]) => {
       patterns.push({
         type: 'truth',
@@ -211,7 +273,7 @@ export const analyzeUserPatterns = async (
         count
       });
     });
-
+    
     // If no patterns were found, add a default message
     if (patterns.length === 0) {
       patterns.push({
@@ -220,11 +282,19 @@ export const analyzeUserPatterns = async (
         count: 0
       });
     }
-
+    
     return { success: true, patterns };
   } catch (error) {
     console.error('Error analyzing user patterns:', error);
-    return { success: false, error };
+    return { 
+      success: false, 
+      error,
+      patterns: [{
+        type: 'tag_pattern',
+        description: 'Error analyzing patterns. Please try again later.',
+        count: 0
+      }]
+    };
   }
 };
 

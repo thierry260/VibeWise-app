@@ -1,5 +1,5 @@
 import { db } from '$lib/firebase';
-import { doc, collection, addDoc, updateDoc, getDoc, getDocs, query, where, orderBy, limit as firestoreLimit } from 'firebase/firestore';
+import { doc, collection, addDoc, updateDoc, getDoc, getDocs, query, where, orderBy, limit as firestoreLimit, startAfter, QueryConstraint, QueryDocumentSnapshot } from 'firebase/firestore';
 import type { User } from 'firebase/auth';
 import { saveAudioLocally } from './localStorage';
 
@@ -292,6 +292,176 @@ export const getRecentSessions = async (
     return { success: true, sessions };
   } catch (error) {
     console.error('Error getting recent sessions:', error);
+    return { success: false, error };
+  }
+};
+
+// Filter interface for session history
+export interface SessionFilters {
+  types?: string[];
+  spiralPhase?: string;
+  moodLevel?: MoodLevel;
+  tags?: string[];
+  searchText?: string;
+}
+
+// Get filtered sessions with pagination
+export const getFilteredSessions = async (
+  user: User,
+  filters: SessionFilters = {},
+  limit: number = 10,
+  lastDoc?: QueryDocumentSnapshot<unknown>
+): Promise<{ 
+  success: boolean; 
+  sessions?: Array<Session & { id: string }>; 
+  lastDoc?: QueryDocumentSnapshot<unknown>;
+  hasMore?: boolean;
+  error?: unknown 
+}> => {
+  try {
+    // Start with base collection reference
+    const queryConstraints: QueryConstraint[] = [
+      orderBy('timestamp', 'desc')
+    ];
+    
+    // Apply server-side filters for optimized queries
+    // 1. Filter by session type (if specified)
+    if (filters.types && filters.types.length > 0) {
+      queryConstraints.push(where('type', 'in', filters.types));
+    }
+    
+    // 2. Filter by mood level (if specified)
+    if (filters.moodLevel) {
+      queryConstraints.push(where('mood_level', '==', filters.moodLevel));
+    }
+    
+    // 3. Add pagination cursor if we have a last document
+    if (lastDoc) {
+      // Use startAfter for pagination
+      queryConstraints.push(firestoreLimit(limit));
+    } else {
+      // First page
+      queryConstraints.push(firestoreLimit(limit + 1)); // Fetch one extra to check if there are more
+    }
+    
+    // Build the query
+    const sessionsRef = collection(db, 'users', user.uid, 'sessions');
+    let sessionsQuery = query(sessionsRef, ...queryConstraints);
+    
+    // Add cursor for pagination if we have a last document
+    if (lastDoc) {
+      sessionsQuery = query(sessionsQuery, startAfter(lastDoc));
+    }
+    
+    // Execute query
+    const sessionsSnap = await getDocs(sessionsQuery);
+    const sessions: Array<Session & { id: string }> = [];
+    let newLastDoc: QueryDocumentSnapshot<unknown> | undefined = undefined;
+    
+    // Process results
+    sessionsSnap.forEach((doc) => {
+      const docIndex = sessions.length;
+      // If this is the extra document we fetched to check for more, don't include it
+      if (!lastDoc && docIndex === limit) {
+        return;
+      }
+      
+      // Update the last document reference for pagination
+      newLastDoc = doc;
+      
+      const session = doc.data() as Session;
+      sessions.push({
+        ...session,
+        id: doc.id
+      });
+    });
+    
+    // Apply client-side filters that aren't indexed in Firestore
+    let filteredSessions = sessions;
+    
+    // 1. Filter by spiral phase (client-side)
+    if (filters.spiralPhase) {
+      filteredSessions = filteredSessions.filter(session => {
+        // For reflections and HRV sessions, check the spiral phase if it exists
+        // Need to use type assertion since spiral_phase is not in the base Session type
+        const sessionWithPhase = session as unknown as { spiral_phase?: string };
+        return sessionWithPhase.spiral_phase === filters.spiralPhase;
+      });
+    }
+    
+    // 2. Filter by tags (client-side)
+    if (filters.tags && filters.tags.length > 0) {
+      filteredSessions = filteredSessions.filter(session => {
+        // Only reflections have tags
+        if (session.type !== 'reflection') return false;
+        
+        const reflection = session as Reflection;
+        // Check if any of the selected tags match
+        return filters.tags!.some(tag => reflection.tags.includes(tag));
+      });
+    }
+    
+    // 3. Filter by search text (client-side)
+    if (filters.searchText && filters.searchText.trim() !== '') {
+      const searchLower = filters.searchText.toLowerCase().trim();
+      filteredSessions = filteredSessions.filter(session => {
+        // Search in reflection text
+        if (session.type === 'reflection') {
+          const reflection = session as Reflection;
+          return reflection.text.toLowerCase().includes(searchLower);
+        }
+        // Search in balcony pattern or truth
+        else if (session.type === 'balcony') {
+          const balcony = session as BalconyExperiment;
+          return (
+            balcony.pattern.toLowerCase().includes(searchLower) ||
+            balcony.truth.toLowerCase().includes(searchLower)
+          );
+        }
+        return false;
+      });
+    }
+    
+    // Determine if there are more results
+    const hasMore = !lastDoc && sessionsSnap.size > limit;
+    
+    return { 
+      success: true, 
+      sessions: filteredSessions,
+      lastDoc: newLastDoc,
+      hasMore
+    };
+  } catch (error) {
+    console.error('Error getting filtered sessions:', error);
+    return { success: false, error };
+  }
+};
+
+// Get all unique tags from user's reflections
+export const getUserTags = async (
+  user: User
+): Promise<{ success: boolean; tags?: string[]; error?: unknown }> => {
+  try {
+    // Query reflections only
+    const reflectionsQuery = query(
+      collection(db, 'users', user.uid, 'sessions'),
+      where('type', '==', 'reflection')
+    );
+    
+    const reflectionsSnap = await getDocs(reflectionsQuery);
+    const tagSet = new Set<string>();
+    
+    // Collect all unique tags
+    reflectionsSnap.forEach(doc => {
+      const reflection = doc.data() as Reflection;
+      if (reflection.tags && Array.isArray(reflection.tags)) {
+        reflection.tags.forEach(tag => tagSet.add(tag));
+      }
+    });
+    
+    return { success: true, tags: Array.from(tagSet).sort() };
+  } catch (error) {
+    console.error('Error getting user tags:', error);
     return { success: false, error };
   }
 };

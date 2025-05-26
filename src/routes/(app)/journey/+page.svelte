@@ -1,71 +1,80 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
+	import { afterNavigate } from '$app/navigation';
 	import { authStore } from '$lib/stores/auth';
-	import {
-		getUserJourneyData,
-		setUserIntention,
-		analyzeUserPatterns,
-		getSpiralPhaseColor,
-		getSpiralPhaseDescription,
-		type SpiralPhase,
-		type Intention,
-		type SpiralHistoryEntry,
-		type PatternInsight
-	} from '$lib/services/journey';
+	import { journeyStore } from '$lib/stores/journey';
+	import { getUserJourneyData, setUserIntention, analyzeUserPatterns, getSpiralPhaseColor, getSpiralPhaseDescription, type SpiralPhase, type Intention, type SpiralHistoryEntry, type PatternInsight } from '$lib/services/journey';
 	import SpiralTimeline from '$lib/components/SpiralTimeline.svelte';
 	import PatternInsights from '$lib/components/PatternInsights.svelte';
+	import Button from '$lib/components/Button.svelte';
+	import Pencil from '$lib/components/icons/Pencil.svelte';
 
 	// User data
 	let userName = '';
-	let loading = true;
-	let error: Error | null = null;
-
-	// Journey data
-	let currentPhase: SpiralPhase = 'Green';
-	let spiralHistory: SpiralHistoryEntry[] = [];
-	let intention: Intention | undefined;
-	let patterns: PatternInsight[] = [];
 
 	// UI state
 	let editingIntention = false;
 	let intentionText = '';
 	let intentionInputError = '';
 
-	// Fetch journey data
-	async function fetchJourneyData() {
-		if (!$authStore.user) return;
+	// Reactive bindings to journey store
+	$: ({ currentPhase, spiralHistory, intention, patterns, loading, error } = $journeyStore);
+	
+	// Update intention text when intention changes
+	$: if (intention && !editingIntention) {
+		intentionText = intention.intention || '';
+	}
+
+	// Fetch journey data with proper guards
+	async function fetchJourneyData(force = false) {
+		// Guard: Check if user is authenticated
+		if (!$authStore.user || $authStore.loading) {
+			console.log('Auth not ready yet, waiting...');
+			return;
+		}
+
+		// Guard: Check if we already have data and don't need to force refresh
+		if (!force && $journeyStore.lastFetched && spiralHistory.length > 0) {
+			console.log('Using cached journey data');
+			return;
+		}
 
 		try {
-			loading = true;
-			error = null;
+			// Set loading state in store
+			journeyStore.setLoading(true);
+			journeyStore.setError(null);
 
 			// Get user journey data
 			const journeyResult = await getUserJourneyData($authStore.user);
 			if (journeyResult.success) {
-				currentPhase = journeyResult.currentPhase || 'Green';
-				spiralHistory = journeyResult.spiralHistory || [];
-				intention = journeyResult.intention;
-
-				if (intention) {
-					intentionText = intention.intention;
+				// Update journey store with results
+				journeyStore.setJourneyData(
+					journeyResult.currentPhase || 'Green',
+					journeyResult.spiralHistory || [],
+					journeyResult.intention
+				);
+				
+				// Update local intention text if needed
+				if (journeyResult.intention) {
+					intentionText = journeyResult.intention.intention;
 				}
 			} else {
 				console.error('Failed to fetch journey data:', journeyResult.error);
-				error = new Error('Failed to fetch journey data');
+				journeyStore.setError(new Error('Failed to fetch journey data'));
 			}
 
 			// Get user patterns
 			const patternsResult = await analyzeUserPatterns($authStore.user);
-			if (patternsResult.success) {
-				patterns = patternsResult.patterns || [];
+			if (patternsResult.success && patternsResult.patterns) {
+				journeyStore.setPatterns(patternsResult.patterns);
 			} else {
 				console.error('Failed to analyze patterns:', patternsResult.error);
 			}
 		} catch (err) {
 			console.error('Error in fetchJourneyData:', err);
-			error = err instanceof Error ? err : new Error('Unknown error');
+			journeyStore.setError(err instanceof Error ? err : new Error('Unknown error'));
 		} finally {
-			loading = false;
+			journeyStore.setLoading(false);
 		}
 	}
 
@@ -112,6 +121,27 @@
 		if ($authStore.user) {
 			userName = $authStore.user.displayName || 'there';
 			fetchJourneyData();
+		} else {
+			// Set up a listener for auth state changes
+			const unsubscribe = authStore.subscribe(authState => {
+				if (authState.user && !authState.loading) {
+					userName = authState.user.displayName || 'there';
+					fetchJourneyData();
+					unsubscribe();
+				}
+			});
+		}
+	});
+	
+	// Refetch data after navigation
+	afterNavigate(() => {
+		// Check if we have a user and if the data is stale (older than 5 minutes)
+		const isDataStale = $journeyStore.lastFetched ? 
+			(Date.now() - $journeyStore.lastFetched) > 5 * 60 * 1000 : true;
+		
+		if ($authStore.user && !$authStore.loading && (isDataStale || spiralHistory.length === 0)) {
+			console.log('Refetching journey data after navigation');
+			fetchJourneyData(true);
 		}
 	});
 </script>
@@ -119,7 +149,12 @@
 <div class="journey-container">
 	<header class="journey-header"></header>
 
-	{#if loading}
+	{#if $authStore.loading}
+		<div class="loading-container">
+			<div class="loading-spinner"></div>
+			<p>Authenticating...</p>
+		</div>
+	{:else if loading}
 		<div class="loading-container">
 			<div class="loading-spinner"></div>
 			<p>Loading your journey data...</p>
@@ -127,7 +162,7 @@
 	{:else if error}
 		<div class="error-container">
 			<p>Error loading journey data: {error.message}</p>
-			<button on:click={fetchJourneyData}>Try Again</button>
+			<button on:click={() => fetchJourneyData(true)}>Try Again</button>
 		</div>
 	{:else}
 		<!-- Current Phase Section -->
@@ -148,11 +183,17 @@
 			<h2>Your Intention</h2>
 			{#if intention && !editingIntention}
 				<div class="intention-display">
-					<p class="intention-text">"{intention.intention}"</p>
+					<div class="intention-header">
+						<p class="intention-text">"{intention.intention}"</p>
+						<Button 
+							variant="ghost" 
+							size="icon" 
+							icon={Pencil} 
+							ariaLabel="Edit Intention"
+							on:click={() => editingIntention = true}
+						/>
+					</div>
 					<p class="intention-meta">Set on {formatDate(intention.set_at)}</p>
-					<button class="edit-button" on:click={() => (editingIntention = true)}
-						>Edit Intention</button
-					>
 				</div>
 			{:else}
 				<div class="intention-form">
@@ -331,11 +372,19 @@
 		background-color: rgba(0, 0, 0, 0.03);
 	}
 
+	.intention-header {
+		display: flex;
+		justify-content: space-between;
+		align-items: flex-start;
+		gap: 0.5rem;
+	}
+
 	.intention-text {
 		font-size: 1.2rem;
 		font-style: italic;
 		margin-bottom: 0.5rem;
 		line-height: 1.6;
+		flex: 1;
 	}
 
 	.intention-meta {
@@ -378,9 +427,7 @@
 		justify-content: flex-end;
 	}
 
-	.save-button,
-	.edit-button,
-	.cancel-button {
+	.save-button, .cancel-button {
 		padding: 0.5rem 1rem;
 		border-radius: 0.5rem;
 		font-weight: 500;
@@ -388,8 +435,7 @@
 		transition: background-color 0.2s;
 	}
 
-	.save-button,
-	.edit-button {
+	.save-button {
 		background: linear-gradient(90deg, var(--color-primary), var(--color-secondary));
 		color: white;
 		border: none;

@@ -2,26 +2,54 @@
 	import { onMount } from 'svelte';
 	import { goto } from '$app/navigation';
 	import { authStore } from '$lib/stores/auth';
-	import { getRecentSessions, getBalconyForReflection, type Session } from '$lib/services/sessions';
+	import { getFilteredSessions, getUserTags, getBalconyForReflection, type Session } from '$lib/services/sessions';
+	import SessionFiltersComponent from '$lib/components/SessionFilters.svelte';
 
+	// Session data
 	let sessions: Array<Session & { id: string }> = [];
 	let isLoading = true;
 	let loadError: string | null = null;
 	let balconyCache: Record<string, boolean> = {}; // Cache to track which reflections have balcony insights
+	let availableTags: string[] = [];
+	let hasMore = false;
+	let lastDoc: any = undefined;
 
-	onMount(async () => {
+	// Filter state
+	let activeFilters = {
+		types: ['reflection', 'hrv_session', 'balcony'],
+		tags: [],
+		spiralPhase: undefined,
+		moodLevel: undefined,
+		searchText: undefined
+	};
+
+	// Load sessions with current filters
+	async function loadSessions(resetPagination = true) {
 		if (!$authStore.user) return;
 
 		try {
-			const result = await getRecentSessions($authStore.user, 20);
+			isLoading = true;
+			loadError = null;
+
+			// Reset pagination if needed
+			if (resetPagination) {
+				lastDoc = undefined;
+				sessions = [];
+			}
+
+			// Get filtered sessions
+			const result = await getFilteredSessions($authStore.user, activeFilters, 10, lastDoc);
 
 			if (result.success && result.sessions) {
-				sessions = result.sessions;
+				// If pagination, append to existing sessions, otherwise replace
+				sessions = resetPagination ? result.sessions : [...sessions, ...result.sessions];
+				lastDoc = result.lastDoc;
+				hasMore = result.hasMore || false;
 
 				// Check for balcony insights for each reflection
 				await checkForBalconyInsights();
 			} else {
-				loadError = 'Failed to load recent sessions.';
+				loadError = 'Failed to load sessions.';
 			}
 		} catch (error) {
 			console.error('Error loading sessions:', error);
@@ -29,6 +57,44 @@
 		} finally {
 			isLoading = false;
 		}
+	}
+
+	// Load more sessions (pagination)
+	async function loadMoreSessions() {
+		if (hasMore) {
+			await loadSessions(false);
+		}
+	}
+
+	// Load available tags for filter
+	async function loadTags() {
+		if (!$authStore.user) return;
+
+		try {
+			const result = await getUserTags($authStore.user);
+			if (result.success && result.tags) {
+				availableTags = result.tags;
+			}
+		} catch (error) {
+			console.error('Error loading tags:', error);
+		}
+	}
+
+	// Handle filter changes
+	function handleFilterChange(event: CustomEvent) {
+		activeFilters = event.detail.filters;
+		loadSessions();
+	}
+
+	// Initialize on mount
+	onMount(async () => {
+		if (!$authStore.user) return;
+
+		// Load tags first (for filter options)
+		await loadTags();
+		
+		// Load initial sessions
+		await loadSessions();
 	});
 
 	// Check which reflections have associated balcony insights
@@ -119,14 +185,45 @@
 </script>
 
 <div class="history-container">
-	{#if isLoading}
-		<div class="loading">Loading your sessions...</div>
+	<header class="history-header">
+		<h1>Session History</h1>
+	</header>
+	
+	<!-- Session Filters -->
+	<SessionFiltersComponent 
+		availableTags={availableTags}
+		activeFilters={activeFilters}
+		on:filter={handleFilterChange}
+	/>
+	
+	{#if isLoading && sessions.length === 0}
+		<div class="loading">
+			<div class="loading-spinner"></div>
+			<p>Loading your sessions...</p>
+		</div>
 	{:else if loadError}
-		<div class="error-message">{loadError}</div>
+		<div class="error-message">
+			<p>{loadError}</p>
+			<button class="retry-button" on:click={() => loadSessions()}>Try Again</button>
+		</div>
 	{:else if sessions.length === 0}
 		<div class="empty-state">
-			<p>You haven't created any sessions yet.</p>
-			<p>Start by creating a reflection or HRV session!</p>
+			{#if activeFilters.types.length < 3 || activeFilters.spiralPhase || activeFilters.moodLevel || activeFilters.tags.length > 0 || activeFilters.searchText}
+				<p>No sessions match your current filters.</p>
+				<p>Try adjusting your filters or <button class="text-button" on:click={() => {
+					activeFilters = {
+						types: ['reflection', 'hrv_session', 'balcony'],
+						tags: [],
+						spiralPhase: undefined,
+						moodLevel: undefined,
+						searchText: undefined
+					};
+					loadSessions();
+				}}>reset them</button>.</p>
+			{:else}
+				<p>You haven't created any sessions yet.</p>
+				<p>Start by creating a reflection or HRV session!</p>
+			{/if}
 		</div>
 	{:else}
 		<div class="sessions-list">
@@ -197,6 +294,19 @@
 				</div>
 			{/each}
 		</div>
+		
+		{#if isLoading && sessions.length > 0}
+			<div class="loading-more">
+				<div class="loading-spinner"></div>
+				<p>Loading more sessions...</p>
+			</div>
+		{:else if hasMore}
+			<div class="load-more-container">
+				<button class="load-more-button" on:click={loadMoreSessions}>
+					Load More
+				</button>
+			</div>
+		{/if}
 	{/if}
 </div>
 
@@ -207,24 +317,74 @@
 		padding: 1rem;
 	}
 
-	h1 {
-		font-size: 1.8rem;
+	.history-header {
 		margin-bottom: 1.5rem;
-		color: var(--color-primary);
 	}
 
-	.loading {
+	.history-header h1 {
+		font-size: 1.8rem;
+		color: var(--color-primary);
+		margin: 0;
+	}
+
+	.loading, .loading-more {
 		text-align: center;
 		padding: 2rem;
 		color: var(--color-text-secondary);
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+	}
+
+	.loading-more {
+		padding: 1rem;
+	}
+
+	.loading-spinner {
+		width: 40px;
+		height: 40px;
+		border: 3px solid rgba(0, 0, 0, 0.1);
+		border-radius: 50%;
+		border-top-color: var(--color-primary);
+		animation: spin 1s ease-in-out infinite;
+		margin-bottom: 1rem;
+	}
+
+	.loading-more .loading-spinner {
+		width: 30px;
+		height: 30px;
+	}
+
+	@keyframes spin {
+		to {
+			transform: rotate(360deg);
+		}
 	}
 
 	.error-message {
 		color: #e53935;
 		margin-bottom: 1rem;
-		padding: 0.75rem;
+		padding: 1rem;
 		background-color: rgba(229, 57, 53, 0.1);
 		border-radius: 8px;
+		text-align: center;
+	}
+
+	.retry-button {
+		background: linear-gradient(90deg, var(--color-primary), var(--color-secondary));
+		color: white;
+		border: none;
+		border-radius: 0.5rem;
+		padding: 0.5rem 1rem;
+		margin-top: 0.5rem;
+		font-size: 0.9rem;
+		cursor: pointer;
+		transition: opacity 0.2s;
+	}
+
+	.retry-button:hover {
+		opacity: 0.9;
 	}
 
 	.empty-state {
@@ -235,10 +395,25 @@
 		color: var(--color-text-secondary);
 	}
 
+	.text-button {
+		background: none;
+		border: none;
+		color: var(--color-primary);
+		font-weight: 500;
+		cursor: pointer;
+		padding: 0;
+		transition: opacity 0.2s;
+	}
+
+	.text-button:hover {
+		text-decoration: underline;
+	}
+
 	.sessions-list {
 		display: flex;
 		flex-direction: column;
 		gap: 1rem;
+		margin-bottom: 1.5rem;
 	}
 
 	.session-card {
@@ -373,5 +548,27 @@
 
 	.balcony-truth::before {
 		content: '💡 ';
+	}
+
+	.load-more-container {
+		display: flex;
+		justify-content: center;
+		margin: 1.5rem 0;
+	}
+
+	.load-more-button {
+		background: transparent;
+		border: 1px solid var(--color-primary);
+		color: var(--color-primary);
+		border-radius: 2rem;
+		padding: 0.75rem 2rem;
+		font-size: 0.9rem;
+		font-weight: 500;
+		cursor: pointer;
+		transition: all 0.2s;
+	}
+
+	.load-more-button:hover {
+		background-color: rgba(77, 68, 179, 0.1);
 	}
 </style>
