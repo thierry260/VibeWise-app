@@ -1,3 +1,33 @@
 @tailwind base;
+
+@layer base {
+    :root {
+        /* Theme colors */
+        --color-primary: #4D44B3;
+        --color-secondary: #BF469A;
+        --color-text: #1F2937;
+        --color-text-light: rgb(236, 236, 236);
+        --color-text-secondary: #6B7280;
+
+        /* Card and UI backgrounds */
+        --color-card-bg: rgb(251, 251, 251);
+        --color-bg: #F9FAFB;
+        --elevated-card-bg: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
+
+        /* Interactive states */
+        --color-hover: rgba(0, 0, 0, 0.05);
+        --color-active: rgba(0, 0, 0, 0.1);
+    }
+
+    .dark {
+        --color-text: #F9FAFB;
+        --color-text-secondary: #D1D5DB;
+        --color-card-bg: #1F2937;
+        --color-bg: #111827;
+        --color-hover: rgba(255, 255, 255, 0.05);
+        --color-active: rgba(255, 255, 255, 0.1);
+    }
+}
+
 @tailwind components;
 @tailwind utilities;

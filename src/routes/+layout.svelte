@@ -64,7 +64,7 @@
 	}
 
 	:global(.light) {
-		--color-bg: #fff8ee;
+		--color-bg: #f4f5fe;
 		--color-bg-elevated: #ffffff;
 		--color-text: #0d2c46;
 		--color-primary: #4d44b3;

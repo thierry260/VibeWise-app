@@ -1,13 +1,14 @@
 <script lang="ts">
   import { page } from '$app/stores';
+  import { Home, History, Sparkles, Compass, BookOpen } from 'lucide-svelte';
   
   // Navigation items as specified in the requirements
   const navItems = [
-    { name: 'Home', path: '/home', icon: '🏠' },
-    { name: 'Reflect', path: '/reflect', icon: '✍️' },
-    { name: 'HRV', path: '/hrv-session', icon: '💓' },
-    { name: 'Journey', path: '/journey', icon: '🔮' },
-    { name: 'Library', path: '/library', icon: '🧰' }
+    { name: 'Home', path: '/home', icon: Home },
+    { name: 'History', path: '/history', icon: History },
+    { name: 'Sessions', path: '/sessions', icon: Sparkles },
+    { name: 'Journey', path: '/journey', icon: Compass },
+    { name: 'Library', path: '/library', icon: BookOpen }
   ];
   
   // Routes where navigation should be hidden
@@ -26,7 +27,9 @@
         aria-label={item.name}
       >
         <div class="nav-item-content">
-          <span class="icon">{item.icon}</span>
+          <span class="icon">
+            <svelte:component this={item.icon} size={20} strokeWidth={1.5} />
+          </span>
           <span class="label">{item.name}</span>
           {#if currentPath === item.path || currentPath.startsWith(item.path + '/')}
             <div class="active-indicator"></div>

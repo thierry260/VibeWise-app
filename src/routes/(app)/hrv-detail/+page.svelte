@@ -18,31 +18,36 @@
 	// Chart reference
 	let chartEl: HTMLElement;
 	let chart: uPlot | null = null;
-	
+
 	// Tooltip state
 	let activeTooltip: 'heartRate' | 'balance' | 'vibeScore' | 'time' | null = null;
-	
+
 	// Tooltip content
 	const tooltipContent = {
 		heartRate: {
 			title: 'Heart Rate',
 			explanation: 'Your heart rate is the number of times your heart beats per minute.',
 			hint: 'A lower resting heart rate often indicates better cardiovascular fitness.',
-			stateDescription: 'Your heart rate changes throughout the day based on activity, emotions, and rest.',
+			stateDescription:
+				'Your heart rate changes throughout the day based on activity, emotions, and rest.',
 			suggestion: 'Deep, slow breathing can help lower your heart rate when it is elevated.'
 		},
 		balance: {
 			title: 'Balance (RMSSD)',
-			explanation: 'Balance measures the variation between heartbeats, indicating how your nervous system is responding.',
+			explanation:
+				'Balance measures the variation between heartbeats, indicating how your nervous system is responding.',
 			hint: 'Higher values typically suggest better recovery and resilience.',
-			stateDescription: 'This metric reflects the balance between your sympathetic (action) and parasympathetic (rest) systems.',
+			stateDescription:
+				'This metric reflects the balance between your sympathetic (action) and parasympathetic (rest) systems.',
 			suggestion: 'Regular relaxation practices can help improve your balance over time.'
 		},
 		vibeScore: {
 			title: 'Vibe Score',
-			explanation: 'Your Vibe Score combines multiple HRV metrics into one easy-to-understand number.',
+			explanation:
+				'Your Vibe Score combines multiple HRV metrics into one easy-to-understand number.',
 			hint: 'Higher scores indicate a more balanced physiological state.',
-			stateDescription: 'This score reflects your overall physiological balance at the time of measurement.',
+			stateDescription:
+				'This score reflects your overall physiological balance at the time of measurement.',
 			suggestion: 'Regular sessions can help you understand what activities improve your score.'
 		},
 		time: {
@@ -53,7 +58,7 @@
 			suggestion: 'Aim for at least 5 minutes for the most reliable readings.'
 		}
 	};
-	
+
 	// Toggle tooltip visibility
 	function toggleTooltip(tooltipType: 'heartRate' | 'balance' | 'vibeScore' | 'time') {
 		if (activeTooltip === tooltipType) {
@@ -277,7 +282,6 @@
 			</svg>
 			Back
 		</button>
-		<h1>HRV Session Details</h1>
 	</div>
 
 	{#if isLoading}
@@ -293,12 +297,16 @@
 
 			<div class="metrics-grid">
 				<!-- Heart Rate Metric -->
-				<button class="metric-tile" on:click={() => toggleTooltip('heartRate')} aria-label="Heart Rate Information">
+				<button
+					class="metric-tile"
+					on:click={() => toggleTooltip('heartRate')}
+					aria-label="Heart Rate Information"
+				>
 					<h3>Heart Rate</h3>
 					<p class="value">{session.avg_hr} <span class="unit">BPM</span></p>
-					<MetricTooltip 
+					<MetricTooltip
 						isVisible={activeTooltip === 'heartRate'}
-						onClose={() => activeTooltip = null}
+						onClose={() => (activeTooltip = null)}
 						title={tooltipContent.heartRate.title}
 						explanation={tooltipContent.heartRate.explanation}
 						hint={tooltipContent.heartRate.hint}
@@ -308,12 +316,16 @@
 				</button>
 
 				<!-- Balance Metric -->
-				<button class="metric-tile" on:click={() => toggleTooltip('balance')} aria-label="Balance Information">
+				<button
+					class="metric-tile"
+					on:click={() => toggleTooltip('balance')}
+					aria-label="Balance Information"
+				>
 					<h3>Balance</h3>
 					<p class="value">{session.avg_rmssd.toFixed(1)} <span class="unit">ms</span></p>
-					<MetricTooltip 
+					<MetricTooltip
 						isVisible={activeTooltip === 'balance'}
-						onClose={() => activeTooltip = null}
+						onClose={() => (activeTooltip = null)}
 						title={tooltipContent.balance.title}
 						explanation={tooltipContent.balance.explanation}
 						hint={tooltipContent.balance.hint}
@@ -323,12 +335,16 @@
 				</button>
 
 				<!-- Time Metric -->
-				<button class="metric-tile" on:click={() => toggleTooltip('time')} aria-label="Session Time Information">
+				<button
+					class="metric-tile"
+					on:click={() => toggleTooltip('time')}
+					aria-label="Session Time Information"
+				>
 					<h3>Duration</h3>
 					<p class="value">{formatDuration(session.duration_seconds)}</p>
-					<MetricTooltip 
+					<MetricTooltip
 						isVisible={activeTooltip === 'time'}
-						onClose={() => activeTooltip = null}
+						onClose={() => (activeTooltip = null)}
 						title={tooltipContent.time.title}
 						explanation={tooltipContent.time.explanation}
 						hint={tooltipContent.time.hint}
@@ -338,7 +354,11 @@
 				</button>
 
 				<!-- Vibe Score Metric -->
-				<button class="metric-tile vibe-tile" on:click={() => toggleTooltip('vibeScore')} aria-label="Vibe Score Information">
+				<button
+					class="metric-tile vibe-tile"
+					on:click={() => toggleTooltip('vibeScore')}
+					aria-label="Vibe Score Information"
+				>
 					<h3>Vibe Score</h3>
 					<p class="value">{session.vibe_score}</p>
 					<div class="vibe-interpretation">
@@ -350,9 +370,9 @@
 							<div class="interpretation-text">{interpretation.label}</div>
 						{/if}
 					</div>
-					<MetricTooltip 
+					<MetricTooltip
 						isVisible={activeTooltip === 'vibeScore'}
-						onClose={() => activeTooltip = null}
+						onClose={() => (activeTooltip = null)}
 						title={tooltipContent.vibeScore.title}
 						explanation={tooltipContent.vibeScore.explanation}
 						hint={tooltipContent.vibeScore.hint}
@@ -478,8 +498,7 @@
 	}
 
 	.metric-tile {
-		background-color: white;
-		padding: 1.25rem 1rem;
+		background-color: var(--color-border);
 		border-radius: 12px;
 		box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
 		text-align: center;
@@ -489,7 +508,9 @@
 		justify-content: center;
 		border: none;
 		cursor: pointer;
-		transition: transform 0.2s, box-shadow 0.2s;
+		transition:
+			transform 0.2s,
+			box-shadow 0.2s;
 		position: relative;
 	}
 
@@ -513,7 +534,12 @@
 	}
 
 	.vibe-tile {
-		background: linear-gradient(135deg, rgba(139, 92, 246, 0.05), rgba(99, 102, 241, 0.1));
+		background: var(--elevated-card-bg);
+	}
+
+	.vibe-tile h3,
+	.vibe-tile .value {
+		color: var(--color-text-light);
 	}
 
 	.unit {
@@ -529,14 +555,10 @@
 		margin-top: 0.75rem;
 	}
 
-	.interpretation-emoji {
-		font-size: 1.5rem;
-	}
-
 	.interpretation-text {
 		font-size: 0.875rem;
 		font-weight: 600;
-		color: var(--color-primary, #4D44B3);
+		color: var(---color-card-bg);
 	}
 
 	.chart-section {
@@ -597,11 +619,5 @@
 	.legend-label {
 		color: var(--color-text-secondary);
 		font-weight: 500;
-	}
-
-	@media (max-width: 600px) {
-		.metrics-grid {
-			grid-template-columns: 1fr;
-		}
 	}
 </style>

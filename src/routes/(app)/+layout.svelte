@@ -8,13 +8,13 @@
 	import OverflowMenu from '$lib/components/OverflowMenu.svelte';
 	import { onMount } from 'svelte';
 
-	let greeting = 'Goede morgen';
+	let greeting = 'Goedemorgen';
 	// Set greeting based on time of day
 	const setGreeting = () => {
 		const hour = new Date().getHours();
-		if (hour < 12) greeting = 'Goede morgen';
-		else if (hour < 18) greeting = 'Goede middag';
-		else greeting = 'Goede avond';
+		if (hour < 12) greeting = 'Goedemorgen';
+		else if (hour < 18) greeting = 'Goedemiddag';
+		else greeting = 'Goedemiddag';
 	};
 
 	onMount(() => {
@@ -46,18 +46,43 @@
 				class="logo-img"
 				on:click={() => goto('/home')}
 			/>
-			<header class="ml-4">
-				<h4 class="text-md font-bold text-gray-900 dark:text-white">
-					{greeting}, {$authStore.user?.displayName?.split(' ')[0] || 'Thierry'}
-				</h4>
-				<p class="text-xs text-gray-600 dark:text-gray-400">
-					{new Date().toLocaleDateString('nl-NL', {
-						weekday: 'long',
-						month: 'long',
-						day: 'numeric'
-					})}
-				</p>
-			</header>
+
+			{#if currentPath === '/home'}
+				<!-- Home page header with welcome message and date -->
+				<header class="ml-4">
+					<h4 class="text-md font-bold text-gray-900 dark:text-white">
+						{greeting}, {$authStore.user?.displayName?.split(' ')[0] || 'Thierry'}
+					</h4>
+					<p class="text-xs text-gray-600 dark:text-gray-400">
+						{new Date().toLocaleDateString('nl-NL', {
+							weekday: 'long',
+							month: 'long',
+							day: 'numeric'
+						})}
+					</p>
+				</header>
+			{:else}
+				<!-- Page title for other pages -->
+				<h1 class="page-title">
+					{#if currentPath.startsWith('/sessions')}
+						Sessions
+					{:else if currentPath.startsWith('/history')}
+						History
+					{:else if currentPath.startsWith('/journey')}
+						Journey
+					{:else if currentPath.startsWith('/library')}
+						Library
+					{:else if currentPath.startsWith('/hrv-session')}
+						HRV Session
+					{:else if currentPath.startsWith('/reflect')}
+						New Reflection
+					{:else if currentPath.startsWith('/settings')}
+						Settings
+					{:else}
+						VibeWise
+					{/if}
+				</h1>
+			{/if}
 		</div>
 
 		<div class="header-actions">
@@ -86,7 +111,7 @@
 		align-items: center;
 		padding: 1rem;
 		background-color: var(--color-bg-elevated);
-		box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+		box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
 		position: sticky;
 		top: 0;
 		z-index: 10;
@@ -100,6 +125,14 @@
 	.logo-img {
 		height: 2rem;
 		cursor: pointer;
+	}
+
+	.page-title {
+		margin: 0 0 0 1rem;
+		font-size: 1.25rem;
+		font-weight: 600;
+		color: var(--color-text);
+		text-align: left;
 	}
 
 	.header-actions {
@@ -123,6 +156,10 @@
 		.app-content {
 			padding: 2rem;
 			padding-bottom: 2rem; /* Reset padding on desktop */
+		}
+
+		.page-title {
+			font-size: 1.5rem;
 		}
 	}
 </style>

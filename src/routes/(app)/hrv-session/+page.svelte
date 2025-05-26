@@ -507,8 +507,6 @@
 </script>
 
 <div class="hrv-session-container">
-	<h1>HRV Session</h1>
-
 	{#if !sessionActive}
 		<div class="start-session">
 			<p class="instructions">
@@ -917,20 +915,20 @@
 	}
 
 	.metric-tile {
+		background-color: var(--color-border);
+		border-radius: 12px;
+		box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+		text-align: center;
 		display: flex;
 		flex-direction: column;
 		align-items: center;
 		justify-content: center;
-		padding: 1.5rem 1rem;
-		background-color: var(--color-card-bg);
-		border-radius: 12px;
-		box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-		transition:
-			transform 0.2s ease,
-			box-shadow 0.2s ease;
-		position: relative;
 		border: none;
 		cursor: pointer;
+		transition:
+			transform 0.2s,
+			box-shadow 0.2s;
+		position: relative;
 	}
 
 	.metric-tile:hover {
@@ -958,7 +956,12 @@
 	}
 
 	.vibe-tile {
-		background: linear-gradient(135deg, rgba(77, 68, 179, 0.05), rgba(191, 70, 154, 0.1));
+		background: var(--elevated-card-bg);
+	}
+
+	.vibe-tile h3,
+	.vibe-tile .value {
+		color: var(--color-text-light);
 	}
 
 	.chart-section {
@@ -1107,21 +1110,15 @@
 		display: flex;
 		flex-direction: column;
 		align-items: center;
-		gap: 0.75rem;
+		gap: 0.5rem;
 		padding-left: 1rem;
 		border-left: 1px solid rgba(0, 0, 0, 0.05);
 	}
 
-	.interpretation-emoji {
-		font-size: 2.5rem;
-		line-height: 1;
-	}
-
 	.interpretation-text {
-		font-size: 1.25rem;
+		font-size: 0.875rem;
 		font-weight: 600;
-		color: var(--color-text-primary);
-		text-align: center;
+		color: var(---color-card-bg);
 	}
 
 	.legend-dot {
