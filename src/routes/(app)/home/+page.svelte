@@ -2,23 +2,12 @@
 	import { onMount } from 'svelte';
 	import { authStore } from '$lib/stores/auth';
 
-	let greeting = 'Good morning';
 	let streakDays = 0;
 	let vibeScore = 0;
 	let spiralPhase = 'Beige';
 	let intention = '';
 
-	// Set greeting based on time of day
-	const setGreeting = () => {
-		const hour = new Date().getHours();
-		if (hour < 12) greeting = 'Good morning';
-		else if (hour < 18) greeting = 'Good afternoon';
-		else greeting = 'Good evening';
-	};
-
 	onMount(() => {
-		setGreeting();
-
 		// This would normally come from the database
 		// Placeholder data for now
 		streakDays = 3;
@@ -29,15 +18,6 @@
 </script>
 
 <div class="home-page p-4">
-	<header class="mb-6">
-		<h1 class="text-2xl font-bold text-gray-900 dark:text-white">
-			{greeting}, {$authStore.user?.displayName?.split(' ')[0] || 'Thierry'}
-		</h1>
-		<p class="text-sm text-gray-600 dark:text-gray-400">
-			{new Date().toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' })}
-		</p>
-	</header>
-
 	<!-- Streak Counter -->
 	<div
 		class="mb-6 flex items-center rounded-lg bg-gradient-to-r from-purple-100 to-indigo-100 p-4 dark:from-purple-900/30 dark:to-indigo-900/30"

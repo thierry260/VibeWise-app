@@ -21,7 +21,8 @@ export const bleConnectionStatus = writable({
   deviceName: '',
   deviceId: '',
   error: null as Error | null,
-  scanning: false
+  scanning: false,
+  batteryLevel: 75 // Default battery level until we can get actual data
 });
 
 // HRV data store
@@ -367,7 +368,8 @@ export const disconnect = async (): Promise<{ success: boolean; error?: Error }>
       deviceName: '',
       deviceId: '',
       error: null,
-      scanning: false
+      scanning: false,
+      batteryLevel: 75 // Default battery level
     });
     
     resetHRVData();

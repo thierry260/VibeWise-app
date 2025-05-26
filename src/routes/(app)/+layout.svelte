@@ -6,7 +6,20 @@
 	import { showNavigation } from '$lib/stores/navigation';
 	import BottomNavigation from '$lib/components/BottomNavigation.svelte';
 	import OverflowMenu from '$lib/components/OverflowMenu.svelte';
-	
+	import { onMount } from 'svelte';
+
+	let greeting = 'Goede morgen';
+	// Set greeting based on time of day
+	const setGreeting = () => {
+		const hour = new Date().getHours();
+		if (hour < 12) greeting = 'Goede morgen';
+		else if (hour < 18) greeting = 'Goede middag';
+		else greeting = 'Goede avond';
+	};
+
+	onMount(() => {
+		setGreeting();
+	});
 	// Routes that should hide navigation
 	const hiddenRoutes = [
 		'/login',
@@ -15,20 +28,38 @@
 		'/hrv-session/active', // When HRV session is in focus mode
 		'/balcony'
 	];
-	
+
 	// Check if current route should hide navigation
 	$: currentPath = $page.url.pathname;
-	$: hideNav = hiddenRoutes.some(route => 
-		currentPath === route || 
-		(route.endsWith('/*') && currentPath.startsWith(route.slice(0, -2)))
+	$: hideNav = hiddenRoutes.some(
+		(route) =>
+			currentPath === route || (route.endsWith('/*') && currentPath.startsWith(route.slice(0, -2)))
 	);
 </script>
 
 <div class="app-layout">
 	<header class="app-header">
 		<div class="logo">
-			<img src="/vibewise-logo.svg" alt="VibeWise" class="logo-img" on:click={() => goto('/home')} />
+			<img
+				src="/vibewise-logo.svg"
+				alt="VibeWise"
+				class="logo-img"
+				on:click={() => goto('/home')}
+			/>
+			<header class="ml-4">
+				<h4 class="text-md font-bold text-gray-900 dark:text-white">
+					{greeting}, {$authStore.user?.displayName?.split(' ')[0] || 'Thierry'}
+				</h4>
+				<p class="text-xs text-gray-600 dark:text-gray-400">
+					{new Date().toLocaleDateString('nl-NL', {
+						weekday: 'long',
+						month: 'long',
+						day: 'numeric'
+					})}
+				</p>
+			</header>
 		</div>
+
 		<div class="header-actions">
 			<OverflowMenu />
 		</div>

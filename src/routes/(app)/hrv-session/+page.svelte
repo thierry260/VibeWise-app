@@ -1,11 +1,12 @@
 <script lang="ts">
-	import { onMount, onDestroy } from 'svelte';
+	import { onMount, onDestroy, tick } from 'svelte';
 	import { goto } from '$app/navigation';
 	import { authStore } from '$lib/stores/auth';
 	import { divineToolChooserStore, isDivineTimingEnabled } from '$lib/stores/divineTools';
 	import DivineToolChooser from '$lib/components/DivineToolChooser.svelte';
+	import MetricTooltip from '$lib/components/MetricTooltip.svelte';
 	import { createHRVSession } from '$lib/services/sessions';
-	import { fade } from 'svelte/transition';
+	import { fade, scale } from 'svelte/transition';
 	import {
 		bleConnectionStatus,
 		hrvData,
@@ -55,6 +56,54 @@
 	// Update vibe interpretation when the score changes
 	$: vibeInterpretation = getVibeScoreInterpretation($hrvData.vibeScore);
 
+	// Tooltip state
+	let activeTooltip: 'heartRate' | 'balance' | 'vibeScore' | 'time' | null = null;
+
+	// Tooltip content
+	const tooltipContent = {
+		heartRate: {
+			title: 'Heart Rate',
+			explanation: 'Your heart beats per minute.',
+			hint: 'Normal resting range is 60-100 BPM.',
+			stateDescription:
+				'Lower heart rate during rest often indicates better cardiovascular health.',
+			suggestion: 'Focus on your breath to help regulate your heart rate.'
+		},
+		balance: {
+			title: 'Balance',
+			explanation: 'Your nervous system is relaxing between beats.',
+			hint: 'Measured in milliseconds of variation between heartbeats.',
+			stateDescription: 'Higher = more emotional flexibility and calm.',
+			suggestion: 'Keep breathing gently – this is a good sign.'
+		},
+		vibeScore: {
+			title: 'Vibe Score',
+			explanation: 'A measure of your overall physiological balance.',
+			hint: 'Combines heart rate variability, breathing patterns, and rhythm.',
+			stateDescription: 'Higher scores reflect a state of calm awareness and inner balance.',
+			suggestion: 'Notice what helps your score rise and fall.'
+		},
+		time: {
+			title: 'Session Time',
+			explanation: 'Duration of your current session.',
+			hint: '',
+			stateDescription: 'Even short sessions of 3-5 minutes can be beneficial.',
+			suggestion: 'Try to practice regularly rather than focusing on length.'
+		}
+	};
+
+	// Toggle tooltip
+	async function toggleTooltip(tooltip: typeof activeTooltip) {
+		await tick();
+		requestAnimationFrame(() => {
+			if (activeTooltip === tooltip) {
+				activeTooltip = null;
+			} else {
+				activeTooltip = tooltip;
+			}
+		});
+	}
+
 	// Initialize chart
 	function initChart() {
 		if (!chartEl) {
@@ -85,8 +134,14 @@
 					if (closestIdx !== null) {
 						const data = u.data;
 						legendValues = {
-							hr: data[1][closestIdx] !== null ? (data[1][closestIdx] as number).toFixed(0) + ' bpm' : '-',
-							rmssd: data[2][closestIdx] !== null ? (data[2][closestIdx] as number).toFixed(1) + ' ms' : '-',
+							hr:
+								data[1][closestIdx] !== null
+									? (data[1][closestIdx] as number).toFixed(0) + ' bpm'
+									: '-',
+							rmssd:
+								data[2][closestIdx] !== null
+									? (data[2][closestIdx] as number).toFixed(1) + ' ms'
+									: '-',
 							vibe: data[3][closestIdx] !== null ? (data[3][closestIdx] as number).toFixed(0) : '-'
 						};
 					}
@@ -102,7 +157,7 @@
 					scale: 'hr',
 					label: 'Heart Rate',
 					value: (u: uPlot, v: number | null) => (v == null ? '-' : v.toFixed(0) + ' bpm'),
-					stroke: 'rgba(229, 57, 53, 0.8)',  // #E53935 with opacity
+					stroke: 'rgba(229, 57, 53, 0.8)', // #E53935 with opacity
 					width: 2,
 					points: {
 						show: false
@@ -113,7 +168,7 @@
 					scale: 'rmssd',
 					label: 'Balance',
 					value: (u: uPlot, v: number | null) => (v == null ? '-' : v.toFixed(1) + ' ms'),
-					stroke: 'rgba(77, 68, 179, 0.8)',  // #4D44B3 with opacity
+					stroke: 'rgba(77, 68, 179, 0.8)', // #4D44B3 with opacity
 					width: 2,
 					points: {
 						show: false
@@ -124,7 +179,7 @@
 					scale: 'vibe',
 					label: 'Vibe Score',
 					value: (u: uPlot, v: number | null) => (v == null ? '-' : v.toFixed(0)),
-					stroke: 'rgba(191, 70, 154, 0.8)',  // #BF469A with opacity
+					stroke: 'rgba(191, 70, 154, 0.8)', // #BF469A with opacity
 					width: 2,
 					points: {
 						show: false
@@ -172,15 +227,20 @@
 						const idx = chart.data[0].length - 1;
 						if (idx >= 0) {
 							legendValues = {
-								hr: chart.data[1][idx] !== null ? (chart.data[1][idx]?.toString() || '-') + ' bpm' : '-',
-								rmssd: chart.data[2][idx] !== null ? (chart.data[2][idx]?.toString() || '-') + ' ms' : '-',
-								vibe: chart.data[3][idx] !== null ? (chart.data[3][idx]?.toString() || '-') : '-'
+								hr:
+									chart.data[1][idx] !== null
+										? (chart.data[1][idx]?.toString() || '-') + ' bpm'
+										: '-',
+								rmssd:
+									chart.data[2][idx] !== null
+										? (chart.data[2][idx]?.toString() || '-') + ' ms'
+										: '-',
+								vibe: chart.data[3][idx] !== null ? chart.data[3][idx]?.toString() || '-' : '-'
 							};
 						}
 					}
 				});
 			}
-
 		} catch (error) {
 			console.error('Error creating chart:', error);
 			return null;
@@ -348,11 +408,11 @@
 
 				// Check if divine timing is enabled for this user
 				const divineTimingEnabled = await isDivineTimingEnabled($authStore.user);
-				
+
 				if (divineTimingEnabled) {
 					// Show a random divine tool
 					const selectedTool = divineToolChooserStore.showRandomTool();
-					
+
 					// Log that the tool was shown
 					if (selectedTool) {
 						await divineToolChooserStore.logToolInteraction(
@@ -471,104 +531,185 @@
 		</div>
 	{:else}
 		<div class="session-active">
-			<div class="status-bar">
+			<div class="device-status">
 				<div class="connection-status">
 					<span class="status-indicator" class:connected={$bleConnectionStatus.connected}></span>
 					<span>
 						{$bleConnectionStatus.connected
-							? `Connected to ${$bleConnectionStatus.deviceName}`
+							? `Connected to Polar H10 ${$bleConnectionStatus.deviceId || ''}`
 							: 'Disconnected'}
 					</span>
 				</div>
 
-				<div class="session-timer">
-					{formatDuration($sessionTimer.elapsedSeconds)}
+				<div class="battery-indicator">
+					<div
+						class="battery-icon"
+						class:battery-low={$bleConnectionStatus.batteryLevel < 20}
+						class:battery-mid={$bleConnectionStatus.batteryLevel >= 20 &&
+							$bleConnectionStatus.batteryLevel < 50}
+						class:battery-full={$bleConnectionStatus.batteryLevel >= 50}
+					>
+						<div class="battery-level" style="width: {$bleConnectionStatus.batteryLevel}%"></div>
+					</div>
+					<span class="battery-text">{$bleConnectionStatus.batteryLevel}%</span>
 				</div>
 			</div>
 
-			<div class="session-container">
-				<div class="metrics-container">
-					<div class="metric">
-						<h3>Heart Rate</h3>
-						<p class="value">{$hrvData.heartRate} <span class="unit">BPM</span></p>
+			<div class="metrics-grid">
+				<!-- Heart Rate Metric -->
+				<button
+					class="metric-tile"
+					on:mousedown={() => toggleTooltip('heartRate')}
+					aria-label="Heart Rate Information"
+				>
+					<h3>Heart Rate</h3>
+					<p class="value">{$hrvData.heartRate} <span class="unit">BPM</span></p>
+					<MetricTooltip
+						isVisible={activeTooltip === 'heartRate'}
+						onClose={() => (activeTooltip = null)}
+						title={tooltipContent.heartRate.title}
+						explanation={tooltipContent.heartRate.explanation}
+						hint={tooltipContent.heartRate.hint}
+						stateDescription={tooltipContent.heartRate.stateDescription}
+						suggestion={tooltipContent.heartRate.suggestion}
+					/>
+				</button>
+
+				<!-- Balance Metric -->
+				<button
+					class="metric-tile"
+					on:mousedown={() => toggleTooltip('balance')}
+					aria-label="Balance Information"
+				>
+					<h3>Balance</h3>
+					<p class="value">{$hrvData.rmssd.toFixed(1)} <span class="unit">ms</span></p>
+					<MetricTooltip
+						isVisible={activeTooltip === 'balance'}
+						onClose={() => (activeTooltip = null)}
+						title={tooltipContent.balance.title}
+						explanation={tooltipContent.balance.explanation}
+						hint={tooltipContent.balance.hint}
+						stateDescription={tooltipContent.balance.stateDescription}
+						suggestion={tooltipContent.balance.suggestion}
+					/>
+				</button>
+
+				<!-- Time Metric -->
+				<button
+					class="metric-tile"
+					on:mousedown={() => toggleTooltip('time')}
+					aria-label="Session Time Information"
+				>
+					<h3>Time</h3>
+					<p class="value">{formatDuration($sessionTimer.elapsedSeconds)}</p>
+					<MetricTooltip
+						isVisible={activeTooltip === 'time'}
+						onClose={() => (activeTooltip = null)}
+						title={tooltipContent.time.title}
+						explanation={tooltipContent.time.explanation}
+						hint={tooltipContent.time.hint}
+						stateDescription={tooltipContent.time.stateDescription}
+						suggestion={tooltipContent.time.suggestion}
+					/>
+				</button>
+
+				<!-- Vibe Score Metric -->
+				<button
+					class="metric-tile vibe-tile"
+					on:mousedown={() => toggleTooltip('vibeScore')}
+					aria-label="Vibe Score Information"
+				>
+					<h3>Vibe Score</h3>
+					<p class="value">{$hrvData.vibeScore}</p>
+					<MetricTooltip
+						isVisible={activeTooltip === 'vibeScore'}
+						onClose={() => (activeTooltip = null)}
+						title={tooltipContent.vibeScore.title}
+						explanation={tooltipContent.vibeScore.explanation}
+						hint={tooltipContent.vibeScore.hint}
+						stateDescription={tooltipContent.vibeScore.stateDescription}
+						suggestion={tooltipContent.vibeScore.suggestion}
+					/>
+				</button>
+			</div>
+
+			<div class="chart-section">
+				<h3 class="mb-2 text-xl font-semibold">Real-time HRV Data</h3>
+				<div class="chart-container" bind:this={chartEl}></div>
+
+				<!-- Unified One-Line Legend -->
+				<div class="unified-legend">
+					<div class="legend-item">
+						<div class="legend-dot hr-dot"></div>
+						<span class="legend-label">Heart Rate</span>
+						<span
+							class="legend-value"
+							class:has-value={legendValues.hr !== '-'}
+							in:fade={{ duration: 150 }}>{legendValues.hr}</span
+						>
 					</div>
-					<div class="metric">
-						<h3>Balance</h3>
-						<p class="value">{$hrvData.rmssd.toFixed(1)} <span class="unit">ms</span></p>
+					<div class="legend-item">
+						<div class="legend-dot rmssd-dot"></div>
+						<span class="legend-label">Balance</span>
+						<span
+							class="legend-value"
+							class:has-value={legendValues.rmssd !== '-'}
+							in:fade={{ duration: 150 }}>{legendValues.rmssd}</span
+						>
 					</div>
-					<div class="metric">
-						<h3>Vibe Score</h3>
-						<p class="value">{$hrvData.vibeScore}</p>
+					<div class="legend-item">
+						<div class="legend-dot vibe-dot"></div>
+						<span class="legend-label">Vibe Score</span>
+						<span
+							class="legend-value"
+							class:has-value={legendValues.vibe !== '-'}
+							in:fade={{ duration: 150 }}>{legendValues.vibe}</span
+						>
 					</div>
 				</div>
 
-				<div class="timer-container">
-					<p class="timer">{formatDuration($sessionTimer.elapsedSeconds)}</p>
-				</div>
-
-				<div class="chart-section">
-					<h3 class="mb-2 text-xl font-semibold">Real-time HRV Data</h3>
-					<div class="chart-container" bind:this={chartEl}></div>
-					
-					<!-- Custom Legend -->
-					<div class="custom-legend">
-						<div class="legend-item">
-							<div class="legend-dot hr-dot"></div>
-							<span class="legend-label">Heart Rate</span>
-							<span class="legend-value" class:has-value={legendValues.hr !== '-'} in:fade={{duration: 150}}>{legendValues.hr}</span>
-						</div>
-						<div class="legend-item">
-							<div class="legend-dot rmssd-dot"></div>
-							<span class="legend-label">Balance</span>
-							<span class="legend-value" class:has-value={legendValues.rmssd !== '-'} in:fade={{duration: 150}}>{legendValues.rmssd}</span>
-						</div>
-						<div class="legend-item">
-							<div class="legend-dot vibe-dot"></div>
-							<span class="legend-label">Vibe Score</span>
-							<span class="legend-value" class:has-value={legendValues.vibe !== '-'} in:fade={{duration: 150}}>{legendValues.vibe}</span>
-						</div>
-					</div>
-
-					<!-- Vibe Score Display -->
-					<div class="vibe-score-container">
+				<!-- Vibe Score Display with Glow Animation -->
+				<div class="vibe-score-container">
+					<div class="vibe-score-circle-wrapper">
+						<div class="glow-aura" style="--intensity: {$hrvData.vibeScore / 100}"></div>
 						<div class="vibe-score-circle" style="--progress: {$hrvData.vibeScore}%">
 							<div class="vibe-score-value">{$hrvData.vibeScore}</div>
 							<div class="vibe-score-label">Vibe Score</div>
 						</div>
-						<div class="vibe-score-interpretation">
-							<div class="interpretation-emoji">{vibeInterpretation.emoji}</div>
-							<div class="interpretation-text">{vibeInterpretation.label}</div>
-						</div>
+					</div>
+					<div class="vibe-score-interpretation">
+						<div class="interpretation-emoji">{vibeInterpretation.emoji}</div>
+						<div class="interpretation-text">{vibeInterpretation.label}</div>
 					</div>
 				</div>
+			</div>
 
-				<div class="breathing-guide-section">
-					<h3 class="mb-3 text-xl font-semibold">Breathing Guide</h3>
-					<p class="mb-3 text-sm text-gray-500">Follow the rhythm</p>
-					<div class="breathing-guide-container">
-						<div class="breathing-pulse-ring"></div>
-						<div
-							class="breathing-circle"
-							class:inhale={breathPhase === 'inhale'}
-							class:exhale={breathPhase === 'exhale'}
-							style="transform: scale({breathPhase === 'inhale'
-								? 0.4 + (breathProgress / 100) * 0.6
-								: 1 - (breathProgress / 100) * 0.8})"
-						>
-							<div class="breathing-text">
-								{breathPhase === 'inhale' ? 'In' : 'Out'}
-							</div>
-							<div class="breathing-timer">
-								{breathPhase === 'inhale' ? '4s' : '6s'}
-							</div>
+			<div class="breathing-guide-section">
+				<h3 class="mb-3 text-xl font-semibold">Breathing Guide</h3>
+				<p class="mb-3 text-sm text-gray-500">Follow the rhythm</p>
+				<div class="breathing-guide-container">
+					<div class="breathing-pulse-ring"></div>
+					<div
+						class="breathing-circle"
+						class:inhale={breathPhase === 'inhale'}
+						class:exhale={breathPhase === 'exhale'}
+						style="transform: scale({breathPhase === 'inhale'
+							? 0.4 + (breathProgress / 100) * 0.6
+							: 1 - (breathProgress / 100) * 0.8})"
+					>
+						<div class="breathing-text">
+							{breathPhase === 'inhale' ? 'In' : 'Out'}
 						</div>
-						<div class="breathing-ripple"></div>
+						<div class="breathing-timer">
+							{breathPhase === 'inhale' ? '4s' : '6s'}
+						</div>
 					</div>
+					<div class="breathing-ripple"></div>
 				</div>
+			</div>
 
-				<div class="button-container">
-					<button class="stop-button" on:click={stopSession}>Stop Session</button>
-				</div>
+			<div class="button-container">
+				<button class="stop-button" on:click={stopSession}>Stop Session</button>
 			</div>
 		</div>
 	{/if}
@@ -636,6 +777,8 @@
 		max-width: 800px;
 		margin: 0 auto;
 		padding: 1rem;
+		overflow-x: hidden; /* Prevent horizontal scrolling */
+		width: 100%;
 	}
 
 	h1 {
@@ -693,7 +836,7 @@
 		gap: 1.5rem;
 	}
 
-	.status-bar {
+	.device-status {
 		display: flex;
 		justify-content: space-between;
 		align-items: center;
@@ -709,6 +852,53 @@
 		gap: 0.5rem;
 	}
 
+	.battery-indicator {
+		display: flex;
+		align-items: center;
+		gap: 0.5rem;
+	}
+
+	.battery-icon {
+		position: relative;
+		width: 20px;
+		height: 10px;
+		border: 1px solid #aaa;
+		border-radius: 2px;
+	}
+
+	.battery-icon:after {
+		content: '';
+		position: absolute;
+		right: -3px;
+		top: 2px;
+		width: 3px;
+		height: 6px;
+		background: #aaa;
+		border-radius: 0 2px 2px 0;
+	}
+
+	.battery-level {
+		height: 100%;
+		background: #4caf50;
+	}
+
+	.battery-low .battery-level {
+		background: #e53935;
+	}
+
+	.battery-mid .battery-level {
+		background: #ff9800;
+	}
+
+	.battery-full .battery-level {
+		background: #4caf50;
+	}
+
+	.battery-text {
+		font-size: 0.8rem;
+		color: var(--color-text-secondary);
+	}
+
 	.status-indicator {
 		width: 10px;
 		height: 10px;
@@ -720,54 +910,55 @@
 		background-color: #4caf50;
 	}
 
-	.session-timer {
-		font-weight: 500;
-		font-size: 1.1rem;
-	}
-
-	.metrics-container {
-		display: flex;
-		justify-content: space-between;
+	.metrics-grid {
+		display: grid;
+		grid-template-columns: repeat(2, 1fr);
 		gap: 1rem;
 	}
 
-	.metric {
-		flex: 1;
+	.metric-tile {
 		display: flex;
 		flex-direction: column;
 		align-items: center;
-		padding: 1rem;
+		justify-content: center;
+		padding: 1.5rem 1rem;
 		background-color: var(--color-card-bg);
-		border-radius: 8px;
+		border-radius: 12px;
 		box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+		transition:
+			transform 0.2s ease,
+			box-shadow 0.2s ease;
+		position: relative;
+		border: none;
+		cursor: pointer;
 	}
 
-	.metric h3 {
-		font-size: 1.1rem;
+	.metric-tile:hover {
+		transform: translateY(-2px);
+		box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+	}
+
+	.metric-tile h3 {
+		font-size: 1rem;
 		margin-bottom: 0.5rem;
-	}
-
-	.metric .value {
-		font-size: 1.8rem;
-		font-weight: 600;
-	}
-
-	.metric .unit {
-		font-size: 0.9rem;
 		color: var(--color-text-secondary);
 	}
 
-	.timer-container {
-		margin-top: 1rem;
-		padding: 1rem;
-		background-color: var(--color-card-bg);
-		border-radius: 8px;
-		box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+	.metric-tile .value {
+		font-size: 2rem;
+		font-weight: 700;
+		color: var(--color-primary);
+		margin: 0;
 	}
 
-	.timer {
-		font-size: 1.8rem;
-		font-weight: 600;
+	.metric-tile .unit {
+		font-size: 0.9rem;
+		color: var(--color-text-secondary);
+		font-weight: normal;
+	}
+
+	.vibe-tile {
+		background: linear-gradient(135deg, rgba(77, 68, 179, 0.05), rgba(191, 70, 154, 0.1));
 	}
 
 	.chart-section {
@@ -783,15 +974,20 @@
 		box-shadow: 0 1px 4px rgba(0, 0, 0, 0.03);
 	}
 
-	.custom-legend {
+	.unified-legend {
 		display: flex;
-		flex-wrap: wrap;
-		gap: 1rem;
-		margin-top: 0.5rem;
+		justify-content: space-around;
+		align-items: center;
+		padding: 0.75rem 0.5rem;
+		margin-top: 0.75rem;
 		margin-bottom: 1.5rem;
 		border-radius: 8px;
 		background-color: rgba(255, 255, 255, 0.5);
 		backdrop-filter: blur(4px);
+		white-space: nowrap;
+		overflow-x: auto;
+		width: 100%;
+		gap: 0.5rem;
 	}
 
 	.legend-item {
@@ -808,10 +1004,58 @@
 		align-items: center;
 		gap: 2rem;
 		margin-top: 1.5rem;
+		padding: 2rem;
+		background-color: var(--color-card-bg);
+		border-radius: 16px;
+		box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+		background: linear-gradient(135deg, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.95));
+		backdrop-filter: blur(10px);
+	}
+
+	.breathing-guide-section {
+		margin-top: 2rem;
 		padding: 1.5rem;
 		background-color: var(--color-card-bg);
 		border-radius: 12px;
 		box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+		text-align: center;
+		width: 100%;
+	}
+
+	.vibe-score-circle-wrapper {
+		position: relative;
+		width: 140px;
+		height: 140px;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+	}
+
+	.glow-aura {
+		position: absolute;
+		width: 100%;
+		height: 100%;
+		border-radius: 50%;
+		background: radial-gradient(
+			circle,
+			rgba(77, 68, 179, calc(0.2 * var(--intensity))),
+			rgba(191, 70, 154, calc(0.1 * var(--intensity))),
+			transparent 70%
+		);
+		filter: blur(10px);
+		opacity: 0.8;
+		animation: pulse 3s infinite alternate;
+	}
+
+	@keyframes pulse {
+		0% {
+			transform: scale(1);
+			opacity: 0.8;
+		}
+		100% {
+			transform: scale(1.15);
+			opacity: 0.6;
+		}
 	}
 
 	.vibe-score-circle {
@@ -820,16 +1064,17 @@
 		height: 120px;
 		border-radius: 50%;
 		background: conic-gradient(
-			var(--color-primary) 0%, 
-			var(--color-primary) var(--progress), 
-			#e5e7eb var(--progress), 
+			var(--color-primary) 0%,
+			var(--color-primary) var(--progress),
+			#e5e7eb var(--progress),
 			#e5e7eb 100%
 		);
 		display: flex;
 		flex-direction: column;
 		justify-content: center;
 		align-items: center;
-		box-shadow: 0 4px 6px rgba(77, 68, 179, 0.1);
+		box-shadow: 0 4px 12px rgba(77, 68, 179, 0.15);
+		z-index: 2;
 	}
 
 	.vibe-score-circle::before {
@@ -862,7 +1107,9 @@
 		display: flex;
 		flex-direction: column;
 		align-items: center;
-		gap: 0.5rem;
+		gap: 0.75rem;
+		padding-left: 1rem;
+		border-left: 1px solid rgba(0, 0, 0, 0.05);
 	}
 
 	.interpretation-emoji {
@@ -884,15 +1131,15 @@
 	}
 
 	.hr-dot {
-		background-color: #E53935;
+		background-color: #e53935;
 	}
 
 	.rmssd-dot {
-		background-color: #4D44B3;
+		background-color: #4d44b3;
 	}
 
 	.vibe-dot {
-		background-color: #BF469A;
+		background-color: #bf469a;
 	}
 
 	.legend-label {

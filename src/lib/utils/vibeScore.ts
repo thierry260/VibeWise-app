@@ -192,9 +192,9 @@ function calculatePatternSmoothnessScore(rrIntervals: number[]): number {
  * @returns Object with label and emoji
  */
 export function getVibeScoreInterpretation(score: number): { label: string; emoji: string } {
-  if (score >= 85) return { label: "You're glowing", emoji: "💫" };
-  if (score >= 70) return { label: "Open and steady", emoji: "💜" };
-  if (score >= 50) return { label: "Coming into sync", emoji: "🌱" };
-  if (score >= 30) return { label: "Breathe and soften", emoji: "🫁" };
-  return { label: "Pause. Feel. Breathe.", emoji: "🧘" };
+  if (score >= 80) return { label: "You're glowing", emoji: "💫" };
+  if (score >= 60) return { label: "Open and steady", emoji: "💜" };
+  if (score >= 40) return { label: "Coming into sync", emoji: "🌱" };
+  if (score >= 20) return { label: "Breathe and soften", emoji: "🫁" };
+  return { label: "Let's slow down together", emoji: "💤" };
 }

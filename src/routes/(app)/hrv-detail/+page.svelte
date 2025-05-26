@@ -5,6 +5,8 @@
 	import { authStore } from '$lib/stores/auth';
 	import { getSessionById, type HRVSession } from '$lib/services/sessions';
 	import { getVibeScoreInterpretation } from '$lib/utils/vibeScore';
+	import MetricTooltip from '$lib/components/MetricTooltip.svelte';
+	import { fade } from 'svelte/transition';
 	import uPlot from 'uplot';
 	import 'uplot/dist/uPlot.min.css';
 
@@ -16,6 +18,50 @@
 	// Chart reference
 	let chartEl: HTMLElement;
 	let chart: uPlot | null = null;
+	
+	// Tooltip state
+	let activeTooltip: 'heartRate' | 'balance' | 'vibeScore' | 'time' | null = null;
+	
+	// Tooltip content
+	const tooltipContent = {
+		heartRate: {
+			title: 'Heart Rate',
+			explanation: 'Your heart rate is the number of times your heart beats per minute.',
+			hint: 'A lower resting heart rate often indicates better cardiovascular fitness.',
+			stateDescription: 'Your heart rate changes throughout the day based on activity, emotions, and rest.',
+			suggestion: 'Deep, slow breathing can help lower your heart rate when it is elevated.'
+		},
+		balance: {
+			title: 'Balance (RMSSD)',
+			explanation: 'Balance measures the variation between heartbeats, indicating how your nervous system is responding.',
+			hint: 'Higher values typically suggest better recovery and resilience.',
+			stateDescription: 'This metric reflects the balance between your sympathetic (action) and parasympathetic (rest) systems.',
+			suggestion: 'Regular relaxation practices can help improve your balance over time.'
+		},
+		vibeScore: {
+			title: 'Vibe Score',
+			explanation: 'Your Vibe Score combines multiple HRV metrics into one easy-to-understand number.',
+			hint: 'Higher scores indicate a more balanced physiological state.',
+			stateDescription: 'This score reflects your overall physiological balance at the time of measurement.',
+			suggestion: 'Regular sessions can help you understand what activities improve your score.'
+		},
+		time: {
+			title: 'Session Duration',
+			explanation: 'The total time you spent in this HRV measurement session.',
+			hint: 'Even short sessions can provide valuable insights.',
+			stateDescription: 'Longer sessions may reveal patterns in how your body responds over time.',
+			suggestion: 'Aim for at least 5 minutes for the most reliable readings.'
+		}
+	};
+	
+	// Toggle tooltip visibility
+	function toggleTooltip(tooltipType: 'heartRate' | 'balance' | 'vibeScore' | 'time') {
+		if (activeTooltip === tooltipType) {
+			activeTooltip = null;
+		} else {
+			activeTooltip = tooltipType;
+		}
+	}
 
 	onMount(async () => {
 		if (!$authStore.user) {
@@ -245,50 +291,93 @@
 				<div class="session-time">{formatTime(session.timestamp)}</div>
 			</div>
 
-			<div class="stats-grid">
-				<div class="stat-card">
-					<div class="stat-label">Duration</div>
-					<div class="stat-value">{formatDuration(session.duration_seconds)}</div>
-				</div>
-				<div class="stat-card">
-					<div class="stat-label">Avg Heart Rate</div>
-					<div class="stat-value">{session.avg_hr.toFixed(0)} <span class="unit">bpm</span></div>
-				</div>
-				<div class="stat-card">
-					<div class="stat-label">Avg Balance</div>
-					<div class="stat-value">{session.avg_rmssd.toFixed(1)} <span class="unit">ms</span></div>
-				</div>
-				<div class="vibe-score-card">
-					<div class="stat-label">Vibe Score</div>
-					<div class="stat-value">{session.vibe_score.toFixed(0)}</div>
+			<div class="metrics-grid">
+				<!-- Heart Rate Metric -->
+				<button class="metric-tile" on:click={() => toggleTooltip('heartRate')} aria-label="Heart Rate Information">
+					<h3>Heart Rate</h3>
+					<p class="value">{session.avg_hr} <span class="unit">BPM</span></p>
+					<MetricTooltip 
+						isVisible={activeTooltip === 'heartRate'}
+						onClose={() => activeTooltip = null}
+						title={tooltipContent.heartRate.title}
+						explanation={tooltipContent.heartRate.explanation}
+						hint={tooltipContent.heartRate.hint}
+						stateDescription={tooltipContent.heartRate.stateDescription}
+						suggestion={tooltipContent.heartRate.suggestion}
+					/>
+				</button>
+
+				<!-- Balance Metric -->
+				<button class="metric-tile" on:click={() => toggleTooltip('balance')} aria-label="Balance Information">
+					<h3>Balance</h3>
+					<p class="value">{session.avg_rmssd.toFixed(1)} <span class="unit">ms</span></p>
+					<MetricTooltip 
+						isVisible={activeTooltip === 'balance'}
+						onClose={() => activeTooltip = null}
+						title={tooltipContent.balance.title}
+						explanation={tooltipContent.balance.explanation}
+						hint={tooltipContent.balance.hint}
+						stateDescription={tooltipContent.balance.stateDescription}
+						suggestion={tooltipContent.balance.suggestion}
+					/>
+				</button>
+
+				<!-- Time Metric -->
+				<button class="metric-tile" on:click={() => toggleTooltip('time')} aria-label="Session Time Information">
+					<h3>Duration</h3>
+					<p class="value">{formatDuration(session.duration_seconds)}</p>
+					<MetricTooltip 
+						isVisible={activeTooltip === 'time'}
+						onClose={() => activeTooltip = null}
+						title={tooltipContent.time.title}
+						explanation={tooltipContent.time.explanation}
+						hint={tooltipContent.time.hint}
+						stateDescription={tooltipContent.time.stateDescription}
+						suggestion={tooltipContent.time.suggestion}
+					/>
+				</button>
+
+				<!-- Vibe Score Metric -->
+				<button class="metric-tile vibe-tile" on:click={() => toggleTooltip('vibeScore')} aria-label="Vibe Score Information">
+					<h3>Vibe Score</h3>
+					<p class="value">{session.vibe_score}</p>
 					<div class="vibe-interpretation">
-						{#if session.vibe_interpretation}
-							<div class="interpretation-emoji">{session.vibe_interpretation.emoji}</div>
-							<div class="interpretation-text">{session.vibe_interpretation.label}</div>
+						{#if !session.vibe_score}
+							<div class="interpretation-text">No score available</div>
 						{:else}
 							{@const interpretation = getVibeScoreInterpretation(session.vibe_score)}
 							<div class="interpretation-emoji">{interpretation.emoji}</div>
 							<div class="interpretation-text">{interpretation.label}</div>
 						{/if}
 					</div>
-				</div>
+					<MetricTooltip 
+						isVisible={activeTooltip === 'vibeScore'}
+						onClose={() => activeTooltip = null}
+						title={tooltipContent.vibeScore.title}
+						explanation={tooltipContent.vibeScore.explanation}
+						hint={tooltipContent.vibeScore.hint}
+						stateDescription={tooltipContent.vibeScore.stateDescription}
+						suggestion={tooltipContent.vibeScore.suggestion}
+					/>
+				</button>
 			</div>
 
 			<div class="chart-section">
 				<h2>Session Data</h2>
 				<div class="chart-container" bind:this={chartEl}></div>
-				<div class="chart-legend">
+				<!-- Unified One-Line Legend -->
+				<div class="unified-legend">
 					<div class="legend-item">
 						<div class="legend-dot hr-dot"></div>
-						<div class="legend-label">Heart Rate</div>
+						<span class="legend-label">Heart Rate</span>
 					</div>
 					<div class="legend-item">
 						<div class="legend-dot rmssd-dot"></div>
-						<div class="legend-label">Balance</div>
+						<span class="legend-label">Balance</span>
 					</div>
 					<div class="legend-item">
 						<div class="legend-dot vibe-dot"></div>
-						<div class="legend-label">Vibe Score</div>
+						<span class="legend-label">Vibe Score</span>
 					</div>
 				</div>
 			</div>
@@ -303,6 +392,8 @@
 		max-width: 800px;
 		margin: 0 auto;
 		padding: 1rem;
+		overflow-x: hidden; /* Prevent horizontal scrolling */
+		width: 100%;
 	}
 
 	.header {
@@ -377,28 +468,58 @@
 		color: var(--color-text-secondary);
 	}
 
-	.stats-grid {
+	/* Metrics Grid */
+	.metrics-grid {
 		display: grid;
 		grid-template-columns: repeat(2, 1fr);
+		grid-auto-rows: 1fr;
 		gap: 1rem;
 		margin-bottom: 1.5rem;
 	}
 
-	.stat-card {
+	.metric-tile {
 		background-color: white;
-		padding: 1rem;
-		border-radius: 0.5rem;
-		box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+		padding: 1.25rem 1rem;
+		border-radius: 12px;
+		box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
 		text-align: center;
-	}
-
-	.vibe-score-card {
-		grid-column: span 2;
 		display: flex;
 		flex-direction: column;
 		align-items: center;
-		padding: 1.5rem;
+		justify-content: center;
+		border: none;
+		cursor: pointer;
+		transition: transform 0.2s, box-shadow 0.2s;
+		position: relative;
+	}
+
+	.metric-tile:hover {
+		transform: translateY(-2px);
+		box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+	}
+
+	.metric-tile h3 {
+		margin: 0 0 0.5rem 0;
+		font-size: 1rem;
+		color: var(--color-text-secondary);
+		font-weight: 500;
+	}
+
+	.metric-tile .value {
+		font-size: 1.75rem;
+		font-weight: 600;
+		margin: 0;
+		color: var(--color-text);
+	}
+
+	.vibe-tile {
 		background: linear-gradient(135deg, rgba(139, 92, 246, 0.05), rgba(99, 102, 241, 0.1));
+	}
+
+	.unit {
+		font-size: 0.9rem;
+		font-weight: normal;
+		color: var(--color-text-secondary);
 	}
 
 	.vibe-interpretation {
@@ -418,23 +539,6 @@
 		color: var(--color-primary, #4D44B3);
 	}
 
-	.stat-label {
-		font-size: 0.9rem;
-		color: var(--color-text-secondary);
-		margin-bottom: 0.5rem;
-	}
-
-	.stat-value {
-		font-size: 1.5rem;
-		font-weight: 600;
-	}
-
-	.unit {
-		font-size: 0.9rem;
-		font-weight: normal;
-		color: var(--color-text-secondary);
-	}
-
 	.chart-section {
 		margin-top: 1.5rem;
 	}
@@ -448,12 +552,21 @@
 		margin-bottom: 1rem;
 	}
 
-	.chart-legend {
+	/* Unified Legend */
+	.unified-legend {
 		display: flex;
-		justify-content: center;
-		gap: 2rem;
-		padding: 0.75rem;
-		margin-top: 0.5rem;
+		justify-content: space-around;
+		align-items: center;
+		padding: 0.75rem 0.5rem;
+		margin-top: 0.75rem;
+		margin-bottom: 1.5rem;
+		border-radius: 8px;
+		background-color: rgba(255, 255, 255, 0.5);
+		backdrop-filter: blur(4px);
+		white-space: nowrap;
+		overflow-x: auto;
+		width: 100%;
+		gap: 0.5rem;
 	}
 
 	.legend-item {
@@ -487,7 +600,7 @@
 	}
 
 	@media (max-width: 600px) {
-		.stats-grid {
+		.metrics-grid {
 			grid-template-columns: 1fr;
 		}
 	}
