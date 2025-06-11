@@ -2,7 +2,12 @@
 	import { onMount } from 'svelte';
 	import { goto } from '$app/navigation';
 	import { authStore } from '$lib/stores/auth';
-	import { getFilteredSessions, getUserTags, getBalconyForReflection, type Session } from '$lib/services/sessions';
+	import {
+		getFilteredSessions,
+		getUserTags,
+		getBalconyForReflection,
+		type Session
+	} from '$lib/services/sessions';
 	import SessionFiltersComponent from '$lib/components/SessionFilters.svelte';
 
 	// Session data
@@ -92,7 +97,7 @@
 
 		// Load tags first (for filter options)
 		await loadTags();
-		
+
 		// Load initial sessions
 		await loadSessions();
 	});
@@ -185,17 +190,9 @@
 </script>
 
 <div class="history-container">
-	<header class="history-header">
-		<h1>Session History</h1>
-	</header>
-	
 	<!-- Session Filters -->
-	<SessionFiltersComponent 
-		availableTags={availableTags}
-		activeFilters={activeFilters}
-		on:filter={handleFilterChange}
-	/>
-	
+	<SessionFiltersComponent {availableTags} {activeFilters} on:filter={handleFilterChange} />
+
 	{#if isLoading && sessions.length === 0}
 		<div class="loading">
 			<div class="loading-spinner"></div>
@@ -210,16 +207,21 @@
 		<div class="empty-state">
 			{#if activeFilters.types.length < 3 || activeFilters.spiralPhase || activeFilters.moodLevel || activeFilters.tags.length > 0 || activeFilters.searchText}
 				<p>No sessions match your current filters.</p>
-				<p>Try adjusting your filters or <button class="text-button" on:click={() => {
-					activeFilters = {
-						types: ['reflection', 'hrv_session', 'balcony'],
-						tags: [],
-						spiralPhase: undefined,
-						moodLevel: undefined,
-						searchText: undefined
-					};
-					loadSessions();
-				}}>reset them</button>.</p>
+				<p>
+					Try adjusting your filters or <button
+						class="text-button"
+						on:click={() => {
+							activeFilters = {
+								types: ['reflection', 'hrv_session', 'balcony'],
+								tags: [],
+								spiralPhase: undefined,
+								moodLevel: undefined,
+								searchText: undefined
+							};
+							loadSessions();
+						}}>reset them</button
+					>.
+				</p>
 			{:else}
 				<p>You haven't created any sessions yet.</p>
 				<p>Start by creating a reflection or HRV session!</p>
@@ -294,7 +296,7 @@
 				</div>
 			{/each}
 		</div>
-		
+
 		{#if isLoading && sessions.length > 0}
 			<div class="loading-more">
 				<div class="loading-spinner"></div>
@@ -302,9 +304,7 @@
 			</div>
 		{:else if hasMore}
 			<div class="load-more-container">
-				<button class="load-more-button" on:click={loadMoreSessions}>
-					Load More
-				</button>
+				<button class="load-more-button" on:click={loadMoreSessions}> Load More </button>
 			</div>
 		{/if}
 	{/if}
@@ -327,7 +327,8 @@
 		margin: 0;
 	}
 
-	.loading, .loading-more {
+	.loading,
+	.loading-more {
 		text-align: center;
 		padding: 2rem;
 		color: var(--color-text-secondary);
