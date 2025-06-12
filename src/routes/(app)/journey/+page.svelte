@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
+	import { goto } from '$app/navigation';
 	import { afterNavigate } from '$app/navigation';
 	import { authStore } from '$lib/stores/auth';
 	import { journeyStore } from '$lib/stores/journey';
@@ -233,7 +234,7 @@
 				<div class="spiral-placeholder">
 					<div class="spiral-message">
 						<h3>No History Yet</h3>
-						<p>Continue using VibeWise to build your spiral journey data.</p>
+						<p>Your spiral journey will be tracked here as you continue to use the app.</p>
 						<p>
 							Your current phase is <span style="color: {getSpiralPhaseColor(currentPhase)}"
 								>{currentPhase}</span
@@ -255,6 +256,19 @@
 				<PatternInsights {patterns} />
 			</div>
 		</div>
+
+		<!-- Connected Sessions Section -->
+		<div class="connected-sessions">
+			<h2>Connected Sessions</h2>
+			<div class="connected-sessions-content">
+				<button class="view-sessions-button" on:click={() => goto(`/history?spiralPhase=${currentPhase}`)}>
+					View All Sessions in {currentPhase} Phase
+				</button>
+				<p class="connected-sessions-note">
+					See reflections, balcony experiments, and HRV sessions related to your current phase
+				</p>
+			</div>
+		</div>
 	{/if}
 </div>
 
@@ -266,29 +280,9 @@
 		max-width: 800px;
 		margin: 0 auto;
 		padding: 1rem;
+		padding-bottom: 3rem;
 	}
 
-	.journey-header {
-		text-align: center;
-		margin-bottom: 1rem;
-	}
-
-	.journey-header h1 {
-		font-size: 1.8rem;
-		margin-bottom: 0.5rem;
-		background: linear-gradient(90deg, var(--color-primary), var(--color-secondary));
-		-webkit-background-clip: text;
-		background-clip: text;
-		color: transparent;
-		font-weight: 700;
-	}
-
-	.journey-header p {
-		color: var(--color-text-secondary, #666666);
-		font-size: 1rem;
-	}
-
-	/* Loading and error states */
 	.loading-container {
 		display: flex;
 		flex-direction: column;
@@ -499,6 +493,50 @@
 		padding: 0.5rem;
 	}
 
+	/* Connected Sessions section */
+	.connected-sessions {
+		background-color: var(--color-bg-elevated);
+		padding: 1.5rem;
+		border-radius: 1rem;
+		box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+	}
+
+	.connected-sessions h2 {
+		font-size: 1.4rem;
+		margin-bottom: 1rem;
+	}
+
+	.connected-sessions-content {
+		padding: 0.5rem;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		gap: 1rem;
+	}
+
+	.view-sessions-button {
+		padding: 0.75rem 1.5rem;
+		background: linear-gradient(90deg, var(--color-primary), var(--color-secondary));
+		color: white;
+		border: none;
+		border-radius: 0.5rem;
+		font-weight: 500;
+		cursor: pointer;
+		transition: opacity 0.2s;
+		width: 100%;
+		max-width: 400px;
+	}
+
+	.view-sessions-button:hover {
+		opacity: 0.9;
+	}
+
+	.connected-sessions-note {
+		font-size: 0.9rem;
+		color: var(--color-text-secondary);
+		text-align: center;
+	}
+
 	.spiral-visualization {
 		padding: 1rem 0;
 	}
@@ -506,10 +544,6 @@
 	@media (min-width: 768px) {
 		.journey-container {
 			padding: 2rem;
-		}
-
-		.journey-header h1 {
-			font-size: 2.2rem;
 		}
 	}
 </style>

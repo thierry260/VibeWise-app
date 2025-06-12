@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import { goto } from '$app/navigation';
+	import { page } from '$app/stores';
 	import { authStore } from '$lib/stores/auth';
 	import {
 		getFilteredSessions,
@@ -97,6 +98,22 @@
 
 		// Load tags first (for filter options)
 		await loadTags();
+
+		// Check URL parameters for filters
+		const urlParams = $page.url.searchParams;
+		const spiralPhaseParam = urlParams.get('spiralPhase');
+		
+		// Apply URL parameters to filters if they exist
+		if (spiralPhaseParam) {
+			// Validate that the spiral phase is one of the valid phases
+			const validPhases = ['Beige', 'Purple', 'Red', 'Blue', 'Orange', 'Green', 'Yellow', 'Turquoise'];
+			if (validPhases.includes(spiralPhaseParam)) {
+				activeFilters = {
+					...activeFilters,
+					spiralPhase: spiralPhaseParam as any
+				};
+			}
+		}
 
 		// Load initial sessions
 		await loadSessions();
@@ -317,15 +334,7 @@
 		padding: 1rem;
 	}
 
-	.history-header {
-		margin-bottom: 1.5rem;
-	}
 
-	.history-header h1 {
-		font-size: 1.8rem;
-		color: var(--color-primary);
-		margin: 0;
-	}
 
 	.loading,
 	.loading-more {

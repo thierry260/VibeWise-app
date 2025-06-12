@@ -54,6 +54,7 @@
 		"@capacitor/local-notifications": "^7.0.1",
 		"firebase": "^11.7.3",
 		"lucide-svelte": "^0.511.0",
+		"svelte-icons": "^2.1.0",
 		"uplot": "^1.6.32"
 	}
 }

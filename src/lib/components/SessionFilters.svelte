@@ -18,6 +18,17 @@
   
   // Local state
   let isExpanded = false;
+  
+  // Auto-expand if filters are active
+  $: {
+    if (activeFilters.spiralPhase || 
+        activeFilters.moodLevel || 
+        activeFilters.tags.length > 0 || 
+        activeFilters.searchText || 
+        activeFilters.types.length < 3) {
+      isExpanded = true;
+    }
+  }
   let searchInput = activeFilters.searchText || '';
   
   // Spiral phases
